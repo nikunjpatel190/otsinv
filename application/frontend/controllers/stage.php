@@ -1,0 +1,86 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class stage extends CI_Controller {
+ 
+    
+	function __construct()  
+	{
+		parent::__construct();
+		$this->load->model("stageModel",'',true);
+	}
+	
+	public function index()
+	{
+		$arrWhere	=	array();
+		
+		// Get All stages
+		$orderBy = " insertdate DESC";
+		$rsStages = $this->stageModel->getAll('',$orderBy);
+		$rsListing['rsStages']	=	$rsStages;
+		
+		// Load Views
+		$this->load->view('stage/list', $rsListing);	
+	}
+	
+	public function AddStage()
+	{
+		$data["strAction"] = $this->Page->getRequest("action");
+        $data["strMessage"] = $this->Page->getMessage();
+        $data["id"] = $this->Page->getRequest("id");
+
+        if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
+		{
+		   $data["rsEdit"] = $this->stageModel->get_by_id('ps_id', $data["id"]);
+        } 
+		else 
+		{
+            $data["strAction"] = "A";
+        }
+		$this->load->view('stage/stageForm',$data);
+	}
+	
+	public function SaveStage()
+	{
+		$strAction = $this->input->post('action');
+		$arrHeader["ps_name"]   	=	$this->Page->getRequest('txt_ps_name');
+        $arrHeader["ps_desc"]     	=	$this->Page->getRequest('txt_ps_desc');
+        $arrHeader["ps_priority"]        =   $this->Page->getRequest('txt_ps_priority');
+        $arrHeader["ps_seq"]        =   $this->Page->getRequest('txt_ps_seq');
+		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
+		
+		if ($strAction == 'A' || $strAction == 'R')
+		{
+            $arrHeader['insertby']		=	$this->Page->getSession("intUserId");
+            $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
+            $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
+			
+			$intCenterID = $this->stageModel->insert($arrHeader);
+			$this->Page->setMessage('REC_ADD_MSG');
+        }
+		elseif ($strAction == 'E')
+		{
+            $ps_id				= 	$this->Page->getRequest('ps_id');
+            $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
+            $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
+			
+            $this->stageModel->update($arrHeader, array('ps_id' => $ps_id));
+            $this->Page->setMessage('REC_EDIT_MSG');
+        }
+		
+		redirect('c=stage', 'location');
+	}
+	
+	public function delete()
+	{
+		$arrStageIds	=	$this->input->post('chk_lst_list1');
+		$strStageIds	=	implode(",", $arrStageIds);
+		$strQuery = "DELETE FROM process_stage_master WHERE ps_id IN (". $strStageIds .")";
+		$this->db->query($strQuery);
+		$this->Page->setMessage("DELETE_RECORD");
+		// redirect to listing screen
+		redirect('c=stage', 'location');
+	}
+}
+
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

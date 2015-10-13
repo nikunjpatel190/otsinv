@@ -1,0 +1,48 @@
+body {
+    background: url("../images/bg_new.jpg") repeat scroll 0 0 #000;
+}
+
+.main_container {
+	padding-top:10px;
+	padding-bottom:50px;
+}
+
+.border-red {
+	border:1px solid #FF8888 !important;	
+	background:#f8dbdd !important;
+}
+
+.msg_error {
+    background: url(../images/msgerror.png) no-repeat scroll 9px 1px #FFD4AA;
+    border-bottom: 1px solid #FF002A;
+    border-top: 1px solid #FF002A;
+    min-height: 28px;
+    padding-left: 48px;
+    padding-top: 10px;
+	font-size:14px;
+	font-weight:bold;
+	color:#F00;
+}
+
+.msg_warning{
+    background: url(../images/msgwarning.png) no-repeat scroll 9px 1px #FFF9AD;
+    border-bottom: 1px solid #EAB002;
+    border-top: 1px solid #EAB002;
+    min-height: 28px;
+    padding-left: 48px;
+    padding-top: 5px;
+	font-size:15px;
+	font-weight:bold;
+	color:#EAB002;
+}
+.msg_success {
+    background: url(../images/msgdone.gif) no-repeat scroll 9px 6px #DBFFD1;
+    border-bottom: 1px solid #2ECE06;
+    border-top: 1px solid #2ECE06;
+    color: #39AF1C;
+    font-size: 15px;
+    font-weight: bold;
+    min-height: 26px;
+    padding-left: 48px;
+    padding-top: 7px;
+}

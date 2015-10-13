@@ -1,0 +1,132 @@
+.main_menu {
+    float: left;
+    list-style: none outside none;
+    margin: 10px 0 0;
+    padding: 0;
+	padding-left:20px;
+}
+
+.main_menu li {
+	float:left;
+	padding:0px 5px;
+	margin:0px;
+	position:relative;
+}
+
+.main_menu li a {
+	padding:0px;
+	margin:0px;
+	color:#fff;
+	text-decoration:none;
+	font-style:normal;
+	font-weight:normal;
+	line-height:24px;
+	padding:5px;
+	font-size:14px;
+}
+
+.main_menu li a:hover {
+	background:#19b961;
+	line-height:24px;
+	padding:5px;
+	font-size:14px;
+	
+	border-radius:3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	
+}
+
+.current {
+	background:#19b961;
+	line-height:24px;
+	padding:5px;
+	
+	border-radius:3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+
+
+.main_menu li #dropdown_menu
+{ 
+	margin:0; 
+	padding:1px 1px 0; 
+	padding-top:10px;
+	list-style:none; 
+	display:none; 
+	width:150px; 
+	position:absolute; 
+	top:25px; 
+	right:-10px; 
+	z-index:1000;
+	text-align:left;
+}
+
+
+.main_menu li:hover #dropdown_menu, .main_menu li:hover #dropdown_menu li:hover 
+{ 
+	display:block; 
+}
+
+#dropdown_menu li.last {
+	border-bottom:1px solid #635F5F;
+}
+
+#dropdown_menu li {
+	display:block;
+	background: none repeat scroll 0 0 #444141;
+	background: url("../images/transparency.png") repeat scroll left top transparent;
+	width:150px;
+	padding:0;
+	border-left:1px solid #635F5F;
+	border-right:1px solid #635F5F;
+	
+}
+
+#dropdown_menu li a {
+	text-align:left;
+	display:block;
+	padding-left:10px;
+}
+
+#dropdown_menu li a:hover {
+	display:block;
+	text-align:left;
+	border-radius:0;
+	background:#FFF;
+	color:#000;
+}
+
+
+/* Footer Menu CSS */
+
+#footer_menu {
+    float: right;
+    list-style: none outside none;
+	padding:0px 10px;
+}
+
+#footer_menu li {
+	float:left;
+	padding:0px 5px;
+	margin:0px;
+	position:relative;
+	line-height:25px;
+}
+
+#footer_menu li a {
+	color:#fff;
+	text-decoration:none;
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+#footer_menu li a:hover {
+	text-decoration:underline;
+	color:#fff;	
+	font-size:12px;
+}
+
+
+

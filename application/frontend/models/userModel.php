@@ -1,0 +1,142 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class userModel extends Data {
+	public $searchCriteria; 
+	function __construct() 
+	{
+        parent::__construct();
+        $this->tbl = 'user_master';
+    }
+	
+	function getUsers()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		// By user type
+		if(isset($searchCriteria['userType']) && $searchCriteria['userType'] != "")
+		{
+			$whereClaue .= 	" AND um.user_type='".$searchCriteria['userType']."' ";
+		}
+		
+		// By user Name
+		if(isset($searchCriteria['userName']) && $searchCriteria['userName'] != "")
+		{
+			$whereClaue .= 	" AND um.user_name='".$searchCriteria['userName']."' ";
+		}
+		
+		// By user Email
+		if(isset($searchCriteria['userEmail']) && $searchCriteria['userEmail'] != "")
+		{
+			$whereClaue .= 	" AND um.user_email='".$searchCriteria['userEmail']."' ";
+		}
+		
+		// By Company
+		if(isset($searchCriteria['companyId']) && $searchCriteria['companyId'] != "")
+		{
+			$whereClaue .= 	" AND um.company_id=".$searchCriteria['companyId']." ";
+		}
+		
+		// By Department
+		if(isset($searchCriteria['deptId']) && $searchCriteria['deptId'] != "")
+		{
+			$whereClaue .= 	" AND um.dept_id=".$searchCriteria['deptId']." ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND user_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " um.user_full_name";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT
+					  	".$selectField."
+					 FROM user_master AS um
+					  	LEFT JOIN company_master AS com
+							ON um.company_id = com.com_id
+					 	LEFT JOIN department_master AS dept
+							ON um.dept_id = dept.dept_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_object();
+		return $rsData;
+	}
+	
+	public function getAssignCompanyDetail()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		// By user
+		if(isset($searchCriteria['userId']) && $searchCriteria['userId'] != "")
+		{
+			$whereClaue .= 	" AND map.user_id='".$searchCriteria['userId']."' ";
+		}
+		
+		// By Company
+		if(isset($searchCriteria['companyId']) && $searchCriteria['companyId'] != "")
+		{
+			$whereClaue .= 	" AND map.company_id='".$searchCriteria['companyId']."' ";
+		}
+		
+		$orderField = " map.id";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT
+					  	".$selectField."
+					 FROM map_user_company AS map
+					 	JOIN user_master AS um
+							ON map.user_id = um.user_id
+					  	JOIN company_master AS com
+							ON map.company_id = com.com_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_object();
+		return $rsData;
+	}
+}

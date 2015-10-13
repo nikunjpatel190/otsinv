@@ -1,0 +1,342 @@
+/* Basic  ---------------------------------------- */
+
+.clear { clear: both; }
+
+body {
+	background: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #646464;
+	text-align: center;
+}
+
+#wrapper {
+	text-align: left;
+	/*width: 930px;*/
+	margin: 0 auto;
+}
+
+/* Logo  ---------------------------------------- */
+
+.logo {
+    color: #FFFFFF;
+    font-size: 44px;
+	background:#000;
+	padding:10px;
+}
+
+/* Main Navigation ---------------------------------------- */
+
+#mainNav {
+	height: 37px;
+	/*padding: 6px;*/
+	/*margin: 0 0 30px 0;*/
+	background-color:#ddd;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	background: #f0f0f0 url(../images/top-menu-item-bg.gif) repeat-x left top;
+	/* We used a background image making the thick border and the thin one to keep the html structure simple */
+}
+
+#mainNav li {
+	float: left;
+	height: 37px;
+	border-right: 1px solid #CCC;
+}
+
+#mainNav li.first {
+	border-left: 1px solid #CCC;	
+}
+
+#mainNav li a {
+	display: block;
+	float: left;
+	height: 37px;
+	font-weight: bold;
+	line-height: 37px;
+	text-decoration: none;
+	padding: 0 20px;
+	color: #454545;
+}
+
+#mainNav li.logout {
+	float: right;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+}
+
+#mainNav li a:hover { background: #fdfcf6; }
+
+#mainNav li a.active, #mainNav li a.active {
+	 background: #fdfcf6;
+}
+
+/* Container ---------------------------------------- */
+
+#containerHolder {
+	background: #eee;
+	padding: 5px;
+}
+
+
+#container {
+	background: #fff/* url(../images/content.gif) repeat-y left top*/;
+	border: 1px solid #ddd;
+	/*width: 918px;*/
+}
+
+/* Sidebar ---------------------------------------- */
+
+#sidebar {
+	width: 179px;
+	/*float: left;*/
+}
+
+#sidebar .sideNav { width: 179px; }
+
+#sidebar .sideNav li { border-bottom: 1px solid #ddd; width: 179px; }
+
+#sidebar .sideNav li a {
+	display: block;
+	color: #646464;
+	background: #f6f6f6;
+	text-decoration: none;
+	height: 29px;
+	line-height: 29px;
+	padding: 0 19px;
+	width: 141px;
+}
+
+#sidebar .sideNav li a:hover { background: #fdfcf6; }
+
+#sidebar .sideNav li a.active, #sidebar .sideNav li a.active:hover {
+	background: #f0f7fa;
+	color: #c66653;
+}
+
+/* Breadcrumb ---------------------------------------- */
+
+h2 {
+	/*width: 718px;
+	float: right;*/
+	color: #646464;
+	font-size: 16px;
+	line-height: 16px;
+	font-weight: bold;
+	margin: 10px 0 0 0;
+	padding: 0 10px 10px 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+h2 a {
+	color: #646464;
+	text-decoration: none;
+}
+
+h2 a.active { color: #c66653; }
+
+h2 a:hover { text-decoration: underline; }
+
+/* Content ---------------------------------------- */
+
+#main {
+	/*width: 700px;*/
+	/*float: right;
+	padding: 0 19px 0 0;*/
+}
+
+h3 {
+	font-size: 14px;
+	line-height: 14px;
+	font-weight: bold;
+	color: #5494af;
+	padding: 0 0 0 10px;
+	margin: 10px 0 10px;
+}
+
+#main .qlist {
+	border-top: 1px solid #ddd;
+	border-collapse:collapse;
+}
+
+tr.inactive td { color:#F00 !important; }
+
+#main .qlist tr td {
+	background: #f6f6f6;
+	border: 1px solid #ddd;
+	border-collapse:collapse;
+}
+
+#main .qlist tr.odd td {
+	background: #fbfbfb;
+}
+
+#main .qlist tr:hover td { background: #fdfcf6; }
+
+#main .qlist .action {
+	text-align: right;
+	padding: 0 20px 0 10px;
+}
+
+#main .qlist .hdr td, #main .qlist .hdr th, #main .qlist th {
+	font-weight:bold;
+	background:#ccc;
+	border: 1px solid #ddd;
+	border-collapse:collapse;
+}
+
+#main .qlist tr .action a { margin: 0 0 0 10px; text-decoration: none; color: #9b9b9b; }
+#main .qlist tr:hover .action .edit { color: #c5a059; }
+#main .qlist tr:hover .action .delete { color: #a02b2b; }
+#main .qlist tr:hover .action .view { color: #55a34a; }
+
+#main table tr:hover .action a:hover { text-decoration: underline; }
+
+#main fieldset {
+	border: 1px solid #ddd;
+	padding: 19px;
+	margin: 0 0 20px 0;
+	background: #fbfbfb;
+}
+
+#main fieldset p { margin: 0 0 14px 0; float: left; width: 100%;  }
+
+#main fieldset label {
+	display: block;
+	width: 100%;
+	margin: 0 0 7px 0;
+	line-height: 12px;
+}
+
+#main fieldset .text-long {
+	border: 1px solid #ddd;
+	background: #fff url(../images/input-shaddow.gif) no-repeat left top;
+	font: 11px Arial, Helvetica, sans-serif;
+	color: #646464;
+	padding: 5px 7px;
+	width: 264px;
+	float: left;
+	margin: 0 10px 0 0;
+}
+
+#main fieldset .text-medium {
+	border: 1px solid #ddd;
+	background: #fff url(../images/input-shaddow.gif) no-repeat left top;
+	font: 11px Arial, Helvetica, sans-serif;
+	color: #646464;
+	padding: 5px 7px;
+	width: 124px;
+	float: left;
+	margin: 0 10px 0 0;
+}
+
+#main fieldset .text-small {
+	border: 1px solid #ddd;
+	background: #fff url(../images/input-shaddow.gif) no-repeat left top;
+	font: 11px Arial, Helvetica, sans-serif;
+	color: #646464;
+	padding: 5px 7px;
+	width: 44px;
+	float: left;
+	margin: 0 10px 0 0;
+}
+
+.button-submit {
+	font: 11px Arial, Helvetica, sans-serif;
+	color: #646464;
+	width: 94px;
+	height: 29px;
+	cursor: pointer;
+	border: none;
+	background: url(../images/button-submit.gif) no-repeat left top;
+}
+
+/* Footer ---------------------------------------- */
+
+#footer {
+	margin: 10px 0 30px 0;
+	font-size: 11px;
+	line-height: 11px;
+	color: #9B9B9B;
+	padding: 0 0 0 5px;
+}
+
+#footer a { color: #9B9B9B; }
+
+#footer a:hover { text-decoration: none; }
+
+/* ---------------------------------------------------------- */
+/* CSS added by milestechnolabs.com */
+/* ---------------------------------------------------------- */
+
+#left_col {
+	border-right:1px solid #ddd;
+}	
+
+
+#main_col {
+	padding:5px;	
+}
+
+legend {
+    color: #5494AF;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 0 2px 0 2px;	
+}
+
+.hint {
+	color:#999;	
+}
+
+.border-red {
+       border:1px solid #F00;        
+}
+.inactive{
+	color:#F00;
+}
+/* [START] Message Box CSS*/
+.msg_error {
+    background: url(../images/msgerror.png) no-repeat scroll 9px 1px #FFD4AA;
+    border-bottom: 1px solid #FF002A;
+    border-top: 1px solid #FF002A;
+    height: 28px;
+    padding-left: 48px;
+    padding-top: 10px;
+	font-size:14px;
+	font-weight:bold;
+	color:#F00;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.msg_warning{
+    background: url(../images/msgwarning.png) no-repeat scroll 9px 1px #FFF9AD;
+    border-bottom: 1px solid #EAB002;
+    border-top: 1px solid #EAB002;
+    height: 28px;
+    padding-left: 48px;
+    padding-top: 5px;
+    width: 100%;
+	font-size:15px;
+	font-weight:bold;
+	color:#EAB002;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.msg_success {
+    background: url(../images/msgdone.gif) no-repeat scroll 9px 6px #DBFFD1;
+    border-bottom: 1px solid #2ECE06;
+    border-top: 1px solid #2ECE06;
+    color: #39AF1C;
+    font-size: 15px;
+    font-weight: bold;
+    height: 26px;
+    padding-left: 48px;
+    padding-top: 7px;
+    width: 100%;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+/* [END] Message Box CSS*/
