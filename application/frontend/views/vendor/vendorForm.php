@@ -52,7 +52,7 @@ echo form_open('c=vendor&m=saveVendor', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">City</label>
+                <label for="form-field-1" class="control-label">City<span class="red">*</span></label>
                 <div class="controls">
                     <input type="text" id="txt_vendor_city" name="txt_vendor_city" class="span6 required" value="<?php echo $rsEdit->vendor_city; ?>" />
                 </div>
@@ -73,7 +73,7 @@ echo form_open('c=vendor&m=saveVendor', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Postal Coad<span class="red">*</span></label>
+                <label for="form-field-1" class="control-label">Postal Code<span class="red">*</span></label>
                 <div class="controls">
                     <input type="text" id="txt_vendor_postal_code" name="txt_vendor_postal_code" class="span6 required" value="<?php echo $rsEdit->vendor_postal_code; ?>" />
                 </div>

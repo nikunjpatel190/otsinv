@@ -75,7 +75,7 @@ echo form_open('c=user&m=saveUser', $attributes);
                 <label for="form-field-1" class="control-label">Company <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_company" id="slt_company" >
-                    	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name",0,"where status='Active'",$rsEdit->company_id,"Select Company"); ?>
+                    	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name","","where status='Active'",$rsEdit->company_id,"Select Company"); ?>
                     </select>
                 </div>
             </div>
@@ -84,7 +84,7 @@ echo form_open('c=user&m=saveUser', $attributes);
                 <label for="form-field-1" class="control-label">Department <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_department" id="slt_department" >
-                    	<?php echo $this->Page->generateComboByTable("department_master","dept_id","dept_name",0,"where status='Active'",$rsEdit->dept_id,"Select Department"); ?>
+                    	<?php echo $this->Page->generateComboByTable("department_master","dept_id","dept_name","","where status='Active'",$rsEdit->dept_id,"Select Department"); ?>
                     </select>
                 </div>
             </div>

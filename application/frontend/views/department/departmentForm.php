@@ -20,7 +20,7 @@ echo form_open('c=department&m=saveDepartment', $attributes);
                 <label for="form-field-1" class="control-label">Company Id <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_company_id" >
-                    	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name",0,"where status='Active'",$rsEdit->company_id,"Select Company"); ?>
+                    	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name","","where status='Active'",$rsEdit->company_id,"Select Company"); ?>
                     </select>
                 </div>
             </div>

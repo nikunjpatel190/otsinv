@@ -52,9 +52,9 @@ echo form_open('c=company&m=saveCompany', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Fax<span class="red">*</span></label>
+                <label for="form-field-1" class="control-label">Fax</label>
                 <div class="controls">
-                    <input type="text" id="txt_com_fax" name="txt_com_fax" class="span6 required" value="<?php echo $rsEdit->com_fax; ?>" />
+                    <input type="text" id="txt_com_fax" name="txt_com_fax" class="span6" value="<?php echo $rsEdit->com_fax; ?>" />
                 </div>
             </div>
             
