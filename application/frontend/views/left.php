@@ -160,7 +160,7 @@
         <li>
         	<a href="#" class="dropdown-toggle">
                 <i class="icon-edit"></i>
-                <span class="menu-text"> Manage Process Stage</span>
+                <span class="menu-text">Process Work Flow</span>
     
                 <b class="arrow icon-angle-down"></b>
             </a>
