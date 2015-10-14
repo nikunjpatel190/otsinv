@@ -149,6 +149,89 @@ class user extends CI_Controller {
 			}
 		}
 	}
+	
+	// open form (user-department mapping)
+	public function frmAssignDept()
+	{
+		$this->load->view('user/assignDeptForm',$data);
+	}
+	
+	// save user-department mapping info
+	public function assignDept()
+	{
+		$dept_id = $this->Page->getRequest("slt_dept");
+		$user_id = $this->Page->getRequest("slt_user");
+		
+		// Check Entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "map.id";
+		$searchCriteria["userId"] = $user_id;
+		$searchCriteria["deptId"] = $dept_id;
+		$this->userModel->searchCriteria=$searchCriteria;
+		$rsRecord = $this->userModel->getAssignDeptDetail();
+		if(count($rsRecord) > 0)
+		{
+			$this->Page->setMessage('ALREADY_MAPPED');
+			redirect('c=user&m=frmAssignDept', 'location');
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["user_id"] = $user_id;
+			$arrRecord["dept_id"] = $dept_id;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_user_department", $arrRecord);
+			if($this->db->insert_id() > 0)
+			{
+				$this->Page->setMessage('REC_MAP_MSG');
+				redirect('c=user&m=frmAssignDept', 'location');
+			}
+		}
+	}
+	
+	
+	// open form (user-STAGE mapping)
+	public function frmAssignUtypePstage()
+	{
+		$this->load->view('user/assignUtypePstageForm',$data);
+	}
+	
+	// save user-STAGE mapping info
+	public function assignUtypePstage()
+	{
+		$u_typ_id = $this->Page->getRequest("slt_utype");
+		$ps_id = $this->Page->getRequest("slt_pstage");
+		
+		// Check Entry
+		$searchCriteria = array(); 
+		//$searchCriteria["selectField"] = "map.id";
+		$searchCriteria["utypeId"] = $u_typ_id;
+		$searchCriteria["stageId"] = $ps_id;
+		$this->userModel->searchCriteria=$searchCriteria;
+		$rsRecord = $this->userModel->getAssignStageDetail();
+		if(count($rsRecord) > 0)
+		{
+			$this->Page->setMessage('ALREADY_MAPPED');
+			redirect('c=user&m=frmAssignUtypePstage', 'location');
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["u_typ_id"] = $u_typ_id;
+			$arrRecord["ps_id"] = $ps_id;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_utype_pstage", $arrRecord);
+			if($this->db->insert_id() > 0)
+			{
+				$this->Page->setMessage('REC_MAP_MSG');
+				redirect('c=user&m=frmAssignUtypePstage', 'location');
+			}
+		}
+	}
 }
 
 /* End of file welcome.php */

@@ -83,6 +83,90 @@ class product extends CI_Controller {
 		// redirect to listing screen
 		redirect('c=Product', 'location');
 	}
+	
+	
+	public function frmAssignRowMaterial()
+	{
+		$this->load->view('product/assignRowMaterialForm',$data);
+	}
+	
+	// save product-raw_material mapping info
+	public function assignRow_material()
+	{
+		$prod_id = $this->Page->getRequest("slt_prod");
+		$rm_id = $this->Page->getRequest("slt_rm");
+		
+		// Check Entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "map.id";
+		$searchCriteria["prodId"] = $prod_id;
+		$searchCriteria["rmId"] = $rm_id;
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsRecord = $this->productModel->getAssignRowMaterialDetail();
+		if(count($rsRecord) > 0)
+		{
+			$this->Page->setMessage('ALREADY_MAPPED');
+			redirect('c=product&m=frmAssignRowMaterial', 'location');
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["prod_id"] = $prod_id;
+			$arrRecord["rm_id"] = $rm_id;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_prod_raw_material", $arrRecord);
+			if($this->db->insert_id() > 0)
+			{
+				$this->Page->setMessage('REC_MAP_MSG');
+				redirect('c=product&m=frmAssignRowMaterial', 'location');
+			}
+		}
+	}
+	
+	
+	public function frmAssignProcess()
+	{
+		$this->load->view('product/assignProcessForm',$data);
+	}
+	
+	// save product-raw_material mapping info
+	public function assignProcess()
+	{
+		$prod_id = $this->Page->getRequest("slt_prod");
+		$proc_id = $this->Page->getRequest("slt_proc");
+		
+		// Check Entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "map.id";
+		$searchCriteria["prodId"] = $prod_id;
+		$searchCriteria["procId"] = $proc_id;
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsRecord = $this->productModel->getAssignProcessDetail();
+		if(count($rsRecord) > 0)
+		{
+			$this->Page->setMessage('ALREADY_MAPPED');
+			redirect('c=product&m=frmAssignProcess', 'location');
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["prod_id"] = $prod_id;
+			$arrRecord["proc_id"] = $proc_id;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_prod_proc", $arrRecord);
+			if($this->db->insert_id() > 0)
+			{
+				$this->Page->setMessage('REC_MAP_MSG');
+				redirect('c=product&m=frmAssignProcess', 'location');
+			}
+		}
+	}
+	
+	
 }
 
 /* End of file welcome.php */
