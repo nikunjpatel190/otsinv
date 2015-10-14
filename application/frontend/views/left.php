@@ -63,6 +63,12 @@
                         Assign Department
                     </a>
                 </li>
+                <li>
+                    <a href="index.php?c=user&m=frmAssignUtypePstage">
+                        <i class="icon-double-angle-right"></i>
+                        Assign Stage
+                    </a>
+                </li>
             </ul>
         </li>
 		<li>
@@ -135,6 +141,18 @@
                     <a href="index.php?c=prod_cat">
                         <i class="icon-double-angle-right"></i>
                         Product Category
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?c=product&m=frmAssignRowMaterial">
+                        <i class="icon-double-angle-right"></i>
+                        Assign Row Material
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?c=product&m=frmAssignProcess">
+                        <i class="icon-double-angle-right"></i>
+                        Assign Process
                     </a>
                 </li>
             </ul>
