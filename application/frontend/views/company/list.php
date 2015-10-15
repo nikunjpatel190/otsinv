@@ -31,6 +31,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                     </th>
                     <th></th>
                     <th>Company Name</th>
+                    <th>Company Code</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Fax</th>
@@ -43,7 +44,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 				if(count($rsCompanies)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="14" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="9" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
@@ -56,6 +57,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
 						echo '<td>'. $arrRecord->com_name .'</td>';
+						echo '<td>'. $arrRecord->com_code .'</td>';
 						echo '<td>'. $arrRecord->com_email .'</td>';
                         echo '<td>'. $arrRecord->com_phone .'</td>';
                         echo '<td>'. $arrRecord->com_fax .'</td>';
@@ -78,9 +80,9 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsCenters)> 0): ?>
+<?php if(count($rsCompanies)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>

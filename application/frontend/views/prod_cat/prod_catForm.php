@@ -16,12 +16,6 @@ echo form_open('c=prod_cat&m=SaveProd_cat', $attributes);
 <div class="row-fluid" id="printFrmDiv">
     <div class="span10">
         <fieldset>
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Category Code<span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cat_code" name="txt_cat_code" class="required span6" value="<?php echo $rsEdit->cat_code; ?>" />
-                </div>
-            </div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Category Name <span class="red">*</span></label>

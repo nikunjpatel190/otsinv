@@ -40,7 +40,12 @@ echo form_open('c=raw_material&m=saveRaw_material', $attributes);
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Measure Unit <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_rm_measure_unit" name="txt_rm_measure_unit" class="required span6" value="<?php echo $rsEdit->rm_measure_unit; ?>" />
+                    <select class="required span6" name="slt_rm_measure_unit" id="slt_rm_measure_unit" >
+                    	<option value="">---Select Unit---</option>
+                        <option>Kg.</option>
+                        <option>Ltr</option>
+                        <option>Qty</option>
+                    </select>
                 </div>
             </div>
             

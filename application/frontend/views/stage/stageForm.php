@@ -24,23 +24,23 @@ echo form_open('c=stage&m=saveStage', $attributes);
             </div>
             
             <div class="control-group">
+                <label for="form-field-1" class="control-label">Color Code <span class="red">*</span></label>
+                <div class="controls">
+                    <input type="text" id="txt_ps_colorcode" name="txt_ps_colorcode" class="required span6" value="<?php echo $rsEdit->ps_colorcode; ?>" />
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label for="form-field-1" class="control-label">Priority<span class="red">*</span></label>
+                <div class="controls">
+                    <input type="text" id="txt_ps_priority" name="txt_ps_priority" class="span6 required" value="<?php echo $rsEdit->ps_priority; ?>" />
+                </div>
+            </div>                        
+            
+            <div class="control-group">
                 <label for="form-field-1" class="control-label">Description</label>
                 <div class="controls">                    
                     <textarea  id="txt_ps_desc" name="txt_ps_desc" class="span6"><?php echo $rsEdit->ps_desc; ?></textarea>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Company Name <span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_ps_priority" name="txt_ps_priority" class="required span6" value="<?php echo $rsEdit->ps_priority; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Sequence<span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_ps_seq" name="txt_ps_seq" class="span6 required" value="<?php echo $rsEdit->ps_seq; ?>" />
                 </div>
             </div>
             

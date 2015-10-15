@@ -30,10 +30,10 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Name</th>
-                    <th>Description</th>
+                    <th>Name</th>                    
+                    <th>Color Code</th>
                     <th>Priority</th>
-                    <th>Sequence</th>
+                    <th>Description</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -55,9 +55,9 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
 						echo '<td>'. $arrRecord->ps_name .'</td>';
+						echo '<td>'. $arrRecord->ps_colorcode .'</td>';	
+                        echo '<td>'. $arrRecord->ps_priority .'</td>';                        					
 						echo '<td>'. $arrRecord->ps_desc .'</td>';
-                        echo '<td>'. $arrRecord->ps_priority .'</td>';
-                        echo '<td>'. $arrRecord->ps_seq .'</td>';
 						echo '<td>'. $arrRecord->status .'</td>';													
                         echo '</tr>';
                     }

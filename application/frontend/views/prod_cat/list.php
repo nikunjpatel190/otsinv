@@ -30,7 +30,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Category Code</th>
                     <th>Cat Name</th>
                     <th>Cat Desc</th>
                     <th>Status</th>
@@ -41,7 +40,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 				if(count($rsProd_cat)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="6" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="5" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
@@ -53,7 +52,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->cat_id.'" value="'.$arrRecord->cat_id.'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->cat_code .'</td>';
 						echo '<td>'. $arrRecord->cat_name .'</td>';
                         echo '<td>'. $arrRecord->cat_desc .'</td>';
                         echo '<td>'. $arrRecord->status .'</td>';
@@ -76,7 +74,7 @@ $(document).ready(function() {
 
 <?php if(count($rsProd_cat)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>

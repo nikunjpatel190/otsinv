@@ -22,6 +22,12 @@ echo form_open('c=company&m=saveCompany', $attributes);
                     <input type="text" id="txt_com_name" name="txt_com_name" class="required span6" value="<?php echo $rsEdit->com_name; ?>" />
                 </div>
             </div>
+            <div class="control-group">
+                <label for="form-field-1" class="control-label">Company Code <span class="red">*</span></label>
+                <div class="controls">
+                    <input type="text" id="txt_com_code" name="txt_com_code" class="required span6" value="<?php echo $rsEdit->com_code; ?>" />
+                </div>
+            </div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">User Email<span class="red">*</span></label>
@@ -45,7 +51,7 @@ echo form_open('c=company&m=saveCompany', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Company Person</label>
+                <label for="form-field-1" class="control-label">Company Person<span class="red">*</span></label>
                 <div class="controls">
                     <input type="text" id="txt_com_person" name="txt_com_person" class="span6 required" value="<?php echo $rsEdit->com_person; ?>" />
                 </div>

@@ -33,7 +33,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                     <th>Product Category</th>
                     <th>Product Name</th>
                     <th>Product Code</th>
-                    <th>Product Type</th>
                     <th>Measure Unit</th>
                     <th>Price Per Unit</th>
                     <th>Product Description</th>
@@ -45,7 +44,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 				if(count($rsProducts)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="12" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="9" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
@@ -60,7 +59,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 						echo '<td>'. $arrRecord->prod_categoty .'</td>';
 						echo '<td>'. $arrRecord->prod_name .'</td>';
                         echo '<td>'. $arrRecord->prod_code .'</td>';
-                        echo '<td>'. $arrRecord->prod_type .'</td>';
 						echo '<td>'. $arrRecord->prod_measure_unit .'</td>';
                         echo '<td>'. $arrRecord->prod_price_per_unit .'</td>';
 						echo '<td>'. $arrRecord->prod_desc .'</td>';
@@ -84,7 +82,7 @@ $(document).ready(function() {
 
 <?php if(count($rsProducts)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null ],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>

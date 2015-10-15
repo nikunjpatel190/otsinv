@@ -19,7 +19,11 @@ echo form_open('c=product&m=saveProduct', $attributes);
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Product Category <span class="red">*</span></label>
                 <div class="controls">
-                  <input type="text" id="txt_prod_category" name="txt_prod_categoty" class="required span6" value="<?php echo $rsEdit->prod_categoty; ?>" />
+                  <select class="required span6" name="slt_prod_categoty" id="slt_prod_categoty" >
+                    	<option value="">---Select Category---</option>
+                        <option>Electronics</option>
+                        <option>Home Ware</option>
+                    </select>
                 </div>
         </div>
             
@@ -35,19 +39,17 @@ echo form_open('c=product&m=saveProduct', $attributes);
                 <div class="controls">
                     <input type="text" id="txt_prod_code" name="txt_prod_code" class="span6 required" value="<?php echo $rsEdit->prod_code; ?>" />
                 </div>
-            </div>  
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Product Type</label>
-                <div class="controls">
-                    <input type="text" id="txt_prod_type" name="txt_prod_type" class="span6 required" value="<?php echo $rsEdit->prod_type; ?>" />
-                </div>
             </div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Measure Unit<span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_prod_measure_unit" name="txt_prod_measure_unit" class="span6 required" value="<?php echo $rsEdit->prod_measure_unit; ?>" />
+                    <select class="required span6" name="slt_prod_measure_unit" id="slt_prod_measure_unit" >
+                    	<option value="">---Select Unit---</option>
+                        <option>Kg.</option>
+                        <option>Ltr</option>
+                        <option>Qty</option>
+                    </select>
                 </div>
             </div>
             
@@ -59,9 +61,9 @@ echo form_open('c=product&m=saveProduct', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Product Description<span class="red">*</span></label>
+                <label for="form-field-1" class="control-label">Product Description</label>
                 <div class="controls">
-                    <textarea type="text" id="txt_prod_desc" name="txt_prod_desc" class="span6 required" value=""><?php echo $rsEdit->prod_desc; ?></textarea>
+                    <textarea type="text" id="txt_prod_desc" name="txt_prod_desc" class="span6" value=""><?php echo $rsEdit->prod_desc; ?></textarea>
                 </div>
             </div>
             
