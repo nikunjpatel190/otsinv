@@ -45,7 +45,7 @@ class raw_material extends CI_Controller {
 		$arrHeader["rm_name"]   	=	$this->Page->getRequest('txt_rm_name');
         $arrHeader["rm_code"]     	=	$this->Page->getRequest('txt_rm_code');
         $arrHeader["rm_desc"]        =   $this->Page->getRequest('txt_rm_desc');
-        $arrHeader["rm_measure_unit"]        =   $this->Page->getRequest('txt_rm_measure_unit');
+        $arrHeader["rm_measure_unit"]        =   $this->Page->getRequest('slt_rm_measure_unit');
 		$arrHeader["rm_price_per_unit"]        =   $this->Page->getRequest('txt_rm_price_per_unit');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
 		

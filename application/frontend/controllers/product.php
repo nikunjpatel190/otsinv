@@ -42,11 +42,10 @@ class product extends CI_Controller {
 	public function SaveProduct()
 	{
 		$strAction = $this->input->post('action');
-		$arrHeader["prod_categoty"]   	=	$this->Page->getRequest('txt_prod_categoty');
+		$arrHeader["prod_categoty"]   	=	$this->Page->getRequest('slt_prod_categoty');
         $arrHeader["prod_name"]     	=	$this->Page->getRequest('txt_prod_name');
         $arrHeader["prod_code"]        =   $this->Page->getRequest('txt_prod_code');
-        $arrHeader["prod_type"]        =   $this->Page->getRequest('txt_prod_type');
-		$arrHeader["prod_measure_unit"]        =   $this->Page->getRequest('txt_prod_measure_unit');
+		$arrHeader["prod_measure_unit"]        =   $this->Page->getRequest('slt_prod_measure_unit');
 		$arrHeader["prod_price_per_unit"]        =   $this->Page->getRequest('txt_prod_price_per_unit');
 		$arrHeader["prod_desc"]        =   $this->Page->getRequest('txt_prod_desc');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');

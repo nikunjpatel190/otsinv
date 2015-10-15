@@ -42,7 +42,6 @@ class prod_cat extends CI_Controller {
 	public function SaveProd_cat()
 	{
 		$strAction = $this->input->post('action');
-		$arrHeader["cat_code"]   	=	$this->Page->getRequest('txt_cat_code');
         $arrHeader["cat_name"]     	=	$this->Page->getRequest('txt_cat_name');
         $arrHeader["cat_desc"]        =   $this->Page->getRequest('txt_cat_desc');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');

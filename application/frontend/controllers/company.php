@@ -58,6 +58,7 @@ class company extends CI_Controller {
 		}
 		
 		$arrHeader["com_name"]   	=	$this->Page->getRequest('txt_com_name');
+		$arrHeader["com_code"]   	=	$this->Page->getRequest('txt_com_code');
         $arrHeader["com_email"]     	=	$this->Page->getRequest('txt_com_email');
         $arrHeader["com_phone"]        =   $this->Page->getRequest('txt_com_phone');
         $arrHeader["com_fax"]        =   $this->Page->getRequest('txt_com_fax');

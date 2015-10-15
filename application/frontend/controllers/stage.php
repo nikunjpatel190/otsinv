@@ -45,7 +45,7 @@ class stage extends CI_Controller {
 		$arrHeader["ps_name"]   	=	$this->Page->getRequest('txt_ps_name');
         $arrHeader["ps_desc"]     	=	$this->Page->getRequest('txt_ps_desc');
         $arrHeader["ps_priority"]        =   $this->Page->getRequest('txt_ps_priority');
-        $arrHeader["ps_seq"]        =   $this->Page->getRequest('txt_ps_seq');
+        $arrHeader["ps_colorcode"]        =   $this->Page->getRequest('txt_ps_colorcode');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
 		
 		if ($strAction == 'A' || $strAction == 'R')
