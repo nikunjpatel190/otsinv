@@ -43,7 +43,7 @@ class company extends CI_Controller {
 		// Check Company
 		$searchCriteria = array(); 
 		$searchCriteria["selectField"] = "com_id";
-		$searchCriteria["email"] = $this->Page->getRequest('txt_com_email');
+		$searchCriteria["name"] = $this->Page->getRequest('txt_com_name');
 		if ($strAction == 'E')
 		{
             $searchCriteria["not_id"] = $this->Page->getRequest('com_id');

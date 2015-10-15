@@ -13,9 +13,10 @@ class prod_cat extends CI_Controller {
 	{
 		$arrWhere	=	array();
 		
-		// Get All Vendors
-		$orderBy = " insertdate DESC";
-		$rsProd_cat = $this->prod_catModel->getAll('',$orderBy);
+		// Get All Categories
+		$searchCriteria	=	array();
+		$this->prod_catModel->searchCriteria = $searchCriteria;
+		$rsProd_cat = $this->prod_catModel->getCategory();
 		$rsListing['rsProd_cat']	=	$rsProd_cat;
 		
 		// Load Views
@@ -42,6 +43,24 @@ class prod_cat extends CI_Controller {
 	public function SaveProd_cat()
 	{
 		$strAction = $this->input->post('action');
+		$cat_id	   = $this->Page->getRequest('cat_id');
+		
+		// Check Duplicate entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "cat_id";
+		$searchCriteria["category_name"] = $this->Page->getRequest('txt_cat_name');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $cat_id;
+		}
+		$this->prod_catModel->searchCriteria=$searchCriteria;
+		$rsCategory = $this->prod_catModel->getCategory();
+		if(count($rsCategory) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=prod_cat&m=AddProd_cat', 'location');
+		}
+		
         $arrHeader["cat_name"]     	=	$this->Page->getRequest('txt_cat_name');
         $arrHeader["cat_desc"]        =   $this->Page->getRequest('txt_cat_desc');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
@@ -57,7 +76,6 @@ class prod_cat extends CI_Controller {
         }
 		elseif ($strAction == 'E')
 		{
-            $cat_id				= 	$this->Page->getRequest('cat_id');
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			

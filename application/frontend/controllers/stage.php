@@ -14,8 +14,7 @@ class stage extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All stages
-		$orderBy = " insertdate DESC";
-		$rsStages = $this->stageModel->getAll('',$orderBy);
+		$rsStages = $this->stageModel->getProcessStage();
 		$rsListing['rsStages']	=	$rsStages;
 		
 		// Load Views
@@ -42,6 +41,24 @@ class stage extends CI_Controller {
 	public function SaveStage()
 	{
 		$strAction = $this->input->post('action');
+		$ps_id     = $this->Page->getRequest('ps_id');
+		
+		// Check Duplicate entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "ps_id";
+		$searchCriteria["ps_name"] = $this->Page->getRequest('txt_ps_name');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $ps_id;
+		}
+		$this->stageModel->searchCriteria=$searchCriteria;
+		$rsProcessStage = $this->stageModel->getProcessStage();
+		if(count($rsProcessStage) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=stage&m=addStage', 'location');
+		}
+		
 		$arrHeader["ps_name"]   	=	$this->Page->getRequest('txt_ps_name');
         $arrHeader["ps_desc"]     	=	$this->Page->getRequest('txt_ps_desc');
         $arrHeader["ps_priority"]        =   $this->Page->getRequest('txt_ps_priority');
@@ -59,7 +76,6 @@ class stage extends CI_Controller {
         }
 		elseif ($strAction == 'E')
 		{
-            $ps_id				= 	$this->Page->getRequest('ps_id');
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			

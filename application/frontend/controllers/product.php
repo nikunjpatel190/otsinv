@@ -14,8 +14,11 @@ class product extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All products
-		$orderBy = " insertdate DESC";
-		$rsProducts = $this->productModel->getAll('',$orderBy);
+		$searchCriteria	=	array();
+		$searchCriteria['orderField'] = 'insertdate';
+		$searchCriteria['orderDir'] = 'DESC';
+		$this->productModel->searchCriteria = $searchCriteria;
+		$rsProducts = $this->productModel->getProduct();
 		$rsListing['rsProducts']	=	$rsProducts;
 		
 		// Load Views
@@ -42,6 +45,24 @@ class product extends CI_Controller {
 	public function SaveProduct()
 	{
 		$strAction = $this->input->post('action');
+		$prod_id   = $this->Page->getRequest('prod_id');
+		
+		// Check Duplicate entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "pm.prod_id";
+		$searchCriteria["prod_name"] = $this->Page->getRequest('txt_prod_name');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $prod_id;
+		}
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsProduct = $this->productModel->getProduct();
+		if(count($rsProduct) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=prod_cat&m=AddProd_cat', 'location');
+		}
+		
 		$arrHeader["prod_categoty"]   	=	$this->Page->getRequest('slt_prod_categoty');
         $arrHeader["prod_name"]     	=	$this->Page->getRequest('txt_prod_name');
         $arrHeader["prod_code"]        =   $this->Page->getRequest('txt_prod_code');
@@ -61,7 +82,6 @@ class product extends CI_Controller {
         }
 		elseif ($strAction == 'E')
 		{
-            $prod_id				= 	$this->Page->getRequest('prod_id');
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			

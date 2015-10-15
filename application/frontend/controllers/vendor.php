@@ -11,11 +11,12 @@ class vendor extends CI_Controller {
 	
 	public function index()
 	{
-		$arrWhere	=	array();
-		
 		// Get All Vendors
-		$orderBy = " insertdate DESC";
-		$rsVendors = $this->vendorModel->getAll('',$orderBy);
+		$searchCriteria	=	array();
+		$searchCriteria['orderField'] = 'insertdate';
+		$searchCriteria['orderDir'] = 'DESC';
+		$this->vendorModel->searchCriteria = $searchCriteria;
+		$rsVendors = $this->vendorModel->getVendor();
 		$rsListing['rsVendors']	=	$rsVendors;
 		
 		// Load Views
