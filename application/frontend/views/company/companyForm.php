@@ -6,6 +6,9 @@ echo form_open('c=company&m=saveCompany', $attributes);
 ?>
 <div class="page-header position-relative">
     <h1>Add Company</h1>
+     <?php
+		echo $this->Page->getMessage();
+	?>
 </div>
 
 <input type="hidden" name="action" value="<?php echo $strAction; ?>" id="action"/>
