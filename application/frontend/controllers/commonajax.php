@@ -8,6 +8,7 @@ class Commonajax extends CI_Controller {
 		$this->load->model("data",'',true);
 		$this->load->model("userModel",'',true);
 		$this->load->model("productModel",'',true);
+		$this->load->model("settingModel",'',true);
     }	
 	
 	function index()
@@ -178,6 +179,34 @@ class Commonajax extends CI_Controller {
 	{
 		$id = $this->Page->getRequest("id");
 		$strQuery = "DELETE FROM map_prod_proc WHERE id =".$id;
+		$this->db->query($strQuery);
+	}
+	
+	function getUtypeModuleDetails()
+	{
+		$utype_id = $this->Page->getRequest("utype_id");
+		
+		
+		// Check Entry
+		$rsListing['rsMapDtl'] = array();
+		if($utype_id != "")
+		{
+			$searchCriteria = array(); 
+			//$searchCriteria["selectField"] = "map.id,ut.u_type_id";
+			$searchCriteria["utypeId"] = $utype_id;
+			$this->settingModel->searchCriteria=$searchCriteria;
+			$rsListing['rsMapDtl'] = $this->settingModel->getAssignModuleDetail();
+		}
+		$this->load->view('module/list_utype_module', $rsListing);	
+		//$this->Page->pr($rsUsers); exit;
+	}
+	
+	function delUtypeModuleDetails()
+	{
+		$id = $this->Page->getRequest("id");
+				
+		$strQuery = "DELETE FROM map_usertype_module WHERE id =".$id;
+		//echo $strQuery; exit;
 		$this->db->query($strQuery);
 	}
 	

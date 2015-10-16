@@ -191,6 +191,35 @@
                 </li>
             </ul>
         </li>
+        <li>
+        	<a href="#" class="dropdown-toggle">
+                <i class="icon-edit"></i>
+                <span class="menu-text">Setting</span>
+    
+                <b class="arrow icon-angle-down"></b>
+            </a>
+    
+            <ul class="submenu">
+                <li>
+                    <a href="index.php?c=setting&m=panel_list">
+                        <i class="icon-double-angle-right"></i>
+                        Panel List
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?c=setting&m=module_list">
+                        <i class="icon-double-angle-right"></i>
+                        Module List
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?c=setting&m=frmAssignModule">
+                        <i class="icon-double-angle-right"></i>
+                        Assign Module to Utype
+                    </a>
+                </li>
+            </ul>            
+        </li>
     </ul>
 		
     <div class="sidebar-collapse" id="sidebar-collapse">
