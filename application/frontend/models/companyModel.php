@@ -12,7 +12,7 @@ class companyModel extends Data {
         $this->tbl = 'company_master';
     }
 	
-	function getCompany($strWhere='', $strOrderBy='')
+	function getCompany()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
@@ -29,6 +29,12 @@ class companyModel extends Data {
 		if(isset($searchCriteria['companyId']) && $searchCriteria['companyId'] != "")
 		{
 			$whereClaue .= 	" AND com_id=".$searchCriteria['userType']." ";
+		}
+		
+		// By company name
+		if(isset($searchCriteria['name']) && $searchCriteria['name'] != "")
+		{
+			$whereClaue .= 	" AND com_name='".$searchCriteria['name']."' ";
 		}
 		
 		// By company email

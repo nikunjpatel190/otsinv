@@ -10,7 +10,7 @@ class departmentModel extends Data {
         $this->tbl = 'department_master';
     }
 	
-	function getDepartmnt($strWhere='', $strOrderBy='')
+	function getDepartmnt()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
