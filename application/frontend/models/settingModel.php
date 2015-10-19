@@ -39,7 +39,10 @@ class settingModel extends Data {
 		$sqlQuery = "SELECT 
 						* 
 					FROM 
-						module_master";
+						module_master as mm 
+						
+					JOIN panel_master AS pm
+							ON pm.panel_id = mm.panel_id";
 		
 		if($strWhere != '')
 		{

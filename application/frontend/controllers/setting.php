@@ -88,7 +88,7 @@ class setting extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All Vendors
-		$orderBy = " insertdate DESC";
+		$orderBy = " mm.insertdate DESC";
 		$rsModules = $this->settingModel->getModule('',$orderBy);
 		$rsListing['rsModules']	=	$rsModules;
 		

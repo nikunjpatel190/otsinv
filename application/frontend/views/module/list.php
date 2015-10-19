@@ -55,7 +55,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
 						echo '<td>'. $arrRecord->module_name .'</td>';
-						echo '<td>'. $arrRecord->panel_id .'</td>';
+						echo '<td>'. $arrRecord->panel_name .'</td>';
                         echo '<td>'. $arrRecord->module_url .'</td>';
 						echo '<td>'. $arrRecord->seq .'</td>';
 						echo '<td>'. $arrRecord->status .'</td>';														
