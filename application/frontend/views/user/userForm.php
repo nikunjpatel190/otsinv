@@ -21,7 +21,7 @@ echo form_open('c=user&m=saveUser', $attributes);
                 <label for="form-field-1" class="control-label">User Types <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_user_type" id="slt_user_type" >
-                    	<?php echo $this->Page->generateComboByTable("user_types","u_typ_code","u_typ_name","","",$rsEdit->user_type,"Select Types"); ?>
+                    	<?php echo $this->Page->generateComboByTable("user_types","u_typ_id","u_typ_name","","",$rsEdit->user_type,"Select Types"); ?>
                     </select>
                 </div>
             </div>

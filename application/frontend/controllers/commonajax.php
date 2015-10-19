@@ -9,6 +9,10 @@ class Commonajax extends CI_Controller {
 		$this->load->model("userModel",'',true);
 		$this->load->model("productModel",'',true);
 		$this->load->model("settingModel",'',true);
+		$this->load->model("generalModel",'',true);
+		
+		$this->Page->pr( $rsListing['rsPanels'] = $this->generalModel->getPanel() );
+		$this->Page->pr($rsListing['rsAssignModules'] = $this->generalModel->getAssignModule());
     }	
 	
 	function index()

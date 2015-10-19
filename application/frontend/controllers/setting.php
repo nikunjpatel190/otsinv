@@ -7,6 +7,10 @@ class setting extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("settingModel",'',true);
+		$this->load->model("generalModel",'',true);
+		
+		$this->Page->pr( $rsListing['rsPanels'] = $this->generalModel->getPanel() );
+		$this->Page->pr($rsListing['rsAssignModules'] = $this->generalModel->getAssignModule());
 	}
 	
 	public function panel_list()
