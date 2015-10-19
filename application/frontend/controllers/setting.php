@@ -200,6 +200,95 @@ class setting extends CI_Controller {
 		}
 	}
 	
+	public function comboList()
+	{
+		// Get All companies
+		$rsCombos = $this->settingModel->getCombo();
+		$rsListing['rsCombos']	=	$rsCombos;
+		
+		// Load Views
+		$this->load->view('combo/list', $rsListing);	
+	}
+	
+	public function AddCombo()
+	{
+		$this->settingModel->tbl="combo_master";
+		$data["strAction"] = $this->Page->getRequest("action");
+        $data["strMessage"] = $this->Page->getMessage();
+        $data["id"] = $this->Page->getRequest("id");
+
+        if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
+		{
+		   $data["rsEdit"] = $this->settingModel->get_by_id('combo_id', $data["id"]);
+        } 
+		else 
+		{
+            $data["strAction"] = "A";
+        }
+		$this->load->view('combo/comboForm',$data);
+	}
+	
+	public function SaveCombo()
+	{
+		$this->settingModel->tbl="combo_master";
+		$strAction = $this->input->post('action');
+		
+		// Check Company
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "combo_id";
+		$searchCriteria["combo_case"] = $this->Page->getRequest('txt_combo_case');
+		$searchCriteria["combo_key"] = $this->Page->getRequest('txt_combo_key');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $this->Page->getRequest('combo_id');
+		}
+		
+		$this->settingModel->searchCriteria=$searchCriteria;
+		$rsCombo = $this->settingModel->getCombo();
+		if(count($rsCombo) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=setting&m=AddCombo', 'location');
+		}
+		
+		$arrHeader["combo_case"]   	=	$this->Page->getRequest('txt_combo_case');
+		$arrHeader["combo_key"]   	=	$this->Page->getRequest('txt_combo_key');
+        $arrHeader["combo_value"]     	=	$this->Page->getRequest('txt_combo_value');
+        $arrHeader["seq"]        =   $this->Page->getRequest('txt_seq');
+		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
+		
+		if ($strAction == 'A' || $strAction == 'R')
+		{
+            $arrHeader['insertby']		=	$this->Page->getSession("intUserId");
+            $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
+            $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
+			
+			$intCenterID = $this->settingModel->insert($arrHeader);
+			$this->Page->setMessage('REC_ADD_MSG');
+        }
+		elseif ($strAction == 'E')
+		{
+            $combo_id				= 	$this->Page->getRequest('combo_id');
+            $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
+            $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
+			
+            $this->settingModel->update($arrHeader, array('combo_id' => $combo_id));
+            $this->Page->setMessage('REC_EDIT_MSG');
+        }
+		
+		redirect('c=setting&m=comboList', 'location');
+	}
+	
+	public function deleteCombo()
+	{
+		$arrComboIds	=	$this->input->post('chk_lst_list1');
+		$strComboIds	=	implode(",", $arrComboIds);
+		$strQuery = "DELETE FROM combo_master WHERE combo_id IN (". $strComboIds .")";
+		$this->db->query($strQuery);
+		$this->Page->setMessage("DELETE_RECORD");
+		// redirect to listing screen
+		redirect('c=setting&m=comboList', 'location');
+	}
 	
 	
 }

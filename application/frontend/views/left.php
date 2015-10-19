@@ -218,6 +218,12 @@
                         Assign Module to Utype
                     </a>
                 </li>
+                <li>
+                    <a href="index.php?c=setting&m=comboList">
+                        <i class="icon-double-angle-right"></i>
+                        Manage Combo
+                    </a>
+                </li>
             </ul>            
         </li>
     </ul>

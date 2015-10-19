@@ -110,4 +110,75 @@ class settingModel extends Data {
 		$rsData     = $result->result_object();
 		return $rsData;
 	}
+	
+	function getCombo()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By company id
+		if(isset($searchCriteria['comboId']) && $searchCriteria['comboId'] != "")
+		{
+			$whereClaue .= 	" AND combo_id=".$searchCriteria['comboId']." ";
+		}
+		
+		// By company name
+		if(isset($searchCriteria['combo_case']) && $searchCriteria['combo_case'] != "")
+		{
+			$whereClaue .= 	" AND combo_case='".$searchCriteria['combo_case']."' ";
+		}
+		
+		// By company email
+		if(isset($searchCriteria['combo_key']) && $searchCriteria['combo_key'] != "")
+		{
+			$whereClaue .= 	" AND combo_key='".$searchCriteria['combo_key']."' ";
+		}
+		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND status='".$searchCriteria['status']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND combo_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " combo_case";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		
+		$sqlQuery = "SELECT 
+						".$selectField."
+					FROM 
+						combo_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_object();
+		return $rsData;
+		
+		
+	}
 }
