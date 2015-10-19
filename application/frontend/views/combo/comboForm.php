@@ -50,7 +50,7 @@ echo form_open('c=setting&m=SaveCombo', $attributes);
                 <label for="form-field-1" class="control-label">Status<span class="red">*</span></label>
                 <div class="controls">
                 	<select class="required span6" name="slt_status" id="slt_status" >
-                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_value","combo_key",0,"order by seq",$rsEdit->status,""); ?>
+                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_value","combo_key",0,"where combo_case='STATUS' order by seq",$rsEdit->status,""); ?>
                     </select>
                 </div>
             </div>
