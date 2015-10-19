@@ -41,10 +41,7 @@ echo form_open('c=raw_material&m=saveRaw_material', $attributes);
                 <label for="form-field-1" class="control-label">Measure Unit <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_rm_measure_unit" id="slt_rm_measure_unit" >
-                    	<option value="">---Select Unit---</option>
-                        <option>Kg.</option>
-                        <option>Ltr</option>
-                        <option>Qty</option>
+                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_value","combo_key",""," where combo_case='MEASURE' order by seq",$rsEdit->rm_measure_unit,"Select Measure Unit"); ?>
                     </select>
                 </div>
             </div>

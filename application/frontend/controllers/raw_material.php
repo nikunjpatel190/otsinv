@@ -14,8 +14,7 @@ class raw_material extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All raw_material
-		$orderBy = " insertdate DESC";
-		$rsRaw_material = $this->raw_materialModel->getAll('',$orderBy);
+		$rsRaw_material = $this->raw_materialModel->getRowMaterial();
 		$rsListing['rsRaw_material']	=	$rsRaw_material;
 		
 		// Load Views
@@ -42,6 +41,24 @@ class raw_material extends CI_Controller {
 	public function SaveRaw_material()
 	{
 		$strAction = $this->input->post('action');
+		$rm_id = $this->Page->getRequest('rm_id');
+		
+		// Check Duplicate entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "rm_id";
+		$searchCriteria["name"] = $this->Page->getRequest('txt_rm_name');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $rm_id;
+		}
+		$this->raw_materialModel->searchCriteria=$searchCriteria;
+		$rsRowMaterial = $this->raw_materialModel->getRowMaterial();
+		if(count($rsRowMaterial) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=raw_material&m=addRaw_material&action=A', 'location');
+		}
+		
 		$arrHeader["rm_name"]   	=	$this->Page->getRequest('txt_rm_name');
         $arrHeader["rm_code"]     	=	$this->Page->getRequest('txt_rm_code');
         $arrHeader["rm_desc"]        =   $this->Page->getRequest('txt_rm_desc');
@@ -60,7 +77,6 @@ class raw_material extends CI_Controller {
         }
 		elseif ($strAction == 'E')
 		{
-            $rm_id				= 	$this->Page->getRequest('rm_id');
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
