@@ -1,6 +1,9 @@
 <?php
-print_r($rsPanels);
-
+$CI =& get_instance();
+$CI->load->model('generalModel');
+$rsPanels = $CI->generalModel->getPanel();
+$rsAssignModules = $CI->generalModel->getAssignModule();
+//$this->Page->pr($rsPanels); exit;
 ?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->
 <div class="sidebar" id="sidebar">
@@ -39,8 +42,40 @@ print_r($rsPanels);
                 <span class="menu-text"> Dashboard </span>
             </a>
         </li>
-		
-        <li>
+		<?php
+			$moduleArr = array();
+			foreach($rsAssignModules AS $module)
+			{
+				$moduleArr[$module['panel_id']][] = $module;
+			}
+			
+			foreach($rsPanels AS $panel)
+			{
+				if(count($moduleArr[$panel['panel_id']]) > 0)
+				{
+					echo '<li>
+							<a href="#" class="dropdown-toggle">
+								'.$panel['img_url'].'
+								<span class="menu-text"> '.$panel['panel_name'].' </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu">';
+					foreach($moduleArr[$panel['panel_id']] AS $module)
+					{
+						//$this->Page->pr($module);
+						echo '<li>
+								 <a href="'.$module['module_url'].'">
+									 <i class="icon-double-angle-right"></i>
+									 '.$module['module_name'].'
+								 </a>
+							 </li>'; 
+					}
+					echo '</ul>
+        			</li>';
+				}
+			}
+		?>
+        <!--<li>
         	<a href="#" class="dropdown-toggle">
                 <i class="icon-edit"></i>
                 <span class="menu-text"> Manage User </span>
@@ -229,7 +264,7 @@ print_r($rsPanels);
                     </a>
                 </li>
             </ul>            
-        </li>
+        </li>-->
     </ul>
 		
     <div class="sidebar-collapse" id="sidebar-collapse">
