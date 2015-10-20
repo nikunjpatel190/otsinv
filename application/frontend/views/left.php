@@ -30,7 +30,7 @@
 
     <ul class="nav nav-list">
     	<li class="active">
-            <a href="index.html">
+            <a href="index.php?c=general">
                 <i class="icon-dashboard text-left"></i>
                 <span class="menu-text"> Dashboard </span>
             </a>

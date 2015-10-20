@@ -9,8 +9,9 @@ class company extends CI_Controller {
 		$this->load->model("companyModel",'',true);
 		$this->load->model("generalModel",'',true);
 		
-		$this->Page->pr( $rsListing['rsPanels'] = $this->generalModel->getPanel() );
-		$this->Page->pr($rsListing['rsAssignModules'] = $this->generalModel->getAssignModule());
+		$rsListing['rsPanels'] = $this->generalModel->getPanel();
+		$rsListing['rsAssignModules'] = $this->generalModel->getAssignModule();		
+		
 	}
 	
 	public function index()
