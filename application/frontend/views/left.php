@@ -1,3 +1,7 @@
+<?php
+print_r($rsPanels);
+
+?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->
 <div class="sidebar" id="sidebar">
     <!--<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">

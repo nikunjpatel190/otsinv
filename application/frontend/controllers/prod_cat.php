@@ -7,10 +7,7 @@ class prod_cat extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("prod_catModel",'',true);
-		$this->load->model("generalModel",'',true);
 		
-		$this->Page->pr( $rsListing['rsPanels'] = $this->generalModel->getPanel() );
-		$this->Page->pr($rsListing['rsAssignModules'] = $this->generalModel->getAssignModule());
 	}
 	
 	public function index()
