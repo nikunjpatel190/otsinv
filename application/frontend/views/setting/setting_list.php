@@ -7,7 +7,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 ?>
 
 <div class="page-header position-relative">
-    <h1>Product Category List</h1>
+    <h1>Manage Setting</h1>
 </div>
 <input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 <input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
@@ -37,7 +37,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
             </thead>
             <tbody>
                 <?php
-				if(count($rsProd_cat)==0)
+				if(count($rsSetting)==0)
                 {
                     echo "<tr>";
                     echo '<td colspan="5" style="text-align:center;">No data found.</td>';
@@ -45,16 +45,16 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 }
                 else
                 {
-                    foreach($rsProd_cat as $arrRecord)
+                    foreach($rsSetting as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=prod_cat&m=AddProd_cat&action=E&id=".$arrRecord->cat_id;
+                        $strEditLink	=	"index.php?c=setting&m=AddSetting&action=E&id=".$arrRecord->setting_id;
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->cat_id.'" value="'.$arrRecord->cat_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->setting_id.'" value="'.$arrRecord->setting_id.'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->cat_name .'</td>';
-                        echo '<td>'. $arrRecord->cat_desc .'</td>';
-                        echo '<td>'. $arrRecord->status .'</td>';
+						echo '<td>'. $arrRecord->var_key .'</td>';
+                        echo '<td>'. $arrRecord->var_value .'</td>';
+                        echo '<td>'. $arrRecord->description .'</td>';
 						echo '</tr>';
                     }
 				}
@@ -72,7 +72,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsProd_cat)> 0): ?>
+<?php if(count($rsSetting)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
 					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null],
 					"iDisplayLength": 25,
@@ -83,7 +83,7 @@ var oTable1 =	$('#pagelist_center').dataTable( {
 
 function openAddPage()
 {
-    window.location.href = 'index.php?c=prod_cat&m=AddProd_cat&action=A';
+    window.location.href = 'index.php?c=setting&m=AddSetting&action=A';
 }
 
 function DeleteRow()
@@ -99,7 +99,7 @@ function DeleteRow()
 		var responce = confirm("Do you want to delete selected record(s)?");
 		if(responce==true)
 		{
-			$('#frm_list_record').attr('action','index.php?c=prod_cat&m=delete');
+			$('#frm_list_record').attr('action','index.php?c=setting&m=deleteSetting');
 			$('#frm_list_record').submit()	
 		}
 	}

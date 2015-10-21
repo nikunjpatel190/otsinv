@@ -291,6 +291,98 @@ class setting extends CI_Controller {
 		redirect('c=setting&m=comboList', 'location');
 	}
 	
+	public function setting_list()
+	{
+		$this->settingModel->tbl="settings";
+		$arrWhere	=	array();
+		
+		// Get All Categories
+		$searchCriteria	=	array();
+		$this->settingModel->searchCriteria = $searchCriteria;
+		$rsSetting = $this->settingModel->getSetting();
+		$rsListing['rsSetting']	=	$rsSetting;
+		
+		// Load Views
+		$this->load->view('setting/setting_list', $rsListing);	
+	}
+	
+	public function AddSetting()
+	{
+		$this->settingModel->tbl="settings";
+		$data["strAction"] = $this->Page->getRequest("action");
+        $data["strMessage"] = $this->Page->getMessage();
+        $data["id"] = $this->Page->getRequest("id");
+
+        if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
+		{
+		   $data["rsEdit"] = $this->settingModel->get_by_id('setting_id', $data["id"]);
+        } 
+		else 
+		{
+            $data["strAction"] = "A";
+        }
+		$this->load->view('setting/settingForm',$data);
+	}
+	
+	public function SaveSetting()
+	{		
+		$this->settingModel->tbl="settings";
+		$strAction = $this->input->post('action');
+		$setting_id	   = $this->Page->getRequest('setting_id');
+		
+		
+		// Check Duplicate entry
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "setting_id";
+		$searchCriteria["var_key"] = $this->Page->getRequest('txt_var_key');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $setting_id;
+		}
+		$this->settingModel->searchCriteria=$searchCriteria;
+		$rsSetting = $this->settingModel->getSetting();
+		if(count($rsSetting) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=setting&m=AddSetting', 'location');
+		}
+		
+        $arrHeader["var_key"]     	=	$this->Page->getRequest('txt_var_key');
+        $arrHeader["var_value"]        =   $this->Page->getRequest('txt_var_value');
+		$arrHeader["description"]        	= 	$this->Page->getRequest('txt_description');
+		
+		if ($strAction == 'A' || $strAction == 'R')
+		{
+            $arrHeader['insertby']		=	$this->Page->getSession("intUserId");
+            $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
+            $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
+			
+			$intCenterID = $this->settingModel->insert($arrHeader);
+			$this->Page->setMessage('REC_ADD_MSG');
+        }
+		elseif ($strAction == 'E')
+		{
+            $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
+            $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
+			
+            $this->settingModel->update($arrHeader, array('setting_id' => $cat_id));
+            $this->Page->setMessage('REC_EDIT_MSG');
+        }
+		
+		redirect('c=setting&m=setting_list', 'location');
+	}
+	
+	public function deleteSetting()
+	{
+		$arrSettingIds	=	$this->input->post('chk_lst_list1');
+		$strSettingIds	=	implode(",", $arrSettingIds);
+		$strQuery = "DELETE FROM settings WHERE setting_id IN (". $strSettingIds .")";
+		$this->db->query($strQuery);
+		$this->Page->setMessage("DELETE_RECORD");
+		// redirect to listing screen
+		redirect('c=setting&m=setting_list', 'location');
+	}
+	
 	
 }
 

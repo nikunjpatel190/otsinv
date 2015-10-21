@@ -7,7 +7,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 ?>
 
 <div class="page-header position-relative">
-    <h1>Product List</h1>
+    <h1>Product Category List</h1>
 </div>
 <input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 <input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
@@ -30,40 +30,32 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Product Category</th>
-                    <th>Product Name</th>
-                    <th>Product Code</th>
-                    <th>Measure Unit</th>
-                    <th>Price Per Unit</th>
-                    <th>Product Description</th>
+                    <th>Cat Name</th>
+                    <th>Cat Desc</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-				if(count($rsProducts)==0)
+				if(count($rsProd_cat)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="9" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="5" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
                 {
-                    foreach($rsProducts as $arrRecord)
+                    foreach($rsProd_cat as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=product&m=AddProduct&action=E&id=".$arrRecord->prod_id;
+                        $strEditLink	=	"index.php?c=product&m=AddProd_cat&action=E&id=".$arrRecord->cat_id;
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->prod_id.'" value="'.$arrRecord->prod_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->cat_id.'" value="'.$arrRecord->cat_id.'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->prod_categoty .'</td>';
-						echo '<td>'. $arrRecord->prod_name .'</td>';
-                        echo '<td>'. $arrRecord->prod_code .'</td>';
-						echo '<td>'. $arrRecord->prod_measure_unit .'</td>';
-                        echo '<td>'. $arrRecord->prod_price_per_unit .'</td>';
-						echo '<td>'. $arrRecord->prod_desc .'</td>';
-						echo '<td>'. $arrRecord->status .'</td>';														
-                        echo '</tr>';
+						echo '<td>'. $arrRecord->cat_name .'</td>';
+                        echo '<td>'. $arrRecord->cat_desc .'</td>';
+                        echo '<td>'. $arrRecord->status .'</td>';
+						echo '</tr>';
                     }
 				}
                 ?>
@@ -80,9 +72,9 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsProducts)> 0): ?>
+<?php if(count($rsProd_cat)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>
@@ -91,7 +83,7 @@ var oTable1 =	$('#pagelist_center').dataTable( {
 
 function openAddPage()
 {
-    window.location.href = 'index.php?c=product&m=addProduct&action=A';
+    window.location.href = 'index.php?c=product&m=AddProd_cat&action=A';
 }
 
 function DeleteRow()
@@ -107,7 +99,7 @@ function DeleteRow()
 		var responce = confirm("Do you want to delete selected record(s)?");
 		if(responce==true)
 		{
-			$('#frm_list_record').attr('action','index.php?c=product&m=deleteProduct');
+			$('#frm_list_record').attr('action','index.php?c=product&m=deleteCategory');
 			$('#frm_list_record').submit()	
 		}
 	}

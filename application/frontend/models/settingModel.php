@@ -184,4 +184,64 @@ class settingModel extends Data {
 		
 		
 	}
+	
+	
+	
+	function getSetting()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By Category id
+		if(isset($searchCriteria['setting_id']) && $searchCriteria['setting_id'] != "")
+		{
+			$whereClaue .= 	" AND setting_id=".$searchCriteria['setting_id']." ";
+		}
+		
+		// By Category name
+		if(isset($searchCriteria['var_key']) && $searchCriteria['var_key'] != "")
+		{
+			$whereClaue .= 	" AND var_key='".$searchCriteria['var_key']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND setting_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " setting_id";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT 
+						".$selectField."
+					FROM 
+						settings ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_object();
+		return $rsData;
+		
+		
+	}
 }
