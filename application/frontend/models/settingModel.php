@@ -39,8 +39,7 @@ class settingModel extends Data {
 		$sqlQuery = "SELECT 
 						* 
 					FROM 
-						module_master as mm 
-						
+						module_master as mm
 					JOIN panel_master AS pm
 							ON pm.panel_id = mm.panel_id";
 		
@@ -55,10 +54,8 @@ class settingModel extends Data {
 		}
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
-		return $rsData;
-		
-		
+		$rsData     = $result->result_array();
+		return $rsData;	
 	}
 	
 	public function getAssignModuleDetail()
@@ -110,7 +107,7 @@ class settingModel extends Data {
 		
 		//	echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 	
@@ -185,8 +182,6 @@ class settingModel extends Data {
 		
 	}
 	
-	
-	
 	function getSetting()
 	{
 		$searchCriteria = array();
@@ -240,8 +235,6 @@ class settingModel extends Data {
 		
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_object();
-		return $rsData;
-		
-		
+		return $rsData;	
 	}
 }
