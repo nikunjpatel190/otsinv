@@ -7,6 +7,7 @@ class setting extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("settingModel",'',true);
+		$this->load->model("userModel",'',true);
 		
 	}
 	
@@ -163,6 +164,7 @@ class setting extends CI_Controller {
 	// open form (module usertype mapping)
 	public function frmAssignModule()
 	{
+		$data['userTypesArr'] = $this->userModel->getUserTypes();
 		$this->load->view('module/assignModuleForm',$data);
 	}
 	
