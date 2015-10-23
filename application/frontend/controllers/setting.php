@@ -12,7 +12,6 @@ class setting extends CI_Controller {
 	
 	public function panel_list()
 	{
-		$this->settingModel->tbl="panel_master";
 		$arrWhere	=	array();
 		
 		// Get All Vendors
