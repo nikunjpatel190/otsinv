@@ -7,11 +7,6 @@ class company extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("companyModel",'',true);
-		$this->load->model("generalModel",'',true);
-		
-		$rsListing['rsPanels'] = $this->generalModel->getPanel();
-		$rsListing['rsAssignModules'] = $this->generalModel->getAssignModule();		
-		
 	}
 	
 	public function index()

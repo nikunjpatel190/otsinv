@@ -19,9 +19,19 @@
                 {
                     foreach($rsMapDtl as $arrRecord)
                     {
-                        echo '<tr id="row_'.$arrRecord->id.'">';
-						echo '<td>'. $arrRecord->module_name .'</td>';
-                        echo '<td><a href="javascript:void(0);" class="green del" title="Remove" id='.$arrRecord->id.'><i class="icon-remove bigger-130"></i></a></td>';
+                        $checked = '';
+						if($arrRecord['map']=='1')
+						{
+							$checked = 'checked';
+						}
+						echo '<tr>';
+						echo '<td>'. $arrRecord['module_name'] .'</td>';
+						echo '<td class="span1 center"><div class="control-group">
+								<div class="controls">
+									<input type="checkbox" name="switch-field-1" class="ace-switch ace-switch-6 asn" '.$checked.' utypeid='.$utype_id.' moduleid='.$arrRecord['module_id'].'>
+									<span class="lbl"></span>
+								</div>
+							</div></td>';
                         echo '</tr>';
                     }
 				}
@@ -31,22 +41,17 @@
     </div>
 </div>
 <script type="text/javascript">
-	$(".del").click(function(){
-		if(confirm("Really want to delete this record?"))
-		{
-			var id = this.id;
-			$.ajax({
-				type:"POST",
-				url:"index.php?c=commonajax&m=delUtypeModuleDetails",
-				data:"id="+id,
-				beforeSend:function()
-				{
-				},
-				success:function(res)
-				{
-					$("#row_"+id).remove();
-				}
-			});
-		}
+	$(".asn").click(function(){
+		var utypeid = $(this).attr('utypeid');
+		var moduleid = $(this).attr('moduleid');		
+		$.ajax({
+			type:"POST",
+			url:"index.php?c=commonajax&m=mapUtypeModule",
+			data:"utypeid="+utypeid+"&moduleid="+moduleid,
+			beforeSend:function(){
+			},
+			success:function(res){
+			}
+		});
 	});
 </script>

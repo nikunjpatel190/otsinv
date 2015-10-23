@@ -41,6 +41,7 @@ function submit_form(form)
 	var formid	=	form.id;
 	var blnError	=	false;	
 	var blnEmailError	=	false;
+	var blnNumber	=	false;
 	
 	$(".errmsg").remove();
 
@@ -70,6 +71,37 @@ function submit_form(form)
 		blnIsValidEmail	=	true;
 
 		blnIsValidEmail	=	checkValidEmail(strEmailVal);
+		
+		if(blnIsValidEmail == false)
+		{
+			setStyle(this);
+			$(this).after('<br /><span class="errmsg">*Please enter valid Email.</span>');
+			blnEmailError	=	true;
+		}
+		else
+		{
+			resetStyle(this);
+		}
+	});
+	
+	if(blnEmailError == true)
+	{
+		return false;
+	}
+	
+	// Check Number Fields
+	$('#'+formid+' .isnumber').each(function() {
+		var numberRegex = "/^[0-9]+$/";
+		blnIsNumber	=	true;
+		intNumberVal		=	$(this).val();
+
+		if(intNumberVal != "")
+		{
+			if(!numberRegex.test(intNumberVal))
+			{
+				blnIsNumber = false;		
+			}
+		}
 		
 		if(blnIsValidEmail == false)
 		{

@@ -52,6 +52,12 @@ class userModel extends Data {
 			$whereClaue .= 	" AND um.dept_id=".$searchCriteria['deptId']." ";
 		}
 		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND um.status='".$searchCriteria['status']."' ";
+		}
+		
 		// Not In
 		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
 		{
@@ -246,6 +252,17 @@ class userModel extends Data {
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_object();
+		return $rsData;
+	}
+	
+	# Auther : Nikunj Bambhroliya
+	# Date : 21-10-2015
+	# Description : get all active user types
+	public function getUserTypes()
+	{
+		$sqlQuery = "SELECT * FROM user_types where status='ACTIVE'";
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 }

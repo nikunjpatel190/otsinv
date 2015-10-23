@@ -97,6 +97,18 @@ class stage extends CI_Controller {
 		// redirect to listing screen
 		redirect('c=stage', 'location');
 	}
+	
+	########################################################################### 
+	#							                                              #
+	#								PROCESS FLOW			              	  #
+	#																		  #					
+	###########################################################################
+	
+	public function addProcess()
+	{
+		// Load Views
+		$this->load->view('process/processForm', '');		
+	}
 }
 
 /* End of file welcome.php */
