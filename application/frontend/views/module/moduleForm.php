@@ -27,7 +27,7 @@ echo form_open('c=setting&m=saveModule', $attributes);
                 <label for="form-field-1" class="control-label">Panel Id <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_panel_id" id="slt_panel_id" >
-                    	<?php echo $this->Page->generateComboByTable("panel_master","panel_id","panel_name","","",$rsEdit->user_type,"Select Panel"); ?>
+                    	<?php echo $this->Page->generateComboByTable("panel_master","panel_id","panel_name","","",$rsEdit->panel_id,"Select Panel"); ?>
                     </select>
                 </div>
             </div>

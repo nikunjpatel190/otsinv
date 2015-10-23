@@ -37,10 +37,9 @@ class settingModel extends Data {
 	function getModule($strWhere='', $strOrderBy='')
 	{
 		$sqlQuery = "SELECT 
-						* 
+						mm.*,pm.panel_name 
 					FROM 
-						module_master as mm 
-						
+						module_master as mm 						
 					JOIN panel_master AS pm
 							ON pm.panel_id = mm.panel_id";
 		
