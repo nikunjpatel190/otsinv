@@ -2,13 +2,12 @@
 <?php include(APPPATH.'views/top.php'); ?>
 <?php endif; ?>
 <?php
-
 $attributes = array('id' => 'frm_list_record', 'name'=>'frm_list_record');
 echo form_open_multipart('c=aheg&m=event_add', $attributes); 
 ?>
 
 <div class="page-header position-relative">
-    <h1>Panel List</h1>
+    <h1>Client List</h1>
 </div>
 <input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 <input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
@@ -31,34 +30,47 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Panel Name</th>
-                    <th>Sequence</th>
-                    <th>Image Url</th>
+                    <th>Client Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Client Theme</th>
+                    <th>Client Domain</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-				if(count($rsPanels)==0)
+				if(count($rsClients)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="6" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="13" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
                 {
-                    foreach($rsPanels as $arrRecord)
-                    {                        
-						
-						$strEditLink	=	"index.php?c=setting&m=AddPanel&action=E&id=".$arrRecord['panel_id'];
+                    foreach($rsClients as $arrRecord)
+                    {
+                        $strEditLink	=	"index.php?c=client&m=AddClient&action=E&id=".$arrRecord['client_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['panel_id'].'" value="'.$arrRecord['panel_id'].'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['client_id'].'" value="'.$arrRecord['client_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord['panel_name'].'</td>';
-						echo '<td>'. $arrRecord['seq'] .'</td>';
-                        echo '<td>'. $arrRecord['img_url'] .'</td>';
-						echo '<td>'. $arrRecord['status'] .'</td>';														
+						echo '<td>'. $arrRecord['client_name'] .'</td>';
+						echo '<td>'. $arrRecord['client_email'] .'</td>';
+						echo '<td>'. $arrRecord['client_mobile'] .'</td>';
+                        echo '<td>'. $arrRecord['client_phone'] .'</td>';
+                        echo '<td>'. $arrRecord['client_address'] .'</td>';
+						echo '<td>'. $arrRecord['client_country'] .'</td>';
+						echo '<td>'. $arrRecord['client_state'] .'</td>';
+						echo '<td>'. $arrRecord['client_city'] .'</td>';
+						echo '<td>'. $arrRecord['client_theme'] .'</td>';
+						echo '<td>'. $arrRecord['client_domain'] .'</td>';
+                        echo '<td>'. $arrRecord['status'] .'</td>';														
                         echo '</tr>';
                     }
 				}
@@ -76,9 +88,9 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsPanels)> 0): ?>
+<?php if(count($rsClients)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null, null, null, null, null],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>
@@ -87,7 +99,7 @@ var oTable1 =	$('#pagelist_center').dataTable( {
 
 function openAddPage()
 {
-    window.location.href = 'index.php?c=setting&m=addPanel&action=A';
+    window.location.href = 'index.php?c=client&m=addClient&action=A';
 }
 
 function DeleteRow()
@@ -95,7 +107,7 @@ function DeleteRow()
 	var intChecked = $("input[name='chk_lst_list1[]']:checked").length;
 	if(intChecked == 0)
 	{
-		alert("No Vendor selected.");
+		alert("No Client selected.");
 		return false;
 	}
 	else
@@ -103,7 +115,7 @@ function DeleteRow()
 		var responce = confirm("Do you want to delete selected record(s)?");
 		if(responce==true)
 		{
-			$('#frm_list_record').attr('action','index.php?c=setting&m=deletePanel');
+			$('#frm_list_record').attr('action','index.php?c=client&m=delete');
 			$('#frm_list_record').submit()	
 		}
 	}

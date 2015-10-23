@@ -106,7 +106,8 @@ class setting extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->settingModel->get_by_id('module_id', $data["id"]);
+		   $data["rsEdit"] = $this->settingModel->get_by_id('module_id', $data["id"]);	     
+		   
         } 
 		else 
 		{
