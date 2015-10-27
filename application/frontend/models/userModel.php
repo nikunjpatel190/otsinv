@@ -81,15 +81,17 @@ class userModel extends Data {
 		
 		$sqlQuery = "SELECT
 					  	".$selectField."
-					 FROM user_master AS um
+					 ,ut.u_typ_name FROM user_master AS um
 					  	LEFT JOIN company_master AS com
 							ON um.company_id = com.com_id
+						LEFT JOIN user_types AS ut
+							ON um.user_type = ut.u_typ_id
 					 	LEFT JOIN department_master AS dept
 							ON um.dept_id = dept.dept_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
-		//echo $sqlQuery;
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 	
@@ -145,7 +147,7 @@ class userModel extends Data {
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 	
@@ -198,7 +200,7 @@ class userModel extends Data {
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 	
@@ -251,7 +253,7 @@ class userModel extends Data {
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 	}
 	

@@ -1,8 +1,4 @@
-<?php include(APPPATH.'views/top.php');
-$this->load->helper('form');
-$attributes = array('class' => 'frm_assign_dept form-horizontal', 'id' => 'frm_assign_dept', 'name' => 'frm_assign_dept');
-echo form_open('c=user&m=assignDept', $attributes);
-?>
+<?php include(APPPATH.'views/top.php'); ?>
 <div class="page-header position-relative">
     <h1>Map User to Department</h1>
     <?php
@@ -10,34 +6,32 @@ echo form_open('c=user&m=assignDept', $attributes);
 	?>
 </div>
 
+
 <div class="row-fluid" id="printFrmDiv">
-    <div class="span10">
-        <fieldset>
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">User <span class="red">*</span></label>
-                <div class="controls">
-                    <select class="required span6 change" name="slt_user" id="slt_user" >
-                    	<?php echo $this->Page->generateComboByTable("user_master","user_id","user_full_name","","where status='ACTIVE'","","Select User"); ?>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Department <span class="red">*</span></label>
-                <div class="controls">
-                    <select class="required span6" name="slt_dept" id="slt_company" >
-                    	<?php echo $this->Page->generateComboByTable("department_master","dept_id","dept_name","","where status='ACTIVE'","","Select Department"); ?>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="control-group non-printable">
-                <div class="controls">
-                    <input type="submit" class="btn btn-primary btn-small" value="Assign" onclick="return submit_form(this.form);">
-                    <input type="button" class="btn btn-primary btn-small" value="Cancel" onclick="window.history.back()" >
-                </div>
-            </div>
-        </fieldset>
+     <div class="span12">
+        	<table width="100%" cellpadding="5" cellspacing="5" border="0" class="table table-striped table-bordered table-hover dataTable">
+            <thead>
+                <tr class="hdr">
+                    <th class="span1 center">+/-</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+				foreach($UsersArr AS $row)
+				{
+				?>
+                	<tr id="row_<?php echo $row['user_id']; ?>">
+                    	<td class="plus span1 center" id="<?php echo $row['user_id']; ?>">+</td>
+                        <td>
+                        	<?php echo $row['user_full_name']; ?>
+                        </td>
+                    </tr>
+                <?php
+				}
+				?>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -51,22 +45,28 @@ echo form_open('c=user&m=assignDept', $attributes);
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".change").change(function(){
-			$(".resp").html("");
-			var usr_id = $("#slt_user").val();
-			
-			$.ajax({
-				type:"POST",
-				url:"index.php?c=commonajax&m=getUsrDeptDetails",
-				data:"usr_id="+usr_id,
-				beforeSend:function()
-				{
-				},
-				success:function(res)
-				{
-					$(".resp").html(res);
-				}
-			});
+		$(".plus").click(function(){
+			var user_id = this.id;
+			$(".resp").remove();
+			if($.trim($(this).html()) == '+')
+			{
+				$(".plus").html('+');
+				$(this).html('-');
+				$.ajax({
+					type:"POST",
+					url:"index.php?c=commonajax&m=getUsrDeptDetails",
+					data:"user_id="+user_id,
+					beforeSend:function(){
+					},
+					success:function(res){
+						$("#row_"+user_id).after('<tr class="resp"><td colspan="2">'+res+'</td></tr>');
+					}
+				});
+			}
+			else
+			{
+				$(this).html('+');
+			}
 		});
 	});
 </script>

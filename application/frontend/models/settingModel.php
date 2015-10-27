@@ -28,7 +28,7 @@ class settingModel extends Data {
 		}
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		
@@ -177,7 +177,7 @@ class settingModel extends Data {
 						combo_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		
@@ -235,7 +235,7 @@ class settingModel extends Data {
 						settings ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;	
 	}
 }

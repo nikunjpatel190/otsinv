@@ -37,6 +37,12 @@ class productModel extends Data {
 			$whereClaue .= 	" AND pm.prod_categoty=".$searchCriteria['cat_id']." ";
 		}
 		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND pm.status='".$searchCriteria['status']."' ";
+		}
+		
 		// By Product name
 		if(isset($searchCriteria['prod_name']) && $searchCriteria['prod_name'] != "")
 		{
@@ -68,9 +74,11 @@ class productModel extends Data {
 						".$selectField."
 					FROM 
 						product_master AS pm LEFT JOIN product_category AS pc ON pm.prod_categoty=pc.cat_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+						
+		//echo $sqlQuery; exit;
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		
@@ -126,7 +134,7 @@ class productModel extends Data {
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);		
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		
 		return $rsData;
 	}
@@ -182,7 +190,7 @@ class productModel extends Data {
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);		
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		
 		return $rsData;
 	}
@@ -239,7 +247,66 @@ class productModel extends Data {
 						product_category ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
+		return $rsData;
+		
+		
+	}
+	
+	
+	function getProcess()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By id
+		if(isset($searchCriteria['procId']) && $searchCriteria['procId'] != "")
+		{
+			$whereClaue .= 	" AND proc_id=".$searchCriteria['procId']." ";
+		}
+		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND status='".$searchCriteria['status']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND proc_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " proc_name";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT 
+						".$selectField."
+					FROM 
+						process_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		

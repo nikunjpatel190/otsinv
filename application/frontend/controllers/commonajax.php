@@ -9,6 +9,9 @@ class Commonajax extends CI_Controller {
 		$this->load->model("userModel",'',true);
 		$this->load->model("productModel",'',true);
 		$this->load->model("settingModel",'',true);
+		$this->load->model("companyModel",'',true);
+		$this->load->model("departmentModel",'',true);
+		$this->load->model("raw_materialModel",'',true);
 		
     }	
 	
@@ -41,85 +44,210 @@ class Commonajax extends CI_Controller {
 	
 	function getUsrCompDetails()
 	{
-		$user_id = $this->Page->getRequest("usr_id");
+		$user_id = $this->Page->getRequest("user_id");
 		
-		// Check Entry
-		$rsListing['rsMapDtl'] = array();
+		// Get All Companies
+		$searchCriteria["status"] = "ACTIVE";
+		$rsCompanies = $this->companyModel->getCompany();
+		//$this->Page->pr($rsCompanies); exit;
+		
+		$rsMapDtl = array();
 		if($user_id != "")
 		{
-			$searchCriteria = array(); 
-			$searchCriteria["selectField"] = "map.id,com.com_name";
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = 'com.com_id';
 			$searchCriteria["userId"] = $user_id;
 			$this->userModel->searchCriteria=$searchCriteria;
-			$rsListing['rsMapDtl'] = $this->userModel->getAssignCompanyDetail();
+			$rsMapDtl = $this->userModel->getAssignCompanyDetail();
+			//$this->Page->pr($rsMapDtl); exit;
 		}
-		$this->load->view('user/list_user_company', $rsListing);	
-		//$this->Page->pr($rsUsers); exit;
+		
+		$assignCompanyArr = array();
+		foreach($rsCompanies AS $row)
+		{
+			$map = 0;
+			foreach($rsMapDtl AS $mapRow)
+			{
+				if($row['com_id'] == $mapRow['com_id'])
+				{
+					$map = 1;
+				}
+			}
+			$assignCompanyArr[$row['com_id']] = 	$row;
+			$assignCompanyArr[$row['com_id']]['map'] = $map;
+		}
+		//$this->Page->pr($assignCompanyArr); exit;
+		$rsListing['rsMapDtl'] = $assignCompanyArr;
+		$rsListing['user_id'] = $user_id;
+		$this->load->view('user/list_user_company', $rsListing);		
 	}
 	
-	function delUsrCompDetails()
+	function mapUserCompany()
 	{
-		$id = $this->Page->getRequest("id");
-		$strQuery = "DELETE FROM map_user_company WHERE id =".$id;
-		$this->db->query($strQuery);
+		$userid = $this->Page->getRequest("userid");
+		$companyid = $this->Page->getRequest("companyid");
+		
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'com.com_id';
+		$searchCriteria["userId"] = $userid;
+		$searchCriteria["companyId"] = $companyid;
+		$this->userModel->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->userModel->getAssignCompanyDetail();
+		if(count($rsMapDtl)>0)
+		{		
+			$strQuery = "DELETE FROM map_user_company WHERE user_id=".$userid." AND company_id=".$companyid."";
+			$this->db->query($strQuery);
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["user_id"] = $userid;
+			$arrRecord["company_id"] = $companyid;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_user_company", $arrRecord);
+			$this->db->insert_id();
+		}
 	}
 	
 	function getUsrDeptDetails()
 	{
-		$user_id = $this->Page->getRequest("usr_id");
+		$user_id = $this->Page->getRequest("user_id");
 		
-		// Check Entry
-		$rsListing['rsMapDtl'] = array();
+		// Get All Department
+		$searchCriteria["status"] = "ACTIVE";
+		$rsDepartments = $this->departmentModel->getDepartmnt();
+		//$this->Page->pr($rsCompanies); exit;
+		
+		$rsMapDtl = array();
 		if($user_id != "")
 		{
-			$searchCriteria = array(); 
-			$searchCriteria["selectField"] = "map.id,dept.dept_name";
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = 'dept.dept_id';
 			$searchCriteria["userId"] = $user_id;
 			$this->userModel->searchCriteria=$searchCriteria;
-			$rsListing['rsMapDtl'] = $this->userModel->getAssignDeptDetail();
+			$rsMapDtl = $this->userModel->getAssignDeptDetail();
+			//$this->Page->pr($rsMapDtl); exit;
 		}
-		$this->load->view('user/list_user_dept', $rsListing);	
-		//$this->Page->pr($rsUsers); exit;
+		
+		$assignDepartmentArr = array();
+		foreach($rsDepartments AS $row)
+		{
+			$map = 0;
+			foreach($rsMapDtl AS $mapRow)
+			{
+				if($row['dept_id'] == $mapRow['dept_id'])
+				{
+					$map = 1;
+				}
+			}
+			$assignDepartmentArr[$row['dept_id']] = 	$row;
+			$assignDepartmentArr[$row['dept_id']]['map'] = $map;
+		}
+		//$this->Page->pr($assignCompanyArr); exit;
+		$rsListing['rsMapDtl'] = $assignDepartmentArr;
+		$rsListing['user_id'] = $user_id;
+		$this->load->view('user/list_user_dept', $rsListing);		
 	}
 	
-	function delUsrDeptDetails()
+	function mapUserDepartment()
 	{
-		$id = $this->Page->getRequest("id");
-		$strQuery = "DELETE FROM map_user_dept WHERE id =".$id;
-		$this->db->query($strQuery);
+		$userid = $this->Page->getRequest("userid");
+		$deptid = $this->Page->getRequest("deptid");
+		
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'dept.dept_id';
+		$searchCriteria["userId"] = $userid;
+		$searchCriteria["deptId"] = $deptid;
+		$this->userModel->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->userModel->getAssignDeptDetail();
+		if(count($rsMapDtl)>0)
+		{		
+			$strQuery = "DELETE FROM map_user_department WHERE user_id=".$userid." AND dept_id=".$deptid."";
+			$this->db->query($strQuery);
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["user_id"] = $userid;
+			$arrRecord["dept_id"] = $deptid;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_user_department", $arrRecord);
+			$this->db->insert_id();
+		}
 	}
 	
 	function getProdRmDetails()
 	{
 		$prod_id = $this->Page->getRequest("prod_id");
 		
-		// Check Entry
-		$rsListing['rsMapDtl'] = array();
+		// Get All Products
+		$searchCriteria["status"] = "ACTIVE";
+		$rsRawmaterials = $this->raw_materialModel->getRowMaterial();
+		//$this->Page->pr($rsRawmaterials); exit;
+		
+		$rsMapDtl = array();
 		if($prod_id != "")
 		{
-			$searchCriteria = array(); 
-			//$searchCriteria["selectField"] = "map.id,map.prod_id";
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = 'rm.rm_id';
 			$searchCriteria["prodId"] = $prod_id;
 			$this->productModel->searchCriteria=$searchCriteria;
-			
-			//print_r ($searchCriteria);
-			//exit;
-			
-			$rsListing['rsMapDtl'] = $this->productModel->getAssignRowMaterialDetail();
-			
-			//print_r ($rsListing);
-			//exit;
-			
+			$rsMapDtl = $this->productModel->getAssignRowMaterialDetail();
+			//$this->Page->pr($rsMapDtl); exit;
 		}
+		
+		$assignRawMaterialArr = array();
+		foreach($rsRawmaterials AS $row)
+		{
+			$map = 0;
+			foreach($rsMapDtl AS $mapRow)
+			{
+				if($row['rm_id'] == $mapRow['rm_id'])
+				{
+					$map = 1;
+				}
+			}
+			$assignRawMaterialArr[$row['rm_id']] = 	$row;
+			$assignRawMaterialArr[$row['rm_id']]['map'] = $map;
+		}
+		//$this->Page->pr($assignRawMaterialArr); exit;
+		$rsListing['rsMapDtl'] = $assignRawMaterialArr;
+		$rsListing['prod_id'] = $prod_id;
 		$this->load->view('product/list_prod_row_material', $rsListing);	
-		//$this->Page->pr($rsUsers); exit;
+		//$this->Page->pr($rsRawmaterials); exit;
 	}
 	
-	function delProdRow_materialDetails()
+	function mapProdRow_material()
 	{
-		$id = $this->Page->getRequest("id");
-		$strQuery = "DELETE FROM map_prod_raw_material WHERE id =".$id;
-		$this->db->query($strQuery);
+		$prodid = $this->Page->getRequest("prodid");
+		$rmid = $this->Page->getRequest("rmid");
+		
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'rm.rm_id';
+		$searchCriteria["prodId"] = $prodid;
+		$searchCriteria["rmId"] = $rmid;
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->productModel->getAssignRowMaterialDetail();
+		if(count($rsMapDtl)>0)
+		{		
+			$strQuery = "DELETE FROM map_prod_raw_material WHERE prod_id=".$prodid." AND rm_id=".$rmid."";
+			$this->db->query($strQuery);
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["prod_id"] = $prodid;
+			$arrRecord["rm_id"] = $rmid;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_prod_raw_material", $arrRecord);
+			$this->db->insert_id();
+		}
 	}
 	
 	
@@ -154,33 +282,69 @@ class Commonajax extends CI_Controller {
 	{
 		$prod_id = $this->Page->getRequest("prod_id");
 		
-		// Check Entry
-		$rsListing['rsMapDtl'] = array();
+		// Get All Products
+		$searchCriteria["status"] = "ACTIVE";
+		$rsProcesses= $this->productModel->getProcess();
+		//$this->Page->pr($rsProcesses); exit;
+		
+		$rsMapDtl = array();
 		if($prod_id != "")
 		{
-			$searchCriteria = array(); 
-			//$searchCriteria["selectField"] = "map.id,map.prod_id";
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = 'proc.proc_id';
 			$searchCriteria["prodId"] = $prod_id;
 			$this->productModel->searchCriteria=$searchCriteria;
-			
-			//print_r ($searchCriteria);
-			//exit;
-			
-			$rsListing['rsMapDtl'] = $this->productModel->getAssignProcessDetail();
-			
-			//print_r ($rsListing);
-			//exit;
-			
+			$rsMapDtl = $this->productModel->getAssignProcessDetail();
+			//$this->Page->pr($rsMapDtl); exit;
 		}
+		
+		$assignProcessArr = array();
+		foreach($rsProcesses AS $row)
+		{
+			$map = 0;
+			foreach($rsMapDtl AS $mapRow)
+			{
+				if($row['proc_id'] == $mapRow['proc_id'])
+				{
+					$map = 1;
+				}
+			}
+			$assignProcessArr[$row['proc_id']] = 	$row;
+			$assignProcessArr[$row['proc_id']]['map'] = $map;
+		}
+		//$this->Page->pr($assignProcessArr); exit;
+		$rsListing['rsMapDtl'] = $assignProcessArr;
+		$rsListing['prod_id'] = $prod_id;
 		$this->load->view('product/list_prod_proc', $rsListing);	
 		//$this->Page->pr($rsUsers); exit;
 	}
-	
-	function delProdProcessDetails()
+	function mapProdProcess()
 	{
-		$id = $this->Page->getRequest("id");
-		$strQuery = "DELETE FROM map_prod_proc WHERE id =".$id;
-		$this->db->query($strQuery);
+		$prodid = $this->Page->getRequest("prodid");
+		$procid = $this->Page->getRequest("procid");
+		
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'proc.proc_id';
+		$searchCriteria["prodId"] = $prodid;
+		$searchCriteria["procId"] = $procid;
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->productModel->getAssignProcessDetail();
+		if(count($rsMapDtl)>0)
+		{		
+			$strQuery = "DELETE FROM map_prod_proc WHERE prod_id=".$prodid." AND proc_id=".$procid."";
+			$this->db->query($strQuery);
+		}
+		else
+		{
+			$arrRecord = array();
+			$arrRecord["prod_id"] = $prodid;
+			$arrRecord["proc_id"] = $procid;
+			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
+			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
+			$this->db->insert("map_prod_proc", $arrRecord);
+			$this->db->insert_id();
+		}
 	}
 	
 	function getUtypeModuleDetails()

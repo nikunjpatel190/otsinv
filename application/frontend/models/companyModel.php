@@ -77,7 +77,7 @@ class companyModel extends Data {
 						company_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		

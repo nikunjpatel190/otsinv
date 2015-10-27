@@ -51,18 +51,18 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsCompanies as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=company&m=AddCompany&action=E&id=".$arrRecord->com_id;
+                        $strEditLink	=	"index.php?c=company&m=AddCompany&action=E&id=".$arrRecord['com_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->com_id.'" value="'.$arrRecord->com_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['com_id'].'" value="'.$arrRecord['com_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->com_name .'</td>';
-						echo '<td>'. $arrRecord->com_code .'</td>';
-						echo '<td>'. $arrRecord->com_email .'</td>';
-                        echo '<td>'. $arrRecord->com_phone .'</td>';
-                        echo '<td>'. $arrRecord->com_fax .'</td>';
-						echo '<td>'. $arrRecord->com_logo .'</td>';
-                        echo '<td>'. $arrRecord->status .'</td>';														
+						echo '<td>'. $arrRecord['com_name'].'</td>';
+						echo '<td>'. $arrRecord['com_code'] .'</td>';
+						echo '<td>'. $arrRecord['com_email'] .'</td>';
+                        echo '<td>'. $arrRecord['com_phone'] .'</td>';
+                        echo '<td>'. $arrRecord['com_fax'] .'</td>';
+						echo '<td>'. $arrRecord['com_logo'] .'</td>';
+                        echo '<td>'. $arrRecord['status'] .'</td>';														
                         echo '</tr>';
                     }
 				}

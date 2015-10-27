@@ -69,7 +69,7 @@ class raw_materialModel extends Data {
 						row_material_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		

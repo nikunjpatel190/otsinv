@@ -47,14 +47,14 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsDepartments as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=department&m=AddDepartment&action=E&id=".$arrRecord->dept_id;
+                        $strEditLink	=	"index.php?c=department&m=AddDepartment&action=E&id=".$arrRecord['dept_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->dept_id.'" value="'.$arrRecord->dept_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['dept_id'].'" value="'.$arrRecord['dept_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->company .'</td>';
-						echo '<td>'. $arrRecord->dept_name .'</td>';
-                        echo '<td class="center">'. $arrRecord->status  .'</td>';														
+						echo '<td>'. $arrRecord['company'] .'</td>';
+						echo '<td>'. $arrRecord['dept_name'] .'</td>';
+                        echo '<td class="center">'. $arrRecord['status']  .'</td>';														
                         echo '</tr>';
                     }
 				}

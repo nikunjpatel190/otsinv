@@ -47,14 +47,14 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsSetting as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=setting&m=AddSetting&action=E&id=".$arrRecord->setting_id;
+                        $strEditLink	=	"index.php?c=setting&m=AddSetting&action=E&id=".$arrRecord['setting_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->setting_id.'" value="'.$arrRecord->setting_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['setting_id'].'" value="'.$arrRecord['setting_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->var_key .'</td>';
-                        echo '<td>'. $arrRecord->var_value .'</td>';
-                        echo '<td>'. $arrRecord->description .'</td>';
+						echo '<td>'. $arrRecord['var_key'] .'</td>';
+                        echo '<td>'. $arrRecord['var_value'] .'</td>';
+                        echo '<td>'. $arrRecord['description'] .'</td>';
 						echo '</tr>';
                     }
 				}

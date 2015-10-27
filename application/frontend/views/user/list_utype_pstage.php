@@ -19,9 +19,9 @@
                 {
                     foreach($rsMapDtl as $arrRecord)
                     {
-                        echo '<tr id="row_'.$arrRecord->id.'">';
-						echo '<td>'. $arrRecord->ps_name .'</td>';
-                        echo '<td><a href="javascript:void(0);" class="green del" title="Remove" id='.$arrRecord->id.'><i class="icon-remove bigger-130"></i></a></td>';
+                        echo '<tr id="row_'.$arrRecord['id'].'">';
+						echo '<td>'. $arrRecord['ps_name'] .'</td>';
+                        echo '<td><a href="javascript:void(0);" class="green del" title="Remove" id='.$arrRecord['id'].'><i class="icon-remove bigger-130"></i></a></td>';
                         echo '</tr>';
                     }
 				}

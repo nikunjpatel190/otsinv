@@ -50,17 +50,17 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsRaw_material as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=raw_material&m=AddRaw_material&action=E&id=".$arrRecord->rm_id;
+                        $strEditLink	=	"index.php?c=raw_material&m=AddRaw_material&action=E&id=".$arrRecord['rm_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->rm_id.'" value="'.$arrRecord->rm_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['rm_id'].'" value="'.$arrRecord['rm_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->rm_name .'</td>';
-						echo '<td>'. $arrRecord->rm_code .'</td>';
-                        echo '<td>'. $arrRecord->rm_desc .'</td>';
-                        echo '<td>'. $arrRecord->rm_measure_unit .'</td>';
-                        echo '<td>'. $arrRecord->rm_price_per_unit .'</td>';
-						echo '<td>'. $arrRecord->status .'</td>';													
+						echo '<td>'. $arrRecord['rm_name'] .'</td>';
+						echo '<td>'. $arrRecord['rm_code'] .'</td>';
+                        echo '<td>'. $arrRecord['rm_desc'] .'</td>';
+                        echo '<td>'. $arrRecord['rm_measure_unit'] .'</td>';
+                        echo '<td>'. $arrRecord['rm_price_per_unit'] .'</td>';
+						echo '<td>'. $arrRecord['status'] .'</td>';													
                         echo '</tr>';
                     }
 				}

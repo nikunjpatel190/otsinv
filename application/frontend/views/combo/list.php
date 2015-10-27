@@ -49,16 +49,16 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsCombos as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=setting&m=AddCombo&action=E&id=".$arrRecord->combo_id;
+                        $strEditLink	=	"index.php?c=setting&m=AddCombo&action=E&id=".$arrRecord['combo_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->combo_id.'" value="'.$arrRecord->combo_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['combo_id'].'" value="'.$arrRecord['combo_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->combo_case .'</td>';
-						echo '<td>'. $arrRecord->combo_key .'</td>';
-						echo '<td>'. $arrRecord->combo_value .'</td>';
-                        echo '<td>'. $arrRecord->seq .'</td>';
-                        echo '<td>'. $arrRecord->status .'</td>';													
+						echo '<td>'. $arrRecord['combo_case'] .'</td>';
+						echo '<td>'. $arrRecord['combo_key'] .'</td>';
+						echo '<td>'. $arrRecord['combo_value'] .'</td>';
+                        echo '<td>'. $arrRecord['seq'] .'</td>';
+                        echo '<td>'. $arrRecord['status'] .'</td>';													
                         echo '</tr>';
                     }
 				}

@@ -39,6 +39,11 @@ class departmentModel extends Data {
 		{
 			$whereClaue .= 	" AND dept.dept_name='".$searchCriteria['dept_name']."' ";
 		}
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND dept.status='".$searchCriteria['status']."' ";
+		}
 		
 		// Not In
 		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
@@ -67,7 +72,7 @@ class departmentModel extends Data {
 						department_master AS dept LEFT JOIN company_master AS comp ON dept.company_id=comp.com_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_object();
+		$rsData     = $result->result_array();
 		return $rsData;
 		
 		

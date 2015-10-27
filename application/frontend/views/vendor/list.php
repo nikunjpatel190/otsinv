@@ -54,21 +54,21 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsVendors as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=vendor&m=AddVendor&action=E&id=".$arrRecord->vendor_id;
+                        $strEditLink	=	"index.php?c=vendor&m=AddVendor&action=E&id=".$arrRecord['vendor_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->vendor_id.'" value="'.$arrRecord->vendor_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['vendor_id'].'" value="'.$arrRecord['vendor_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->vendor_name .'</td>';
-						echo '<td>'. $arrRecord->vendor_comp_name .'</td>';
-                        echo '<td>'. $arrRecord->vendor_phone .'</td>';
-                        echo '<td>'. $arrRecord->vendor_email .'</td>';
-						echo '<td>'. $arrRecord->vendor_address .'</td>';
-                        echo '<td>'. $arrRecord->vendor_city .'</td>';
-						echo '<td>'. $arrRecord->vendor_state .'</td>';
-						echo '<td>'. $arrRecord->vendor_country .'</td>';
-                        echo '<td>'. $arrRecord->vendor_postal_code .'</td>';
-						echo '<td>'. $arrRecord->status .'</td>';														
+						echo '<td>'. $arrRecord['vendor_name'] .'</td>';
+						echo '<td>'. $arrRecord['vendor_comp_name'] .'</td>';
+                        echo '<td>'. $arrRecord['vendor_phone'] .'</td>';
+                        echo '<td>'. $arrRecord['vendor_email'] .'</td>';
+						echo '<td>'. $arrRecord['vendor_address'] .'</td>';
+                        echo '<td>'. $arrRecord['vendor_city'] .'</td>';
+						echo '<td>'. $arrRecord['vendor_state'] .'</td>';
+						echo '<td>'. $arrRecord['vendor_country'] .'</td>';
+                        echo '<td>'. $arrRecord['vendor_postal_code'] .'</td>';
+						echo '<td>'. $arrRecord['status'] .'</td>';														
                         echo '</tr>';
                     }
 				}
