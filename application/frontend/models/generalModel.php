@@ -16,8 +16,7 @@ class generalModel extends Data {
 		
 		$sqlQuery = "SELECT 
 						* FROM 
-						
-						panel_master WHERE status = 'ACTIVE' ORDER by 'seq'";
+						panel_master WHERE status = 'ACTIVE' ORDER by seq";
 		
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
@@ -31,14 +30,11 @@ class generalModel extends Data {
 		
 		$user_type = $this->Page->getSession("strUserType");
 		
-		$sqlQuery = "SELECT 
-						* FROM 
-						
+		$sqlQuery = "SELECT * FROM 
 						module_master as mm
-						JOIN  map_usertype_module as utm 
+					 JOIN  map_usertype_module as utm 
 						ON utm.module_id = mm.module_id
-						
-						WHERE utm.utype_id = ".$user_type." ";
+					 WHERE utm.utype_id = ".$user_type." ORDER BY mm.seq";
 						
 		//echo $sqlQuery; exit;
 		

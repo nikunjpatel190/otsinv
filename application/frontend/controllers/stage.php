@@ -47,7 +47,7 @@ class stage extends CI_Controller {
 		// Check Duplicate entry
 		$searchCriteria = array(); 
 		$searchCriteria["selectField"] = "ps_id";
-		$searchCriteria["ps_name"] = $this->Page->getRequest('txt_ps_name');
+		$searchCriteria["stage_name"] = $this->Page->getRequest('txt_ps_name');
 		if ($strAction == 'E')
 		{
             $searchCriteria["not_id"] = $ps_id;
@@ -108,6 +108,65 @@ class stage extends CI_Controller {
 	{
 		// Load Views
 		$this->load->view('process/processForm', '');		
+	}
+	
+	public function saveProcess()
+	{
+		// save process
+		$processName = trim($_REQUEST['processName']);
+		$stageArr = $_REQUEST['stages'];
+		
+		$stageDetailArr = array();
+		$i=1;
+		foreach($stageArr AS $key=>$valArr)
+		{
+			ksort($valArr);
+			if(is_array($valArr))
+			{
+				foreach($valArr AS $key=>$val)
+				{
+					$stageDetailArr[$i]=$val;
+					$i++;
+				}
+			}
+		}
+		
+		$cnt = 0;
+		if($processName != "" && count($stageDetailArr) > 0)
+		{
+			$arrData = array();
+			$arrData["proc_name"]  =	$processName;
+			$arrData["status"]     = 	'ACTIVE';
+			$arrData['insertby']		=	$this->Page->getSession("intUserId");
+			$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
+			
+			$this->stageModel->tbl = "process_master";
+			$intProcessID = $this->stageModel->insert($arrData);
+			if($intProcessID != "" && $intProcessID != 0)
+			{
+				foreach($stageDetailArr AS $key=>$row)
+				{
+					$arrData = array();
+					$arrData['process_id'] = $intProcessID;
+					$arrData['stage_id'] = $row['id'];
+					$arrData['stage_name'] = $row['name'];
+					$arrData['seq'] = $key;
+					$arrData['insertby']		=	$this->Page->getSession("intUserId");
+					$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
+					
+					$this->stageModel->tbl = "map_process_stage";
+					$this->stageModel->insert($arrData);
+					$cnt++;
+				}
+			}
+		}
+		
+		if($cnt>0){
+			echo '1';
+		}
+		else{
+			echo '0';
+		}
 	}
 }
 

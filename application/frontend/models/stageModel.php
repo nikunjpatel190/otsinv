@@ -55,7 +55,7 @@ class stageModel extends Data {
 						".$selectField."
 					FROM 
 						process_stage_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
-		
+						
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_object();
 		return $rsData;
