@@ -1,6 +1,6 @@
 <?php include(APPPATH.'views/top.php'); ?>
 <div class="page-header position-relative">
-    <h1>Map Product to Process</h1>
+    <h1>Assign Process</h1>
     <?php
 		echo $this->Page->getMessage();
 	?>
@@ -8,6 +8,9 @@
 
 <div class="row-fluid" id="printFrmDiv">
      <div class="span12">
+     		<select class="required span2" name="slt_proc_typ" id="slt_proc_typ" >
+				<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='PROCESS_TYPE' order by seq",$rsEdit->ps_type,"Select Process Type"); ?>
+            </select>
         	<table width="100%" cellpadding="5" cellspacing="5" border="0" class="table table-striped table-bordered table-hover dataTable">
             <thead>
                 <tr class="hdr">

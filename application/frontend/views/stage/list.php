@@ -30,6 +30,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
+                    <th>Type</th>
                     <th>Name</th>                    
                     <th>Color Code</th>
                     <th>Priority</th>
@@ -49,11 +50,12 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsStages as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=stage&m=AddStage&action=E&id=".$arrRecord->ps_id;
+                        $strEditLink	=	"index.php?c=process&m=AddStage&action=E&id=".$arrRecord->ps_id;
                         echo '<tr>';
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->ps_id.'" value="'.$arrRecord->ps_id.'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
+						echo '<td>'. $this->Page->getComboValueByCase('PROCESS_TYPE',$arrRecord->ps_type) .'</td>';
 						echo '<td>'. $arrRecord->ps_name .'</td>';
 						echo '<td>'. $arrRecord->ps_colorcode .'</td>';	
                         echo '<td>'. $arrRecord->ps_priority .'</td>';                        					
@@ -87,7 +89,7 @@ var oTable1 =	$('#pagelist_center').dataTable( {
 
 function openAddPage()
 {
-    window.location.href = 'index.php?c=stage&m=addStage&action=A';
+    window.location.href = 'index.php?c=process&m=addStage&action=A';
 }
 
 function DeleteRow()
@@ -103,7 +105,7 @@ function DeleteRow()
 		var responce = confirm("Do you want to delete selected record(s)?");
 		if(responce==true)
 		{
-			$('#frm_list_record').attr('action','index.php?c=stage&m=delete');
+			$('#frm_list_record').attr('action','index.php?c=process&m=delete');
 			$('#frm_list_record').submit()	
 		}
 	}

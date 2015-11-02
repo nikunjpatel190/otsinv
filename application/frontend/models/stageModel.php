@@ -30,6 +30,12 @@ class stageModel extends Data {
 			$whereClaue .= 	" AND ps_name='".$searchCriteria['stage_name']."' ";
 		}
 		
+		// By Process type
+		if(isset($searchCriteria['type']) && $searchCriteria['type'] != "")
+		{
+			$whereClaue .= 	" AND ps_type='".$searchCriteria['type']."' ";
+		}
+		
 		// Not In
 		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
 		{

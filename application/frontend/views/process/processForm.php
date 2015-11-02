@@ -4,8 +4,11 @@
 </div>
 <div class="row-fluid">
     <form class="form-inline">
+    	<select name="slt_proc_typ" id="slt_proc_typ" >
+			<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='PROCESS_TYPE' order by seq",$rsEdit->ps_type,""); ?>
+        </select>
         <select name="stage" id="stage">
-        	<?php echo $this->Page->generateComboByTable("process_stage_master","ps_id","ps_name","","where status='ACTIVE'","","Select process stage"); ?>
+        	<option value="">Select process stage</option>
         </select>
         <!--<a class='add button' href='#'>Add</a>-->
         <button class="btn btn-small btn-success add">Add</button>  
@@ -63,10 +66,23 @@
 <script src='./js/drag-drop/javascripts/rainbow.js' type='text/javascript'></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	$("#slt_proc_typ").change(function(){
+		var type = $(this).val();
+		$.ajax({
+			type:"POST",
+			url:"index.php?c=commonajax&m=loadStageComboByType",
+			data:"type="+type,
+			success:function(res)
+			{
+				$("#stage").html(res);
+			}
+		});
+	});
 	$("#saveProcess").click(function(){
 		$(".error").remove();
 		var param = {};
 		var stageArr = {};
+		var processType = $("#slt_proc_typ").val();
 		var processName = $("#txtProcessName").val();
 		if(processName == "")
 		{
@@ -74,6 +90,7 @@ $(document).ready(function(){
 			return false;
 		}
 		param['processName'] = processName;
+		param['processType'] = processType;
 		$(".gridly .brick h3").each(function(){
 			var top = $(this).parent().css('top').slice(0, -2);
 			var left = $(this).parent().css('left').slice(0, -2);
@@ -92,7 +109,7 @@ $(document).ready(function(){
 		param['stages'] = stageArr;
 		$.ajax({
 			type:"POST",
-			url:"index.php?c=stage&m=saveProcess",
+			url:"index.php?c=process&m=saveProcess",
 			data:param,
 			success:function(res){
 				var res = $.trim(res);
@@ -108,4 +125,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-});</script>
+	$("#slt_proc_typ").change();
+});
+</script>

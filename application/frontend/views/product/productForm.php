@@ -43,7 +43,7 @@ echo form_open('c=product&m=saveProduct', $attributes);
                 <label for="form-field-1" class="control-label">Measure Unit<span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_prod_measure_unit" id="slt_prod_measure_unit" >
-                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_value","combo_key",""," where combo_case='MEASURE' order by seq",$rsEdit->prod_measure_unit,"Select Measure Unit"); ?>
+                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",""," where combo_case='MEASURE' order by seq",$rsEdit->prod_measure_unit,"Select Measure Unit"); ?>
                     </select>
                 </div>
             </div>
@@ -66,7 +66,7 @@ echo form_open('c=product&m=saveProduct', $attributes);
                 <label for="form-field-1" class="control-label">Status<span class="red">*</span></label>
                 <div class="controls">
                 	<select class="required span6" name="slt_status" id="slt_status" >
-                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_value","combo_key",0," where combo_case='STATUS' order by seq",$rsEdit->status,""); ?>
+                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='STATUS' order by seq",$rsEdit->status,""); ?>
                     </select>
                 </div>
             </div>
