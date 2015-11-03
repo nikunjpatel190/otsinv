@@ -414,12 +414,6 @@ class Commonajax extends CI_Controller {
 			$this->db->insert_id();
 		}
 	}
-	
-	public function loadStageComboByType()
-	{
-		$type = $_REQUEST['type'];
-		echo $this->Page->generateComboByTable("process_stage_master","ps_id","ps_name","","where status='ACTIVE' AND ps_type='".$type."'","","Select process stage");
-	}
 }
 
 

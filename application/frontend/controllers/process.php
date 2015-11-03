@@ -116,7 +116,6 @@ class process extends CI_Controller {
 	{
 		// save process
 		$processName = trim($_REQUEST['processName']);
-		$processType = trim($_REQUEST['processType']);
 		$stageArr = $_REQUEST['stages'];
 		
 		$stageDetailArr = array();
@@ -139,7 +138,6 @@ class process extends CI_Controller {
 		{
 			$arrData = array();
 			$arrData["proc_name"]  =	$processName;
-			$arrData["proc_type"]  =	$processType;
 			$arrData["status"]     = 	'ACTIVE';
 			$arrData['insertby']		=	$this->Page->getSession("intUserId");
 			$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
@@ -166,10 +164,40 @@ class process extends CI_Controller {
 		}
 		
 		if($cnt>0){
-			echo '1';
+			$searchCriteria = array();
+			$searchCriteria["selectField"] = "sm.ps_id,sm.ps_name,map.process_id,map.seq";
+			$searchCriteria['p_id'] = $intProcessID;
+			$searchCriteria['orderField'] = "map.seq";
+			$searchCriteria['orderDir'] = "ASC";
+			$this->stageModel->searchCriteria = $searchCriteria;
+			$data = array();
+			$data['processId'] = $intProcessID;
+			$data['resArr'] = $this->stageModel->getProcessStage();
+			$this->load->view('process/assignUserToStage', $data);
 		}
 		else{
 			echo '0';
+		}
+	}
+	
+	public function assignUserToStage()
+	{
+		$processId = $_REQUEST['processId'];
+		$dataArr = $_REQUEST['dataArr'];
+		
+		if(count($dataArr) > 0)
+		{
+			foreach($dataArr AS $key=>$row)
+			{
+				$stageId = $row['stageId'];
+				if($row['userIds'] > 0)		
+				{
+					foreach($row['userIds'] AS $userId)
+					{
+						echo $processId."|".$stageId."|".$userId."<br/>";
+					}
+				}
+			}
 		}
 	}
 }
