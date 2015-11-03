@@ -95,9 +95,6 @@ class userModel extends Data {
 		return $rsData;
 	}
 	
-	
-	
-	
 	public function getAssignCompanyDetail()
 	{
 		$searchCriteria = array();
@@ -197,59 +194,6 @@ class userModel extends Data {
 							ON map.user_id = um.user_id
 					  	JOIN department_master AS dept
 							ON map.dept_id = dept.dept_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
-		
-		//echo $sqlQuery; exit;
-		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_array();
-		return $rsData;
-	}
-	
-	public function getAssignStageDetail()
-	{
-		$searchCriteria = array();
-		$searchCriteria = $this->searchCriteria;
-		
-		$selectField = "*";
-		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
-		{
-			$selectField = 	$searchCriteria['selectField'];
-		}
-		
-		$whereClaue = "WHERE 1=1 ";
-		// By user
-		if(isset($searchCriteria['utypeId']) && $searchCriteria['utypeId'] != "")
-		{
-			$whereClaue .= 	" AND map.u_typ_id='".$searchCriteria['utypeId']."' ";
-		}
-		
-		// By Company
-		if(isset($searchCriteria['stageId']) && $searchCriteria['stageId'] != "")
-		{
-			$whereClaue .= 	" AND map.ps_id='".$searchCriteria['stageId']."' ";
-		}
-		
-		$orderField = " map.id";
-		$orderDir = " ASC";
-		
-		// Set Order Field
-		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
-		{
-			$orderField = $searchCriteria['orderField'];
-		}
-		
-		// Set Order Field
-		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
-		{
-			$orderDir = $searchCriteria['orderDir'];
-		}
-		
-		$sqlQuery = "SELECT
-					  	".$selectField."
-					 FROM map_utype_pstage AS map
-					 	JOIN user_types AS ut
-							ON map.u_typ_id = ut.u_typ_id
-					  	JOIN process_stage_master AS ps
-							ON map.ps_id = ps.ps_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);

@@ -49,16 +49,16 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsStages as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=process&m=AddStage&action=E&id=".$arrRecord->ps_id;
+                        $strEditLink	=	"index.php?c=process&m=AddStage&action=E&id=".$arrRecord['ps_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->ps_id.'" value="'.$arrRecord->ps_id.'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['ps_id'].'" value="'.$arrRecord['ps_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord->ps_name .'</td>';
-						echo '<td>'. $arrRecord->ps_colorcode .'</td>';	
-                        echo '<td>'. $arrRecord->ps_priority .'</td>';                        					
-						echo '<td>'. $arrRecord->ps_desc .'</td>';
-						echo '<td>'. $arrRecord->status .'</td>';													
+						echo '<td>'. $arrRecord['ps_name'] .'</td>';
+						echo '<td>'. $arrRecord['ps_colorcode'] .'</td>';	
+                        echo '<td>'. $arrRecord['ps_priority'] .'</td>';                        					
+						echo '<td>'. $arrRecord['ps_desc'] .'</td>';
+						echo '<td>'. $arrRecord['status'] .'</td>';													
                         echo '</tr>';
                     }
 				}

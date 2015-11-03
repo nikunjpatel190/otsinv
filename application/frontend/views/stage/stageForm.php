@@ -2,7 +2,7 @@
 <?php
 $this->load->helper('form');
 $attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frm_add_stage', 'name' => 'frm_add_stage');
-echo form_open('c=stage&m=saveStage', $attributes);
+echo form_open('c=process&m=saveStage', $attributes);
 ?>
 <div class="page-header position-relative">
     <h1>Add Stage</h1>

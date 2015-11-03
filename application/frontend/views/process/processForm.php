@@ -76,13 +76,12 @@
 <!-- END Modal popup for assign user -->
 
 
-<input type="hidden" class="" id="openPopup" href="#modal-form-assign-user" data-toggle="modal" />
+<!--<input type="hidden" class="" id="openPopup" href="#modal-form-assign-user" data-toggle="modal" />-->
 
 
 <?php include(APPPATH.'views/bottom.php'); ?>
 <link href='./js/drag-drop/stylesheets/jquery.gridly.css' rel='stylesheet' type='text/css'>
 <link href='./js/drag-drop/stylesheets/sample.css' rel='stylesheet' type='text/css'>
-<script src='./js/drag-drop/javascripts/jquery.js' type='text/javascript'></script>
 <script src='./js/drag-drop/javascripts/jquery.gridly.js' type='text/javascript'></script>
 <script src='./js/drag-drop/javascripts/sample.js' type='text/javascript'></script>
 <script src='./js/drag-drop/javascripts/rainbow.js' type='text/javascript'></script>
@@ -91,6 +90,7 @@
 $(document).ready(function(){
 	$("#saveProcess").click(function(){
 		$(".error").remove();
+		$("#resAssignUserView").html('');
 		var param = {};
 		var stageArr = {};
 		var processName = $("#txtProcessName").val();
@@ -122,18 +122,12 @@ $(document).ready(function(){
 			data:param,
 			success:function(res){
 				var res = $.trim(res);
-				if(res==='1')
-				{
-					alert("Process data saved successfully");
-				}
-				else
-				{
-					$("#resAssignUserView").html(res);
-				}
-				$("#openPopup").click();
+				$("#resAssignUserView").html(res);
+				$('#modal-form-assign-user').modal('show');
 			}
 		});
 	});
+	
 	$("#btnAssignUser").click(function(){
 		var data = {};
 		var i=0;
@@ -160,7 +154,7 @@ $(document).ready(function(){
 			{
 				alert(res);
 			}
-		})
+		});
 	});
 });
 </script>

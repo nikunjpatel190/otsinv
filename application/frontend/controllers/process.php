@@ -57,7 +57,7 @@ class process extends CI_Controller {
 		if(count($rsProcessStage) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
-			redirect('c=stage&m=addStage', 'location');
+			redirect('c=process&m=addStage', 'location');
 		}
 		
 		$arrHeader["ps_name"]   	=	$this->Page->getRequest('txt_ps_name');
@@ -86,7 +86,7 @@ class process extends CI_Controller {
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
-		redirect('c=stage', 'location');
+		redirect('c=process', 'location');
 	}
 	
 	public function delete()
@@ -194,7 +194,26 @@ class process extends CI_Controller {
 				{
 					foreach($row['userIds'] AS $userId)
 					{
-						echo $processId."|".$stageId."|".$userId."<br/>";
+						### Cehck entry
+						$searchCriteria = array();
+						$searchCriteria['userId'] = $userId;
+						$searchCriteria['stageId'] = $stageId;
+						$searchCriteria['processId'] = $processId;
+						$this->stageModel->searchCriteria = $searchCriteria;
+						$resArr = $this->stageModel->getMapUserStageDetails();
+						if(count($resArr) == 0)
+						{
+							### insert data
+							$arrData = array();
+							$arrData['u_id'] = $userId;
+							$arrData['p_id'] = $processId;
+							$arrData['stage_id'] = $stageId;
+							$arrData['insertby']		=	$this->Page->getSession("intUserId");
+							$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
+							
+							$this->stageModel->tbl = "map_user_pstage";
+							$this->stageModel->insert($arrData);	
+						}
 					}
 				}
 			}
