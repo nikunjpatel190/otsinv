@@ -16,15 +16,7 @@ echo form_open('c=stage&m=saveStage', $attributes);
 <div class="row-fluid" id="printFrmDiv">
     <div class="span10">
         <fieldset>
-        	<div class="control-group">
-                <label for="form-field-1" class="control-label">For <span class="red">*</span></label>
-                <div class="controls">
-                    <select class="required span6" name="slt_proc_typ" id="slt_proc_typ" >
-                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='PROCESS_TYPE' order by seq",$rsEdit->ps_type,"Select Process Type"); ?>
-                    </select>
-                </div>
-            </div>
-            
+        	            
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Stage Name <span class="red">*</span></label>
                 <div class="controls">
