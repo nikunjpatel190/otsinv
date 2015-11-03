@@ -251,33 +251,6 @@ class Commonajax extends CI_Controller {
 	}
 	
 	
-	function getUtypePstageDetails()
-	{
-		$u_type_id = $this->Page->getRequest("u_type_id");
-		
-		
-		// Check Entry
-		$rsListing['rsMapDtl'] = array();
-		if($u_type_id != "")
-		{
-			$searchCriteria = array(); 
-			//$searchCriteria["selectField"] = "map.id,dept.dept_name";
-			$searchCriteria["utypeId"] = $u_type_id;
-			$this->userModel->searchCriteria=$searchCriteria;
-			$rsListing['rsMapDtl'] = $this->userModel->getAssignStageDetail();
-		}
-		$this->load->view('user/list_utype_pstage', $rsListing);	
-		//$this->Page->pr($rsUsers); exit;
-	}
-	
-	function delUtypePstageDetails()
-	{
-		$id = $this->Page->getRequest("id");
-		$strQuery = "DELETE FROM map_utype_pstage WHERE id =".$id;
-		$this->db->query($strQuery);
-	}
-	
-	
 	function getProdProcDetails()
 	{
 		$prod_id = $this->Page->getRequest("prod_id");

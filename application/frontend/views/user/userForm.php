@@ -29,14 +29,14 @@ echo form_open('c=user&m=saveUser', $attributes);
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Use Full Name <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_user_full_name" name="txt_user_full_name" id="txt_user_full_name" class="required span6" value="<?php echo $rsEdit->user_full_name; ?>" />
+                    <input type="text" id="txt_user_full_name" name="txt_user_full_name" class="required span6" value="<?php echo $rsEdit->user_full_name; ?>" />
                 </div>
             </div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">User Name <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_user_name" name="txt_user_name" id="txt_user_name" class="required span6" value="<?php echo $rsEdit->user_name; ?>" />
+                    <input type="text" id="txt_user_name" name="txt_user_name" class="required span6" value="<?php echo $rsEdit->user_name; ?>" />
                 </div>
             </div>
             
@@ -44,14 +44,14 @@ echo form_open('c=user&m=saveUser', $attributes);
             <div class="control-group">
                 <label for="form-field-1" class="control-label">User Email<span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_user_email" name="txt_user_email" id="txt_user_email" class="span6 required isemail" value="<?php echo $rsEdit->user_email ?>" />
+                    <input type="text" id="txt_user_email" name="txt_user_email" class="span6 required isemail" value="<?php echo $rsEdit->user_email ?>" />
                 </div>
             </div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">User Phone <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_user_phone" name="txt_user_phone" id="txt_user_phone" class="span6 required" value="<?php echo $rsEdit->user_phone; ?>" />
+                    <input type="text" id="txt_user_phone" name="txt_user_phone" class="span6 required" value="<?php echo $rsEdit->user_phone; ?>" />
                 </div>
             </div>
             
@@ -67,7 +67,7 @@ echo form_open('c=user&m=saveUser', $attributes);
                 <label for="form-field-1" class="control-label">Password <?php echo $red; ?></label>
                 
                 <div class="controls">                	
-                    <input type="text" id="txt_user_password" name="txt_user_password" id="txt_user_password" class="span6 <?php echo $required; ?> " value="" />
+                    <input type="text" id="txt_user_password" name="txt_user_password"class="span6 <?php echo $required; ?> " value="" />
                 </div>
             </div>
             

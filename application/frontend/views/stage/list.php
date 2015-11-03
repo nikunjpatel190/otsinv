@@ -30,7 +30,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Type</th>
                     <th>Name</th>                    
                     <th>Color Code</th>
                     <th>Priority</th>
@@ -55,7 +54,6 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord->ps_id.'" value="'.$arrRecord->ps_id.'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $this->Page->getComboValueByCase('PROCESS_TYPE',$arrRecord->ps_type) .'</td>';
 						echo '<td>'. $arrRecord->ps_name .'</td>';
 						echo '<td>'. $arrRecord->ps_colorcode .'</td>';	
                         echo '<td>'. $arrRecord->ps_priority .'</td>';                        					

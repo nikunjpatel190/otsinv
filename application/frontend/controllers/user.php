@@ -124,46 +124,6 @@ class user extends CI_Controller {
 		$this->load->view('user/assignDeptForm',$data);
 	}
 	
-	// open form (user-pstage mapping)
-	public function frmAssignUtypePstage()
-	{
-		$this->load->view('user/assignUtypePstageForm',$data);
-	}
-	
-	// save user-STAGE mapping info
-	public function assignUtypePstage()
-	{
-		$u_typ_id = $this->Page->getRequest("slt_utype");
-		$ps_id = $this->Page->getRequest("slt_pstage");
-		
-		// Check Entry
-		$searchCriteria = array(); 
-		//$searchCriteria["selectField"] = "map.id";
-		$searchCriteria["utypeId"] = $u_typ_id;
-		$searchCriteria["stageId"] = $ps_id;
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsRecord = $this->userModel->getAssignStageDetail();
-		if(count($rsRecord) > 0)
-		{
-			$this->Page->setMessage('ALREADY_MAPPED');
-			redirect('c=user&m=frmAssignUtypePstage', 'location');
-		}
-		else
-		{
-			$arrRecord = array();
-			$arrRecord["u_typ_id"] = $u_typ_id;
-			$arrRecord["ps_id"] = $ps_id;
-			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
-			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
-			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
-			$this->db->insert("map_utype_pstage", $arrRecord);
-			if($this->db->insert_id() > 0)
-			{
-				$this->Page->setMessage('REC_MAP_MSG');
-				redirect('c=user&m=frmAssignUtypePstage', 'location');
-			}
-		}
-	}
 }
 
 /* End of file welcome.php */
