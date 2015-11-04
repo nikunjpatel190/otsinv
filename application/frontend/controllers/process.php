@@ -12,6 +12,11 @@ class process extends CI_Controller {
 	
 	public function index()
 	{
+	
+	}
+	
+	public function getStageList()
+	{
 		$arrWhere	=	array();
 		
 		// Get All stages
@@ -86,7 +91,7 @@ class process extends CI_Controller {
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
-		redirect('c=process', 'location');
+		redirect('c=process&m=getStageList', 'location');
 	}
 	
 	public function delete()
