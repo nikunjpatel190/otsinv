@@ -1,29 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class process extends CI_Controller {
+class stage extends CI_Controller {
  
-    
+    public $clientDetail=array();
 	function __construct()  
 	{
 		parent::__construct();
 		$this->load->model("stageModel",'',true);
-		$this->load->model("productModel",'',true);
+		$this->clientDetail = $this->stageModel->getClientDetail();
+		$this->clientDetail=$this->clientDetail[0];
 	}
 	
 	public function index()
-	{
-		$arrWhere	=	array();
-		
-		// Get All stages
-		$rsProcesses = $this->stageModel->getProcess();
-		$rsListing['rsProcesses']	=	$rsProcesses;
-		
-		// Load Views
-		$this->load->view('process/list', $rsListing);
-	
-	}
-	
-	public function getStageList()
 	{
 		$arrWhere	=	array();
 		
@@ -35,7 +23,7 @@ class process extends CI_Controller {
 		$this->load->view('stage/list', $rsListing);	
 	}
 	
-	public function AddStage()
+	public function addStage()
 	{
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
@@ -52,7 +40,7 @@ class process extends CI_Controller {
 		$this->load->view('stage/stageForm',$data);
 	}
 	
-	public function SaveStage()
+	public function saveStage()
 	{
 		$strAction = $this->input->post('action');
 		$ps_id     = $this->Page->getRequest('ps_id');
@@ -70,17 +58,13 @@ class process extends CI_Controller {
 		if(count($rsProcessStage) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
-			redirect('c=process&m=addStage', 'location');
-		}
-		
+			redirect('c=stage&m=addStage', 'location');
+		}		
 		$arrHeader["ps_name"]   	=	$this->Page->getRequest('txt_ps_name');
         $arrHeader["ps_desc"]     	=	$this->Page->getRequest('txt_ps_desc');
         $arrHeader["ps_priority"]   =   $this->Page->getRequest('txt_ps_priority');
         $arrHeader["ps_colorcode"]  =   $this->Page->getRequest('txt_ps_colorcode');
-		$arrHeader["ps_colorcode"]  =   $this->Page->getRequest('txt_ps_colorcode');
-		$arrHeader["ps_type"]       =   $this->Page->getRequest('slt_proc_typ');
-		$arrHeader["status"]        = 	$this->Page->getRequest('slt_status');
-		
+		$arrHeader["status"]        = 	$this->Page->getRequest('slt_status');	
 		if ($strAction == 'A' || $strAction == 'R')
 		{
             $arrHeader['insertby']		=	$this->Page->getSession("intUserId");
@@ -99,7 +83,7 @@ class process extends CI_Controller {
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
-		redirect('c=process&m=getStageList', 'location');
+		redirect('c=stage', 'location');
 	}
 	
 	public function delete()
@@ -122,50 +106,15 @@ class process extends CI_Controller {
 	public function addProcess()
 	{
 		// Load Views
-		//$this->load->view('process/processForm', '');	
-		
-		$data["strAction"] = $this->Page->getRequest("action");
-        $data["id"] = $this->Page->getRequest("id");
-
-        if ($data["strAction"] == 'E')
-		{
-		   $searchCriteria['p_id'] = $data["id"];
-		   $searchCriteria['orderField'] = "map.seq";
-		   $searchCriteria['selectField'] = "map.stage_id , map.seq , sm.ps_name , pm.proc_name , pm.proc_id";
-		   $this->stageModel->searchCriteria=$searchCriteria;
-		   $data["rsEdit"] = $this->stageModel->getProcessStage();
-		   
-		 /*   $proc_id=$data["id"];
-		    $sqlQuery = "SELECT *
-					FROM 
-						process_master WHERE proc_id= $proc_id ";		
-			$result     = $this->db->query($sqlQuery);
-			$rsData     = $result->result_array();
-			return $rsData;
-		    $this->Page->pr($data["rsEdit"]);*/
-        } 
-		else 
-		{
-            $data["strAction"] = "A";
-        }
-		$this->load->view('process/processForm',$data);	
+		$this->load->view('process/processForm', '');		
 	}
 	
 	public function saveProcess()
 	{
 		// save process
 		$processName = trim($_REQUEST['processName']);
-		$processId = trim($_REQUEST['processId']);
 		$stageArr = $_REQUEST['stages'];
-		//$this->Page->pr($stageArr); exit;
 		
-		if($processId != "" && $processId != 0)
-		{
-			$strQuery = "DELETE FROM map_process_stage WHERE process_id IN (". $processId .")";
-			$this->db->query($strQuery);
-			$strQuery = "DELETE FROM map_user_pstage WHERE p_id IN (". $processId .")";
-			$this->db->query($strQuery);
-		}
 		$stageDetailArr = array();
 		$i=1;
 		foreach($stageArr AS $key=>$valArr)
@@ -187,25 +136,11 @@ class process extends CI_Controller {
 			$arrData = array();
 			$arrData["proc_name"]  =	$processName;
 			$arrData["status"]     = 	'ACTIVE';
-			if ($processId != "" && $processId != 0)
-			{	
-				// for update
-				$arrData['updateby'] 		= 	$this->Page->getSession("intUserId");
-				$arrData['updatedate'] =	date('Y-m-d H:i:s');
-				$this->stageModel->tbl = "process_master";
-				$this->stageModel->update($arrData, array('proc_id' => $processId));
-				$intProcessID = $processId;
-			}
-			else
-			{
-				//for insert
-				$arrData['insertby']		=	$this->Page->getSession("intUserId");
-				$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
+			$arrData['insertby']		=	$this->Page->getSession("intUserId");
+			$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 			
-				$this->stageModel->tbl = "process_master";
-				$intProcessID = $this->stageModel->insert($arrData);
-			}
-			
+			$this->stageModel->tbl = "process_master";
+			$intProcessID = $this->stageModel->insert($arrData);
 			if($intProcessID != "" && $intProcessID != 0)
 			{
 				foreach($stageDetailArr AS $key=>$row)
@@ -226,61 +161,10 @@ class process extends CI_Controller {
 		}
 		
 		if($cnt>0){
-			$searchCriteria = array();
-			$searchCriteria["selectField"] = "sm.ps_id,sm.ps_name,map.process_id,map.seq";
-			$searchCriteria['p_id'] = $intProcessID;
-			$searchCriteria['orderField'] = "map.seq";
-			$searchCriteria['orderDir'] = "ASC";
-			
-			$this->stageModel->searchCriteria = $searchCriteria;
-			$data = array();
-			$data['processId'] = $intProcessID;
-			$data['resArr'] = $this->stageModel->getProcessStage();
-			$this->load->view('process/assignUserToStage', $data);
+			echo '1';
 		}
 		else{
 			echo '0';
-		}
-	}
-	
-	public function assignUserToStage()
-	{
-		$processId = $_REQUEST['processId'];
-		$dataArr = $_REQUEST['dataArr'];
-		//$this->Page->pr($dataArr);
-		
-		if(count($dataArr) > 0)
-		{
-			foreach($dataArr AS $key=>$row)
-			{
-				$stageId = $row['stageId'];
-				if($row['userIds'] > 0)		
-				{
-					foreach($row['userIds'] AS $userId)
-					{
-						### Cehck entry
-						$searchCriteria = array();
-						$searchCriteria['userId'] = $userId;
-						$searchCriteria['stageId'] = $stageId;
-						$searchCriteria['processId'] = $processId;
-						$this->stageModel->searchCriteria = $searchCriteria;
-						$resArr = $this->stageModel->getMapUserStageDetails();
-						if(count($resArr) == 0)
-						{
-							### insert data
-							$arrData = array();
-							$arrData['u_id'] = $userId;
-							$arrData['p_id'] = $processId;
-							$arrData['stage_id'] = $stageId;
-							$arrData['insertby']		=	$this->Page->getSession("intUserId");
-							$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
-							
-							$this->stageModel->tbl = "map_user_pstage";
-							$this->stageModel->insert($arrData);	
-						}
-					}
-				}
-			}
 		}
 	}
 }
