@@ -152,7 +152,7 @@ $(document).ready(function(){
 			url:"index.php?c=process&m=assignUserToStage",
 			success:function(res)
 			{
-				alert(res);
+				location.reload();
 			}
 		});
 	});
