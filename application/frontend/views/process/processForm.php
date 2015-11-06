@@ -16,7 +16,20 @@
 </div>
 <div class='col-sm-12'>
   <section class='example'>
-      <div class='gridly'></div>
+      <div class='gridly'>
+      	<?php 
+			if(count($rsEdit)!=0)
+			{
+				foreach($rsEdit as $arrRecord)
+				{
+		?>	
+					<div class='brick small'><div class='delete'>&times;</div><h3 id="<?php echo $arrRecord['stage_id'];?>"><?php echo $arrRecord['ps_name'];?></h3></div>			
+		<?php	
+				}
+			}
+		?>
+        
+      </div>
   </section>
 </div>
 
@@ -35,7 +48,8 @@
                     <label class="control-label" for="form-field-username">Process Name</label>
 
                     <div class="controls">
-                        <input type="text" name="txtProcessName" id="txtProcessName" placeholder="Process name .." value="" />
+                        <input type="hidden" name="txtProcessId" id="txtProcessId"  value="<?php echo $arrRecord['proc_id'];?>" />
+                        <input type="text" name="txtProcessName" id="txtProcessName" placeholder="Process name .." value="<?php echo $arrRecord['proc_name'];?>" />
                     </div>
                 </div>
             </div>
@@ -94,12 +108,14 @@ $(document).ready(function(){
 		var param = {};
 		var stageArr = {};
 		var processName = $("#txtProcessName").val();
+		var processId = $("#txtProcessId").val();
 		if(processName == "")
 		{
 			$("#txtProcessName").after('<div class="text-error error">Enter Process Name</div>');
 			return false;
 		}
 		param['processName'] = processName;
+		param['processId'] = processId;
 		$(".gridly .brick h3").each(function(){
 			var top = $(this).parent().css('top').slice(0, -2);
 			var left = $(this).parent().css('left').slice(0, -2);
