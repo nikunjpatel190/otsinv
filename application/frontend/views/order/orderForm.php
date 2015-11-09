@@ -82,6 +82,35 @@
                 
                 
             </div>
+                 
+            <div class="controls">
+                	
+
+                    <div class="entry " style="margin:10px 0px;">
+                        <label class="span2" style="margin:5px;">Product Name</label>
+                        <label class="span2" style="margin:5px;">Quantity</label>
+                        <label class="span2" style="margin:5px;">Price</label>
+                        <label class="span2" style="margin:5px;">Tax</label>
+                        <label class="span2" style="margin:5px;">Total</label>
+                        <label class="span2" style="margin:5px;"></label><br />
+                    </div>
+            </div>
+            <div class="controls"> 
+                <form class = "form-inline" role="form" autocomplete="off">
+                	
+
+                    <div class="entry form-group" style="margin:10px 0px;">
+                        <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
+                        <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
+                        <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
+                        <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
+                        <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
+                        <button class="btn btn-success btn-add" type="button">
+                            <span class="icon-plus bigger-110"></span>
+                        </button><br />
+                    </div>
+                </form>
+            </div>
             
             <div class="form-actions" align="center">
                 <button class="btn btn-info" type="button">
@@ -96,6 +125,29 @@
         
 <?php include(APPPATH.'views/bottom.php'); ?>
 
-<script language="javascript">
+<script type="text/javascript">
+$(function()
+{
+    $(document).on('click', '.btn-add', function(e)
+    {
+        e.preventDefault();
+
+        var controlForm = $('.controls form:first'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="icon-minus bigger-110"></span>');
+    }).on('click', '.btn-remove', function(e)
+    {
+		$(this).parents('.entry:first').remove();
+
+		e.preventDefault();
+		return false;
+	});
+});
 
 </script>
