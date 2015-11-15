@@ -11,7 +11,8 @@
         </select>
         <!--<a class='add button' href='#'>Add</a>-->
         <button class="btn btn-small btn-success add">Add</button>  
-        <button class="btn btn-small btn-primary save" href="#modal-form" data-toggle="modal">Save</button>  
+        <!--<button class="btn btn-small btn-primary save" href="#modal-form" data-toggle="modal">Save</button>  -->
+        <button class="btn btn-small btn-primary save" id="openProcessModel">Save</button>  
     </form>    
 </div>
 <div class='col-sm-12'>
@@ -48,8 +49,8 @@
                     <label class="control-label" for="form-field-username">Process Name</label>
 
                     <div class="controls">
-                        <input type="hidden" name="txtProcessId" id="txtProcessId"  value="<?php echo $arrRecord['proc_id'];?>" />
                         <input type="text" name="txtProcessName" id="txtProcessName" placeholder="Process name .." value="<?php echo $arrRecord['proc_name'];?>" />
+                        <input type="hidden" name="txtProcessId" id="txtProcessId"  value="<?php echo $arrRecord['proc_id'];?>" />
                     </div>
                 </div>
             </div>
@@ -102,6 +103,20 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$("#openProcessModel").click(function(){
+		var stageCount = $(".gridly .brick").find("h3").length;
+		if(stageCount > 0)
+		{
+			$('#modal-form').modal('show');	return false;
+		}
+		else
+		{
+			alert("Please Add stages");
+			return false;
+		}
+		
+	});
+	
 	$("#saveProcess").click(function(){
 		$(".error").remove();
 		$("#resAssignUserView").html('');
@@ -139,23 +154,40 @@ $(document).ready(function(){
 			success:function(res){
 				var res = $.trim(res);
 				$("#resAssignUserView").html(res);
+				$('#modal-form').modal('hide');
 				$('#modal-form-assign-user').modal('show');
 			}
 		});
 	});
 	
 	$("#btnAssignUser").click(function(){
+		$("#frmAssignUser").find('button').addClass('btn-default').removeClass('btn-danger');
 		var data = {};
 		var i=0;
+		var nullVal=0;
 		$("#frmAssignUser table tbody tr").each(function(){
 			var lblObj = $(this).find('label');
 			var selObj = $(this).find('select');
+			var btnObj = $(this).find('button');
 			
 			data[i] = {};
 			data[i]['stageId'] = lblObj.attr('id');
-			data[i]['userIds'] = selObj.val();
+			if(selObj.val() != null)
+			{
+				data[i]['userIds'] = selObj.val();
+			}
+			else
+			{
+				btnObj.addClass('btn-danger').removeClass('btn-default');
+				nullVal++;
+			}
 			i++;
 		});
+		
+		if(nullVal > 0)
+		{
+			return false;
+		}
 		
 		var param = {};
 		var processId = $("#processId").val();

@@ -209,6 +209,11 @@ class Page extends CI_Model {
 	// Display combobox options with selected from database table
 	function generateComboByTable($TableName,$ValueField,$DataField,$initialVal,$WhereClause="",$Selected="",$Seltext="")
 	{
+		$selectedArr = array();
+		if($Selected != "")
+		{
+			$selectedArr = explode(",",$Selected);
+		}
 		$retstr = NULL;
 		if($Seltext != "")
 		{
@@ -222,7 +227,7 @@ class Page extends CI_Model {
         {
             $Val=$arrRec[$ValueField];
 			$Data=$arrRec[$DataField];
-			if($Val==$Selected){
+			if(count($selectedArr) > 0 && in_array($Val,$selectedArr)){
 				$sel="selected";
 			}
 			else

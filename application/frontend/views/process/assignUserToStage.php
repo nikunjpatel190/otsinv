@@ -11,6 +11,7 @@
     <?php
         foreach($resArr AS $key=>$row)
         {
+			$usersIds = $asnUserArr[$processId][$row['ps_id']];
     ?>
             <tr>
                 <td>
@@ -18,7 +19,7 @@
                 </td>
                 <td align="right">
                     <select name="slt_user<?php echo $row['ps_id']; ?>" id="slt_user<?php echo $row['ps_id']; ?>" class="mltSlt" multiple="multiple">
-            <?php echo $this->Page->generateComboByTable("user_master","user_id","user_full_name","","where status='ACTIVE' order by user_full_name","",""); ?>
+            <?php echo $this->Page->generateComboByTable("user_master","user_id","user_full_name","","where status='ACTIVE' order by user_full_name",$usersIds,""); ?>
         </select>
                 </td>
             </tr>

@@ -14,7 +14,7 @@ class process extends CI_Controller {
 	{
 		$arrWhere	=	array();
 		
-		// Get All stages
+		// Get All process
 		$rsProcesses = $this->stageModel->getProcess();
 		$rsListing['rsProcesses']	=	$rsProcesses;
 		
@@ -157,15 +157,7 @@ class process extends CI_Controller {
 		$processName = trim($_REQUEST['processName']);
 		$processId = trim($_REQUEST['processId']);
 		$stageArr = $_REQUEST['stages'];
-		//$this->Page->pr($stageArr); exit;
 		
-		if($processId != "" && $processId != 0)
-		{
-			$strQuery = "DELETE FROM map_process_stage WHERE process_id IN (". $processId .")";
-			$this->db->query($strQuery);
-			$strQuery = "DELETE FROM map_user_pstage WHERE p_id IN (". $processId .")";
-			$this->db->query($strQuery);
-		}
 		$stageDetailArr = array();
 		$i=1;
 		foreach($stageArr AS $key=>$valArr)
@@ -181,6 +173,14 @@ class process extends CI_Controller {
 			}
 		}
 		
+		if($processId != "" && $processId != 0)
+		{
+			$strQuery = "DELETE FROM map_process_stage WHERE process_id IN (". $processId .")";
+			$this->db->query($strQuery);
+			//$strQuery = "DELETE FROM map_user_pstage WHERE p_id IN (". $processId .")";
+			//$this->db->query($strQuery);
+		}
+		
 		$cnt = 0;
 		if($processName != "" && count($stageDetailArr) > 0)
 		{
@@ -189,7 +189,7 @@ class process extends CI_Controller {
 			$arrData["status"]     = 	'ACTIVE';
 			if ($processId != "" && $processId != 0)
 			{	
-				// for update
+				// for update process
 				$arrData['updateby'] 		= 	$this->Page->getSession("intUserId");
 				$arrData['updatedate'] =	date('Y-m-d H:i:s');
 				$this->stageModel->tbl = "process_master";
@@ -198,7 +198,7 @@ class process extends CI_Controller {
 			}
 			else
 			{
-				//for insert
+				//for insert process
 				$arrData['insertby']		=	$this->Page->getSession("intUserId");
 				$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 			
@@ -226,6 +226,7 @@ class process extends CI_Controller {
 		}
 		
 		if($cnt>0){
+			### Get Process Assigned stage
 			$searchCriteria = array();
 			$searchCriteria["selectField"] = "sm.ps_id,sm.ps_name,map.process_id,map.seq";
 			$searchCriteria['p_id'] = $intProcessID;
@@ -236,6 +237,24 @@ class process extends CI_Controller {
 			$data = array();
 			$data['processId'] = $intProcessID;
 			$data['resArr'] = $this->stageModel->getProcessStage();
+			
+			### Get Process Stage assigned Users
+			
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = "map.p_id,map.stage_id,GROUP_CONCAT(map.u_id) AS userIds";
+			$searchCriteria['processId'] = $processId;
+			$searchCriteria['groupField'] = "map.p_id,map.stage_id";
+			$this->stageModel->searchCriteria = $searchCriteria;
+			$stgUserArr = $this->stageModel->getMapUserStageDetails();
+			
+			$asnUserArr = array();
+			foreach($stgUserArr AS $row)
+			{
+				$asnUserArr[$row['p_id']][$row['stage_id']]	= $row['userIds'];
+			}
+			$data['asnUserArr'] = $asnUserArr;
+			// $this->Page->pr($data['asnUserArr']); exit;
+			
 			$this->load->view('process/assignUserToStage', $data);
 		}
 		else{
@@ -247,7 +266,9 @@ class process extends CI_Controller {
 	{
 		$processId = $_REQUEST['processId'];
 		$dataArr = $_REQUEST['dataArr'];
-		//$this->Page->pr($dataArr);
+		
+		$strQuery = "DELETE FROM map_user_pstage WHERE p_id IN (". $processId .")";
+		$this->db->query($strQuery);	
 		
 		if(count($dataArr) > 0)
 		{
@@ -258,7 +279,7 @@ class process extends CI_Controller {
 				{
 					foreach($row['userIds'] AS $userId)
 					{
-						### Cehck entry
+						### Check entry
 						$searchCriteria = array();
 						$searchCriteria['userId'] = $userId;
 						$searchCriteria['stageId'] = $stageId;

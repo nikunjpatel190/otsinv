@@ -11,6 +11,73 @@ class stageModel extends Data {
         $this->tbl = 'process_stage_master';
     }
 	
+	// Auther : snehal
+	// Description : Function will return process
+	function getProcess()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By Client id
+		if(isset($searchCriteria['procId']) && $searchCriteria['procId'] != "")
+		{
+			$whereClaue .= 	" AND proc_id=".$searchCriteria['procId']." ";
+		}
+		
+		// By Process name
+		if(isset($searchCriteria['proc_name']) && $searchCriteria['proc_name'] != "")
+		{
+			$whereClaue .= 	" AND proc_name='".$searchCriteria['proc_name']."' ";
+		}
+		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND status='".$searchCriteria['status']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND proc_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " proc_id";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		
+		$sqlQuery = "SELECT 
+						".$selectField."
+					FROM 
+						process_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;
+	}
+	
+	// Auther : Nikunj Bambhroliya
+	// Description : Function will process assigned stages
 	function getProcessStage()
 	{
 		$searchCriteria = array();
@@ -108,10 +175,16 @@ class stageModel extends Data {
 			$whereClaue .= 	" AND map.p_id='".$searchCriteria['processId']."' ";
 		}
 		
-		$orderField = " map.id";
-		$orderDir = " ASC";
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
 		
 		// Set Order Field
+		$orderField = " map.id";
+		$orderDir = " ASC";
 		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
 		{
 			$orderField = $searchCriteria['orderField'];
@@ -129,79 +202,11 @@ class stageModel extends Data {
 					 	JOIN user_master AS usr
 							ON map.u_id = usr.user_id
 					  	JOIN process_stage_master AS ps
-							ON map.stage_id = ps.ps_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+							ON map.stage_id = ps.ps_id ".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;	
-	}
-	
-	// snehal
-	//4-11-15
-	
-	function getProcess()
-	{
-		$searchCriteria = array();
-		$searchCriteria = $this->searchCriteria;
-		
-		$selectField = "*";
-		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
-		{
-			$selectField = 	$searchCriteria['selectField'];
-		}
-		
-		$whereClaue = "WHERE 1=1 ";
-		
-		// By Client id
-		if(isset($searchCriteria['procId']) && $searchCriteria['procId'] != "")
-		{
-			$whereClaue .= 	" AND proc_id=".$searchCriteria['procId']." ";
-		}
-		
-		// By Process name
-		if(isset($searchCriteria['proc_name']) && $searchCriteria['proc_name'] != "")
-		{
-			$whereClaue .= 	" AND proc_name='".$searchCriteria['proc_name']."' ";
-		}
-		
-		// By Status
-		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
-		{
-			$whereClaue .= 	" AND status='".$searchCriteria['status']."' ";
-		}
-		
-		// Not In
-		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
-		{
-			$whereClaue .= 	" AND proc_id !=".$searchCriteria['not_id']." ";
-		}
-		
-		$orderField = " proc_id";
-		$orderDir = " ASC";
-		
-		// Set Order Field
-		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
-		{
-			$orderField = $searchCriteria['orderField'];
-		}
-		
-		// Set Order Field
-		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
-		{
-			$orderDir = $searchCriteria['orderDir'];
-		}
-		
-		
-		$sqlQuery = "SELECT 
-						".$selectField."
-					FROM 
-						process_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
-		//echo $sqlQuery; exit;
-		$result     = $this->db->query($sqlQuery);
-		$rsData     = $result->result_array();
-		return $rsData;
-		
-		
 	}
 }
