@@ -51,7 +51,7 @@ echo form_open('c=user&m=saveUser', $attributes);
             <div class="control-group">
                 <label for="form-field-1" class="control-label">User Phone <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_user_phone" name="txt_user_phone" class="span6 required" value="<?php echo $rsEdit->user_phone; ?>" />
+                    <input type="text" id="txt_user_phone" name="txt_user_phone" class="span6 required isnumber" value="<?php echo $rsEdit->user_phone; ?>" />
                 </div>
             </div>
             
@@ -67,7 +67,7 @@ echo form_open('c=user&m=saveUser', $attributes);
                 <label for="form-field-1" class="control-label">Password <?php echo $red; ?></label>
                 
                 <div class="controls">                	
-                    <input type="text" id="txt_user_password" name="txt_user_password"class="span6 <?php echo $required; ?> " value="" />
+                    <input type="password" id="txt_user_password" name="txt_user_password"class="span6 <?php echo $required; ?> " value="" />
                 </div>
             </div>
             

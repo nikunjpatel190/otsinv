@@ -45,7 +45,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 				if(count($rsUsers)==0)
                 {
                     echo "<tr>";
-                    echo '<td colspan="14" style="text-align:center;">No data found.</td>';
+                    echo '<td colspan="10" style="text-align:center;">No data found.</td>';
                     echo "</tr>";
                 }
                 else
@@ -82,9 +82,9 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsCenters)> 0): ?>
+<?php if(count($rsUsers)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null, null, null, null, null, null ],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>
