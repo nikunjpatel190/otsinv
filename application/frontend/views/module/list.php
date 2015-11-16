@@ -1,14 +1,19 @@
 <?php if($blnAjax != 1): ?>
 <?php include(APPPATH.'views/top.php'); ?>
 <?php endif; ?>
+
 <?php
-$attributes = array('id' => 'frm_list_record', 'name'=>'frm_list_record');
-echo form_open_multipart('c=aheg&m=event_add', $attributes); 
+$this->load->helper('form');
+$attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frm_add_user', 'name' => 'frm_search_module');
+echo form_open('c=setting&m=module_list', $attributes);
+
 ?>
 
 <div class="page-header position-relative">
     <h1>Module List</h1>
 </div>
+
+
 <input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 <input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
 
@@ -17,8 +22,16 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
         <button type="button" class="btn btn-small btn-success" onclick="return openAddPage();"> <i class="icon-plus-sign bigger-125"></i> Add </button>
         <button type="button" class="btn btn-small btn-danger" onclick="return DeleteRow();" name="btnDelete" id="btnDelete"> <i class="icon-trash bigger-125"></i> Delete </button>
     </div>
+    <div class="span6 text-right">     
+ 		<select class="required span6" name="slt_panel" id="slt_panel" >
+        	<?php echo $this->Page->generateComboByTable("panel_master","panel_id","panel_name","","where status='ACTIVE'",$panel_id,"Select Panel"); ?>
+        </select>
+   
+         <input type="submit" class="btn btn-primary btn-small" value="Search" onclick="return submit_form(this.form);">         
+    </div>
 </div>
 
+<?php echo form_close(); ?>
 <br />
 <div class="row-fluid">
     <div class="span12">

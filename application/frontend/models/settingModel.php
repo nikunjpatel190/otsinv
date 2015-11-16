@@ -36,23 +36,33 @@ class settingModel extends Data {
 	
 	function getModule($strWhere='', $strOrderBy='')
 	{
-		$sqlQuery = "SELECT 
-						mm.*,pm.panel_name 
-					FROM 
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "mm.*,pm.panel_name,pm.panel_id";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		// By user
+		if(isset($searchCriteria['panelId']) && $searchCriteria['panelId'] != "")
+		{
+			$whereClaue .= 	" AND mm.panel_id='".$searchCriteria['panelId']."' ";
+		}		
+				
+		$orderField = "mm.insertdate";
+		$orderDir = "DESC";
+				
+		$sqlQuery = "SELECT
+					  	".$selectField."
+					 FROM 
 						module_master as mm
 					JOIN panel_master AS pm
-							ON pm.panel_id = mm.panel_id";
+							ON pm.panel_id = mm.panel_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
-		if($strWhere != '')
-		{
-			$sqlQuery	.=	" WHERE " . $strWhere;
-		}
-		
-		if($strOrderBy != '')
-		{
-			$sqlQuery	.=	" ORDER BY " . $strOrderBy;
-		}
-		
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 

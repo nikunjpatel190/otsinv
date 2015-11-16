@@ -100,7 +100,7 @@ echo form_open('c=user&m=saveUser', $attributes);
             
             <div class="control-group non-printable">
                 <div class="controls">
-                    <input type="submit" class="btn btn-primary btn-small" value="Save" onclick="return submit_form(this.form);">
+                        <input type="submit" class="btn btn-primary btn-small" value="Save" onclick="return submit_form(this.form);">
                     <input type="button" class="btn btn-primary btn-small" value="Cancel" onclick="window.history.back()" >
                 </div>
             </div>

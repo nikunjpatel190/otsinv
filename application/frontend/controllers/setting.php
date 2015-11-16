@@ -88,10 +88,21 @@ class setting extends CI_Controller {
 	public function module_list()
 	{
 		$arrWhere	=	array();
+		$searchCriteria = array(); 
+		$strAction = $this->input->post('action');
+		$panel_id =   $this->Page->getRequest('slt_panel');
+		if($panel_id!=0 && $panel_id!="")
+		{
 		
-		// Get All Vendors
+		$searchCriteria["panelId"] = $panel_id;
+			
+		}
+			
+		// Get All modules
 		$orderBy = " mm.insertdate DESC";
+		$this->settingModel->searchCriteria=$searchCriteria;
 		$rsModules = $this->settingModel->getModule('',$orderBy);
+		$rsListing['panel_id']	=	$panel_id;
 		$rsListing['rsModules']	=	$rsModules;
 		
 		// Load Views
