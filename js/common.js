@@ -69,6 +69,7 @@ function submit_form(form)
 	$('#'+formid+' .isemail').each(function() {
 		strEmailVal		=	$(this).val();	
 		blnIsValidEmail	=	true;
+		
 
 		blnIsValidEmail	=	checkValidEmail(strEmailVal);
 		
@@ -94,16 +95,19 @@ function submit_form(form)
 		var numberRegex = "/^[0-9]+$/";
 		blnIsNumber	=	true;
 		intNumberVal		=	$(this).val();
-
 		if(intNumberVal != "")
 		{
-			if(!numberRegex.test(intNumberVal))
+			
+			var check = isNaN(intNumberVal);
+			
+			if(check != false)
 			{
-				blnIsNumber = false;		
+				blnIsNumber = false;
+				
 			}
 		}
 		
-		if(blnIsValidEmail == false)
+		if(blnIsNumber == false)
 		{
 			setStyle(this);
 			$(this).after('<br /><span class="errmsg">*Please enter valid Email.</span>');
