@@ -56,7 +56,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['prod_id'].'" value="'.$arrRecord['prod_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord['prod_categoty'] .'</td>';
+						echo '<td>'. $arrRecord['cat_name'] .'</td>';
 						echo '<td>'. $arrRecord['prod_name'] .'</td>';
                         echo '<td>'. $arrRecord['prod_code'] .'</td>';
 						echo '<td>'. $arrRecord['prod_measure_unit'] .'</td>';
