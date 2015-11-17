@@ -119,8 +119,10 @@
             <div class="controls"> 
                 <form class = "form-inline" id="frmMenuProdAdd" role="form" autocomplete="off">
                     <div class="entry form-group" style="margin:10px 0px;">
-                        <input class="form-control span4" name="fields[]" type="text" placeholder="Type something" />
-                        <input class="form-control span4" name="fields[]" type="text" placeholder="Type something" />
+                    	<select class="form-control span4">
+                    		<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","","","Select Product"); ?>
+                    	</select>
+                        <input class="form-control span4" type="text" placeholder="Enter Qty" />
                         <button class="btn btn-success btn-add" type="button" id="btnMenuProdAdd">
                             <span class="icon-plus bigger-110"></span>
                         </button><br />
@@ -131,7 +133,7 @@
 	</div>
     
     <div class="modal-footer">
-        <button class="btn btn-small btn-primary" id="saveOrder">
+        <button class="btn btn-small btn-primary" id="saveMenuOrder">
             <i class="icon-ok"></i>
             Save
         </button>
@@ -183,5 +185,66 @@ $(document).ready(function(){
 		$(this).parents('.entry:first').remove();
 		return false;
 	});
+	
+	/* START Save menufecture order*/
+		$(document).on("click","#saveMenuOrder",function(){
+			$(".text-error").remove();
+			$("#frmMenuProdAdd").find('select').css("border-color","#d5d5d5");
+			$("#frmMenuProdAdd").find('input[type="text"]').css("border-color","#d5d5d5");
+			var data = {};
+			var i=0;
+			var nullVal=0;
+			$("#frmMenuProdAdd .entry").each(function(){
+				var selectObj = $(this).find('select');
+				var inputObj = $(this).find('input[type="text"]');
+				var btnObj = $(this).find('button');
+				if(btnObj.hasClass("btn-remove"))
+				{
+					if(selectObj.val() == "" || selectObj.val() == 0 || selectObj.val() == null)
+					{
+						selectObj.css("border-color","#d15b47");
+						nullVal++;
+					}
+					if(inputObj.val() == "" || inputObj.val() == 0 || inputObj.val() == null)
+					{
+						inputObj.css("border-color","#d15b47");
+						nullVal++;
+					}
+										
+					data[i] = {};
+					data[i]['prodId'] = selectObj.val();
+					data[i]['prodQty'] = inputObj.val();
+					i++;
+				}
+			});
+			
+			// validation
+			if(nullVal > 0)
+			{
+				$("#saveMenuOrder").before('<span class="text-error">some field are blanks</span>');
+				return false;
+			}
+			else if(Object.keys(data).length == 0)
+			{
+				$("#saveMenuOrder").before('<span class="text-error">Minimum one product required</span>');
+				return false;
+			}
+			
+			var param = {};
+			param['dataArr'] = data;
+			//alert(param.toSource());
+			$.ajax({
+				type:"POST",
+				data:param,
+				url:"index.php?c=order&m=saveMenufectureOrder",
+				success:function(res)
+				{
+					alert("Menufecture order created successfully"); 
+					$('#mft-form').modal('hide');
+					return false;
+				}
+			});
+		});
+	/* END Save menufecture order*/
 });
 </script>
