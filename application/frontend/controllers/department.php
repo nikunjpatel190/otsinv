@@ -13,10 +13,21 @@ class department extends CI_Controller {
 	public function index()
 	{
 		$arrWhere	=	array();
+		$searchCriteria = array(); 
+		$strAction = $this->input->post('action');
+		$company_id =   $this->Page->getRequest('slt_company');
+		if($company_id!=0 && $company_id!="")
+		{
 		
+		$searchCriteria["company_id"] = $company_id;
+			
+		}
 		// Get All Departments
+		
+		$this->departmentModel->searchCriteria=$searchCriteria;
 		$rsDepartments = $this->departmentModel->getDepartmnt();
 		$rsListing['rsDepartments']	=	$rsDepartments;
+		$rsListing['company_id']	=	$company_id;
 		
 		// Load Views
 		$this->load->view('department/list', $rsListing);	

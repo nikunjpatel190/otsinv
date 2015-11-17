@@ -2,8 +2,9 @@
 <?php include(APPPATH.'views/top.php'); ?>
 <?php endif; ?>
 <?php
-$attributes = array('id' => 'frm_list_record', 'name'=>'frm_list_record');
-echo form_open_multipart('c=aheg&m=event_add', $attributes); 
+$this->load->helper('form');
+$attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frm_add_user', 'name' => 'frm_search_module');
+echo form_open('c=department', $attributes);
 ?>
 
 <div class="page-header position-relative">
@@ -17,8 +18,18 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
         <button type="button" class="btn btn-small btn-success" onclick="return openAddPage();"> <i class="icon-plus-sign bigger-125"></i> Add </button>
         <button type="button" class="btn btn-small btn-danger" onclick="return DeleteRow();" name="btnDelete" id="btnDelete"> <i class="icon-trash bigger-125"></i> Delete </button>
     </div>
+    
+    <div class="span6 text-right">     
+ 		<select class="required span6" name="slt_company" id="slt_company" >
+        	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name","","where status='ACTIVE'",$company_id,"Select Company"); ?>
+        </select>
+   
+         <input type="submit" class="btn btn-primary btn-small" value="Search" onclick="return submit_form(this.form);">         
+    </div>
+    
 </div>
 
+<?php echo form_close(); ?>
 <br />
 <div class="row-fluid">
     <div class="span12">

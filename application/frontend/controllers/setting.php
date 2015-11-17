@@ -217,9 +217,22 @@ class setting extends CI_Controller {
 	
 	public function comboList()
 	{
-		// Get All companies
+		$arrWhere	=	array();
+		$searchCriteria = array(); 
+		$strAction = $this->input->post('action');
+		$combo_case =   $this->Page->getRequest('slt_combo_case');
+		if($combo_case!="")
+		{
+		
+		$searchCriteria["combo_case"] = $combo_case;
+			
+		}
+		
+		// Get All combo
+		$this->settingModel->searchCriteria=$searchCriteria;
 		$rsCombos = $this->settingModel->getCombo();
 		$rsListing['rsCombos']	=	$rsCombos;
+		$rsListing['combo_case']	=	$combo_case;
 		
 		// Load Views
 		$this->load->view('combo/list', $rsListing);	
