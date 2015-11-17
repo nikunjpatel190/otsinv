@@ -14,14 +14,23 @@ class product extends CI_Controller {
 	{
 		$this->productModel->tbl="product_master";
 		$arrWhere	=	array();
-		
+		$strAction = $this->input->post('action');
+		$cat_id =   $this->Page->getRequest('slt_category');
+			
 		// Get All products
 		$searchCriteria	=	array();
+		if($cat_id!=0 && $cat_id!="")
+		{
+		
+			$searchCriteria["cat_id"] = $cat_id;
+			
+		}
 		$searchCriteria['orderField'] = 'insertdate';
 		$searchCriteria['orderDir'] = 'DESC';
 		$this->productModel->searchCriteria = $searchCriteria;
 		$rsProducts = $this->productModel->getProduct();
 		$rsListing['rsProducts']	=	$rsProducts;
+		$rsListing['cat_id']	=	$cat_id;
 		
 		// Load Views
 		$this->load->view('product/list', $rsListing);	
