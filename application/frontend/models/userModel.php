@@ -7,7 +7,7 @@ class userModel extends Data {
 	function __construct() 
 	{
         parent::__construct();
-        $this->tbl = 'user_master';
+       // $this->tbl = 'user_master';
     }
 	
 	function getUsers()
@@ -206,9 +206,63 @@ class userModel extends Data {
 	# Description : get all active user types
 	public function getUserTypes()
 	{
-		$sqlQuery = "SELECT * FROM user_types where status='ACTIVE'";
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		// By user type name
+		if(isset($searchCriteria['userTypesName']) && $searchCriteria['userTypesName'] != "")
+		{
+			$whereClaue .= 	" AND u_typ_name='".$searchCriteria['userTypesName']."' ";
+		}
+		
+		// By user Type Code
+		if(isset($searchCriteria['userTypesCode']) && $searchCriteria['userTypesCode'] != "")
+		{
+			$whereClaue .= 	" AND u_typ_code='".$searchCriteria['userTypesCode']."' ";
+		}
+		
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND status='".$searchCriteria['status']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND u_typ_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " u_typ_id ";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT
+					  	".$selectField."
+					  FROM user_types ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;
+		
 	}
 }

@@ -12,6 +12,7 @@ class user extends CI_Controller {
 	
 	public function index()
 	{
+		$this->userModel->tbl="user_master";
 		$arrWhere	=	array();
 		
 		// Get All Users
@@ -29,6 +30,7 @@ class user extends CI_Controller {
 	
 	public function AddUser()
 	{
+		$this->userModel->tbl="user_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
@@ -46,6 +48,7 @@ class user extends CI_Controller {
 	
 	public function SaveUser()
 	{
+		$this->userModel->tbl="user_master";
 		$strAction = $this->input->post('action');
 		
 		// Check User
@@ -101,6 +104,7 @@ class user extends CI_Controller {
 	
 	public function delete()
 	{
+		$this->userModel->tbl="user_master";
 		$arrUserIds	=	$this->input->post('chk_lst_list1');
 		$strUserIds	=	implode(",", $arrUserIds);
 		$strQuery = "DELETE FROM user_master WHERE user_id IN (". $strUserIds .")";
@@ -113,6 +117,7 @@ class user extends CI_Controller {
 	// open form (user-company mapping)
 	public function frmAssignCompany()
 	{
+		$this->userModel->tbl="user_master";
 		$data['UsersArr'] = $this->userModel->getUsers();
 		$this->load->view('user/assignCompanyForm',$data);
 	}
@@ -120,9 +125,101 @@ class user extends CI_Controller {
 	// open form (user-department mapping)
 	public function frmAssignDept()
 	{
+		$this->userModel->tbl="user_master";
 		$data['UsersArr'] = $this->userModel->getUsers();
 		$this->load->view('user/assignDeptForm',$data);
 	}
+	
+	##User Type List
+	public function userTypesList()
+	{
+		$arrWhere	=	array();
+		
+		// Get All User Types
+		$rsUserTypes = $this->userModel->getUserTypes();
+		
+		$rsListing['rsUserTypes']	=	$rsUserTypes;
+		
+		// Load Views
+		$this->load->view('user/userTypesList', $rsListing);	
+	}
+	
+	public function addUserTypes()
+	{
+		$this->userModel->tbl="user_types";
+		$data["strAction"] = $this->Page->getRequest("action");
+        $data["strMessage"] = $this->Page->getMessage();
+        $data["id"] = $this->Page->getRequest("id");
+
+        if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
+		{
+		   $data["rsEdit"] = $this->userModel->get_by_id('u_typ_id', $data["id"]);
+        } 
+		else 
+		{
+            $data["strAction"] = "A";
+        }
+		$this->load->view('user/userTypesForm',$data);
+	}
+	
+	public function saveUserTypes()
+	{
+		$this->userModel->tbl="user_types";
+		$strAction = $this->input->post('action');
+		// Check User
+		$searchCriteria = array(); 
+		$searchCriteria["selectField"] = "u_typ_id";
+		$searchCriteria["userTypesName"] = $this->Page->getRequest('txt_u_typ_name');
+		if ($strAction == 'E')
+		{
+            $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
+		}
+		$this->userModel->searchCriteria=$searchCriteria;
+		$rsUserTypes = $this->userModel->getUserTypes();
+		if(count($rsUserTypes) > 0)
+		{
+			$this->Page->setMessage('ALREADY_EXISTS');
+			redirect('c=user&m=addUserTypes', 'location');
+		}
+		$arrHeader["u_typ_name"]				=   $this->Page->getRequest('txt_u_typ_name');
+		$arrHeader["u_typ_code"]     	=	$this->Page->getRequest('txt_u_typ_code');
+        $arrHeader["u_typ_desc"]     	=	$this->Page->getRequest('txt_u_typ_desc');
+        $arrHeader["status"]        			= 	$this->Page->getRequest('slt_status');
+		
+		if ($strAction == 'A' || $strAction == 'R')
+		{
+            $arrHeader['insertby']		=	$this->Page->getSession("intUserId");
+            $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
+            $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
+			
+			$intCenterID = $this->userModel->insert($arrHeader);
+			$intCenterID;
+			$this->Page->setMessage('REC_ADD_MSG');
+        }
+		elseif ($strAction == 'E')
+		{
+            $u_typ_id				= 	$this->Page->getRequest('hid_id');
+            $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
+            $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
+			
+            $this->userModel->update($arrHeader, array('u_typ_id' => $u_typ_id));
+            $this->Page->setMessage('REC_EDIT_MSG');
+        }
+		
+		redirect('c=user&m=userTypesList', 'location');
+	}
+	
+	public function deleteUserTypes()
+	{
+		$arrUserTypesIds	=	$this->input->post('chk_lst_list1');
+		$strUserTypesIds	=	implode(",", $arrUserTypesIds);
+		$strQuery = "DELETE FROM user_types WHERE u_typ_id IN (". $strUserTypesIds .")";
+		$this->db->query($strQuery);
+		$this->Page->setMessage("DELETE_RECORD");
+		// redirect to listing screen
+		redirect('c=user&m=userTypesList', 'location');
+	}
+	
 	
 }
 
