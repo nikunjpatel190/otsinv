@@ -7,6 +7,7 @@ class order extends CI_Controller {
 		parent::__construct();
 		$this->load->model("orderModel",'',true);
 		$this->load->model("inventoryModel",'',true);
+		$this->load->model("processModel",'',true);
 	}
 	
 	public function index()
@@ -17,6 +18,13 @@ class order extends CI_Controller {
 	
 	public function checkOrder()
 	{
+		// Get user assigned process stage
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = "DISTINCT(ps.ps_id),ps.ps_name ";
+		$searchCriteria['userId'] = $this->Page->getSession("intUserId");
+		$this->processModel->searchCriteria = $searchCriteria;
+		$rsListing['usrStageArr'] = $this->processModel->getMapUserStageDetails();
+		
 		// Load Views
 		$this->load->view('order/checkOrderForm', $rsListing);	
 	}
