@@ -10,4 +10,74 @@ class orderModel extends Data {
         parent::__construct();
         $this->tbl = 'order_master';
     }
+	
+	//@Author : Nikunj Bambhroliya
+	//@Description : function will return menufecturing orders to users in deffrent stages
+	public function getOrders()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By user
+		if(isset($searchCriteria['userId']) && $searchCriteria['userId'] != "")
+		{
+			$whereClaue .= 	" AND mup.u_id =".$searchCriteria['userId']." ";
+		}
+		
+		// By Stage
+		if(isset($searchCriteria['stageId']) && $searchCriteria['stageId'] != "")
+		{
+			$whereClaue .= 	" AND mup.stage_id IN (".$searchCriteria['stageId'].") ";
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		$orderField = " mup.id";
+		$orderDir = " ASC";
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT ".$selectField." FROM map_user_pstage AS mup
+					JOIN map_prod_proc AS mpp
+					ON mup.p_id = mpp.proc_id
+					JOIN manufacture_prod_detail mpd
+					ON mpp.prod_id = mpd.prod_id
+					JOIN manufacture_master AS mm
+					ON mpd.mft_id=mm.mft_id
+					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;	
+	}
 }

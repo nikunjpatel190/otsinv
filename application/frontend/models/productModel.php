@@ -28,7 +28,7 @@ class productModel extends Data {
 		// By Product id
 		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "")
 		{
-			$whereClaue .= 	" AND pm.prod_id=".$searchCriteria['prod_id']." ";
+			$whereClaue .= 	" AND pm.prod_id IN (".$searchCriteria['prod_id'].") ";
 		}
 		
 		// By Category
