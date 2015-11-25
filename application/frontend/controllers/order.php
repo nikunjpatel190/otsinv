@@ -17,7 +17,7 @@ class order extends CI_Controller {
 		$this->load->view('order/orderForm', $rsListing);	
 	}
 	
-	public function checkOrder()
+	public function checkMftOrder()
 	{
 		// Get user assigned process stage
 		$searchCriteria = array();
@@ -39,18 +39,18 @@ class order extends CI_Controller {
 		
 		// Get Orders
 		$searchCriteria = array();
-		$searchCriteria['selectField'] = "mm.mft_no,mpd.prod_id,mpd.prod_qty,mup.u_id,mup.stage_id";
+		$searchCriteria['selectField'] = "mm.mft_id,mm.mft_no,mpd.prod_id,mpd.prod_qty,mup.u_id,mup.stage_id";
 		$searchCriteria['userId'] = $this->Page->getSession("intUserId");
 		$searchCriteria['stageId'] = $stageIds;
 		$this->orderModel->searchCriteria = $searchCriteria;
-		$usrOrderArr = $this->orderModel->getOrders();
+		$usrOrderArr = $this->orderModel->getMftOrders();
 		
 		$orderListArr = array();
 		$orderProductListArr = array();
 		$productIds = "";
 		foreach($usrOrderArr AS $row)
 		{
-			$orderListArr[$row['u_id']][$row['stage_id']][$row['mft_no']] =  $row['mft_no'];
+			$orderListArr[$row['u_id']][$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
 			
 			$temp = array();
 			$temp["prod_id"] = $row['prod_id'];
@@ -86,7 +86,7 @@ class order extends CI_Controller {
 	
 	### Auther : Nikunj Bambhroliya
 	### Desc : save menufecture order details
-	public function saveMenufectureOrder()
+	public function saveMftOrder()
 	{
 		$dataArr = $_REQUEST['dataArr'];
 		
@@ -127,6 +127,42 @@ class order extends CI_Controller {
 				$this->inventoryModel->insert($arrData);
 			}
 		}
+	}
+	
+	
+	### Auther : Nikunj Bambhroliya
+	### Desc : update order status submited by users from diffrent stages with product qty.
+	public function addMftOrderStatus()
+	{
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = "SUM(mps.qty) AS prod_qty ";
+		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
+		$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
+		$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
+		$this->orderModel->searchCriteria = $searchCriteria;
+		$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
+		
+		// Add menufecture Order status
+		$arrData = array();
+		$arrData['mft_id'] = $this->Page->getRequest("order_id");
+		$arrData['prod_id'] = $this->Page->getRequest("product_id");
+		$arrData['stage_id'] = $this->Page->getRequest("stage_id");
+		$arrData['qty'] = $this->Page->getRequest("qty");
+		$arrData['note'] = $this->Page->getRequest("note");
+		$arrData['insertby'] =	$this->Page->getSession("intUserId");
+		$arrData['insertdate'] = date('Y-m-d H:i:s');
+		
+		$this->orderModel->tbl = "manufacture_prod_status";
+		$lst_id = $this->orderModel->insert($arrData);
+		if($lst_id > 0)
+		{
+			echo "1";
+		}
+		else
+		{
+			echo "0";
+		}
+		exit;
 	}
 }
 

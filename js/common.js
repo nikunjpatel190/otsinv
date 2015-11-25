@@ -39,9 +39,7 @@ function checkAll(strName)
 function submit_form(form)
 {
 	var formid	=	form.id;
-	var blnError	=	false;	
-	var blnEmailError	=	false;
-	var blnNumber	=	false;
+	var blnError	=	false;
 	
 	$(".errmsg").remove();
 
@@ -76,8 +74,8 @@ function submit_form(form)
 		if(blnIsValidEmail == false)
 		{
 			setStyle(this);
-			$(this).after('<br /><span class="errmsg">*Please enter valid Email.</span>');
-			blnEmailError	=	true;
+			$(this).after('<br /><span class="errmsg red">Please enter valid Email</span>');
+			blnError	=	true;
 		}
 		else
 		{
@@ -85,7 +83,7 @@ function submit_form(form)
 		}
 	});
 	
-	if(blnEmailError == true)
+	if(blnError == true)
 	{
 		return false;
 	}
@@ -110,8 +108,8 @@ function submit_form(form)
 		if(blnIsNumber == false)
 		{
 			setStyle(this);
-			$(this).after('<br /><span class="errmsg">*Please enter valid Email.</span>');
-			blnEmailError	=	true;
+			$(this).after('<br /><span class="errmsg red">Please enter numeric value</span>');
+			blnError	=	true;
 		}
 		else
 		{
@@ -119,7 +117,7 @@ function submit_form(form)
 		}
 	});
 	
-	if(blnEmailError == true)
+	if(blnError == true)
 	{
 		return false;
 	}
@@ -130,7 +128,7 @@ function submit_form(form)
 	{
         return extraValid();
     }
-	
+	return true
 }
 
 function setStyle(element)

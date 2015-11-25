@@ -53,7 +53,7 @@ $uid = $this->Page->getSession("intUserId");
                                     if(count($orderListArr[$uid][$row['ps_id']]) > 0)
                                     {
                                         $cnt = 0;
-                                        foreach($orderListArr[$uid][$row['ps_id']] as $orderNo)
+                                        foreach($orderListArr[$uid][$row['ps_id']] as $orderId=>$orderNo)
                                         {
                                         ?>
                                                <div class="panel">
@@ -95,9 +95,9 @@ $uid = $this->Page->getSession("intUserId");
                                                                                 <td>0</td>
                                                                                 <td>
 																					<div class="hidden-phone visible-desktop btn-group">
-																						<button class="btn btn-mini btn-success" href="#ship-qty-form" data-toggle="modal">
+																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>">
 																							<!--<i class="icon-ok bigger-120"></i>-->
-																							Ship Order
+																							Forward
 																						</button>
 																					</div>
 																					<div class="hidden-desktop visible-phone">
@@ -108,10 +108,9 @@ $uid = $this->Page->getSession("intUserId");
 
 																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																								<li>
-																									<a class="tooltip-info" data-rel="tooltip" title="View" href="#ship-qty-form" data-toggle="modal">
-																										<span class="green">
-																											<!--<i class="icon-ok bigger-120"></i>-->
-																											Ship Order
+																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" >
+																										<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
+Forward
 																										</span>
 																									</a>
 																								</li>
@@ -155,29 +154,38 @@ $uid = $this->Page->getSession("intUserId");
     <div class="modal-body overflow-visible">
     	<div class="vspace"></div>
         <div class="row-fluid">
-			<form class="form-horizontal" />
+			<form class="form-horizontal" id="frmAddProdStatus" />
 				<div class="control-group">
 					<label class="control-label" for="form-field-1">Quantity</label>
 					<div class="controls">
-						<input type="text" id="form-field-1" placeholder="Username" />
+						<input type="text" id="prod_ship_qty" placeholder="Product Quantity" class="required isnumber" />
+                        <input type="hidden" id="hdn_stage_id" value="" />
+                        <input type="hidden" id="hdn_order_id" value="" />
+                        <input type="hidden" id="hdn_product_id" value="" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="form-field-1">Note</label>
 					<div class="controls">
-						<textarea placeholder="Status Note" id="form-field-2"></textarea>
+						<textarea placeholder="Status Note" id="sts_note"></textarea>
 					</div>
 				</div>
+                <div class="control-group">
+                	<div class="controls">
+                        <button class="btn btn-small btn-info" type="submit">
+                            <i class="icon-ok bigger-110"></i>
+                            Submit
+                        </button>
+                        &nbsp;
+                        <button class="btn btn-small" type="reset">
+                            <i class="icon-undo bigger-110"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
 			</form>
     	</div>
 	</div>
-    
-    <div class="modal-footer">
-        <button class="btn btn-small btn-primary" id="saveMenuOrder">
-            <i class="icon-ok"></i>
-            Save
-        </button>
-    </div>
 </div>
 <!-- END Modal popup for Ship Quntity & update status -->
 <?php include(APPPATH.'views/bottom.php'); ?>
@@ -196,7 +204,49 @@ $uid = $this->Page->getSession("intUserId");
 			$("#body_"+id).toggle();
 			//alert(id);
 		});
+		$(document).on("click",".opnModalShipQty",function(){
+			$("#frmAddProdStatus")[0].reset();
+			$("#hdn_stage_id").val($(this).attr('stageid'));
+			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_product_id").val(this.id);
+			
+			$("#ship-qty-form").modal('show');
+		});
 		
+		$(document).on("submit","#frmAddProdStatus",function(e){
+			if(!submit_form(this))
+			{
+				return false;
+			}
+			e.preventDefault();
+			var data={};
+			data['qty'] = $("#prod_ship_qty").val();
+			data['note'] = $("#sts_note").val();
+			data['order_id'] = $("#hdn_order_id").val();
+			data['stage_id'] = $("#hdn_stage_id").val();
+			data['product_id'] = $("#hdn_product_id").val();
+			//alert(data.toSource());
+			
+			$.ajax({
+				type:"POST",
+				data:data,
+				url:"index.php?c=order&m=addMftOrderStatus",
+				success:function(res)
+				{
+					var res = $.trim(res);
+					if(res)
+					{
+						alert("Status updated succesfully");
+						$("#ship-qty-form").modal('hide');
+					}
+					else
+					{
+						alert("Error! Please try again");
+					}
+					return false;
+				}
+			});
+		});
 		/*$('#myTabs a').click(function (e) {
 		  e.preventDefault()
 		  alert("111");
