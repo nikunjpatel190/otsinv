@@ -77,6 +77,7 @@ $uid = $this->Page->getSession("intUserId");
                                                                             <th>Total Qty</th>
                                                                             <th>Proceed Qty</th>
                                                                             <th>Remaining Qty</th>
+                                                                            <th>Action</th>
                                                                         </tr>
                                                                     </thead>
                         
@@ -92,6 +93,32 @@ $uid = $this->Page->getSession("intUserId");
                                                                                 <td><?php echo $product['prod_qty']; ?></td>
                                                                                 <td>0</td>
                                                                                 <td>0</td>
+                                                                                <td>
+																					<div class="hidden-phone visible-desktop btn-group">
+																						<button class="btn btn-mini btn-success" href="#ship-qty-form" data-toggle="modal">
+																							<!--<i class="icon-ok bigger-120"></i>-->
+																							Ship Order
+																						</button>
+																					</div>
+																					<div class="hidden-desktop visible-phone">
+																						<div class="inline position-relative">
+																							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																								<i class="icon-cog icon-only bigger-110"></i>
+																							</button>
+
+																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
+																								<li>
+																									<a class="tooltip-info" data-rel="tooltip" title="View" href="#ship-qty-form" data-toggle="modal">
+																										<span class="green">
+																											<!--<i class="icon-ok bigger-120"></i>-->
+																											Ship Order
+																										</span>
+																									</a>
+																								</li>
+																							</ul>
+																						</div>
+																					</div>
+																				</td>
                                                                             </tr>
                                                                         <?php
                                                                             $i++;
@@ -118,6 +145,41 @@ $uid = $this->Page->getSession("intUserId");
         </div>             
     </div>
 </div>
+<!-- START Modal popup for Ship Quntity & update status -->
+<div id="ship-qty-form" class="modal hide" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="blue bigger">Please fill the following information</h4>
+    </div>
+
+    <div class="modal-body overflow-visible">
+    	<div class="vspace"></div>
+        <div class="row-fluid">
+			<form class="form-horizontal" />
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Quantity</label>
+					<div class="controls">
+						<input type="text" id="form-field-1" placeholder="Username" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Note</label>
+					<div class="controls">
+						<textarea placeholder="Status Note" id="form-field-2"></textarea>
+					</div>
+				</div>
+			</form>
+    	</div>
+	</div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-small btn-primary" id="saveMenuOrder">
+            <i class="icon-ok"></i>
+            Save
+        </button>
+    </div>
+</div>
+<!-- END Modal popup for Ship Quntity & update status -->
 <?php include(APPPATH.'views/bottom.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function(){
