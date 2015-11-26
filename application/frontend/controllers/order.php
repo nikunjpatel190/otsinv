@@ -134,6 +134,7 @@ class order extends CI_Controller {
 	### Desc : update order status submited by users from diffrent stages with product qty.
 	public function addMftOrderStatus()
 	{
+		// Get Proceed Qty
 		$searchCriteria = array();
 		$searchCriteria['selectField'] = "SUM(mps.qty) AS prod_qty ";
 		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
@@ -141,26 +142,44 @@ class order extends CI_Controller {
 		$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
 		$this->orderModel->searchCriteria = $searchCriteria;
 		$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
+		$proceed_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
+
+		// Get Total Product Qty
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = "mpd.prod_qty ";
+		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
+		$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
+		$this->orderModel->searchCriteria = $searchCriteria;
+		$mftOrdProductArr = $this->orderModel->getMftOrderProductDetails();
+		$total_qty = (int)$mftOrdProductArr[0]['prod_qty'];
 		
-		// Add menufecture Order status
-		$arrData = array();
-		$arrData['mft_id'] = $this->Page->getRequest("order_id");
-		$arrData['prod_id'] = $this->Page->getRequest("product_id");
-		$arrData['stage_id'] = $this->Page->getRequest("stage_id");
-		$arrData['qty'] = $this->Page->getRequest("qty");
-		$arrData['note'] = $this->Page->getRequest("note");
-		$arrData['insertby'] =	$this->Page->getSession("intUserId");
-		$arrData['insertdate'] = date('Y-m-d H:i:s');
 		
-		$this->orderModel->tbl = "manufacture_prod_status";
-		$lst_id = $this->orderModel->insert($arrData);
-		if($lst_id > 0)
+		if($proceed_qty < $total_qty)
 		{
-			echo "1";
+			// Add menufecture Order status
+			$arrData = array();
+			$arrData['mft_id'] = $this->Page->getRequest("order_id");
+			$arrData['prod_id'] = $this->Page->getRequest("product_id");
+			$arrData['stage_id'] = $this->Page->getRequest("stage_id");
+			$arrData['qty'] = $this->Page->getRequest("qty");
+			$arrData['note'] = $this->Page->getRequest("note");
+			$arrData['insertby'] =	$this->Page->getSession("intUserId");
+			$arrData['insertdate'] = date('Y-m-d H:i:s');
+			
+			$this->orderModel->tbl = "manufacture_prod_status";
+			$lst_id = $this->orderModel->insert($arrData);
+			if($lst_id > 0)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
 		}
 		else
 		{
-			echo "0";
+			echo "2";
 		}
 		exit;
 	}
