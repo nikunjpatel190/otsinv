@@ -80,6 +80,70 @@ class orderModel extends Data {
 		$rsData     = $result->result_array();
 		return $rsData;	
 	}
+
+	//@Author : Nikunj Bambhroliya
+	//@Description : function will return menufecturing orders product Details
+	public function getMftOrderProductDetails()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By menufecture order id
+		if(isset($searchCriteria['mft_id']) && $searchCriteria['mft_id'] != "")
+		{
+			$whereClaue .= 	" AND mpd.mft_id =".$searchCriteria['mft_id']." ";
+		}
+		
+		// By product id
+		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "")
+		{
+			$whereClaue .= 	" AND mpd.prod_id IN (".$searchCriteria['prod_id'].") ";
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		$orderField = " mpd.mpd_id";
+		$orderDir = " ASC";
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT ".$selectField." FROM manufacture_prod_detail AS mpd
+					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;		
+	}
 	
 	//@Author : Nikunj Bambhroliya
 	//@Description : function will return menufecturing orders product status
