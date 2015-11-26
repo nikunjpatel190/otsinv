@@ -234,10 +234,14 @@ Forward
 				success:function(res)
 				{
 					var res = $.trim(res);
-					if(res)
+					if(res == "1")
 					{
 						alert("Status updated succesfully");
 						$("#ship-qty-form").modal('hide');
+					}
+					else if(res == "2")
+					{
+						alert("Enterd quantity exceed than total quantity");
 					}
 					else
 					{
