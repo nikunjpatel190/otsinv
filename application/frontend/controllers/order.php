@@ -39,7 +39,7 @@ class order extends CI_Controller {
 		
 		// Get Orders
 		$searchCriteria = array();
-		$searchCriteria['selectField'] = "mm.mft_id,mm.mft_no,mpd.prod_id,mpd.prod_qty,mup.u_id,mup.stage_id";
+		/*$searchCriteria['selectField'] = "mm.mft_id,mm.mft_no,mpd.prod_id,mpd.prod_qty AS prod_tot_qty,mup.u_id,mup.stage_id,(SELECT SUM(mps.qty) AS proceed_qty FROM manufacture_prod_status AS mps WHERE mps.mft_id = mm.mft_id AND mps.prod_id = mpd.prod_id AND mps.stage_id=mup.stage_id) AS proceed_qty ";*/
 		$searchCriteria['userId'] = $this->Page->getSession("intUserId");
 		$searchCriteria['stageId'] = $stageIds;
 		$this->orderModel->searchCriteria = $searchCriteria;
@@ -50,13 +50,29 @@ class order extends CI_Controller {
 		$productIds = "";
 		foreach($usrOrderArr AS $row)
 		{
-			$orderListArr[$row['u_id']][$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
+			if($row['seq'] == 1)
+			{
+				$prod_tot_qty = (int)$row['prod_tot_qty'];
+			}
+			else
+			{
+				$prod_tot_qty = (int)$row['prv_proceed_qty'];
+			}
+			$prod_proceed_qty = (int)$row['proceed_qty'];
+			$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
 			
-			$temp = array();
-			$temp["prod_id"] = $row['prod_id'];
-			$temp["prod_qty"] = $row['prod_qty'];
-			$orderProductListArr[$row['u_id']][$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
-			$productIds .= $row['prod_id'].",";
+			if($prod_proceed_qty < $prod_tot_qty)
+			{
+				$orderListArr[$row['u_id']][$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
+				
+				$temp = array();
+				$temp["prod_id"] = $row['prod_id'];
+				$temp["prod_tot_qty"] = $prod_tot_qty;
+				$temp["proceed_qty"] = $prod_proceed_qty;
+				$temp["remain_qty"] = $remain_proceed_qty;
+				$orderProductListArr[$row['u_id']][$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
+				$productIds .= $row['prod_id'].",";
+			}
 		}
 		
 		if(strpos($productIds,",") == true)
@@ -131,7 +147,7 @@ class order extends CI_Controller {
 	
 	
 	### Auther : Nikunj Bambhroliya
-	### Desc : update order status submited by users from diffrent stages with product qty.
+	### Desc : update order status submited by users from different stages with product qty.
 	public function addMftOrderStatus()
 	{
 		// Get Proceed Qty
@@ -143,18 +159,12 @@ class order extends CI_Controller {
 		$this->orderModel->searchCriteria = $searchCriteria;
 		$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
 		$proceed_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
+		$proceed_qty = $proceed_qty + $this->Page->getRequest("qty");
 
-		// Get Total Product Qty
-		$searchCriteria = array();
-		$searchCriteria['selectField'] = "mpd.prod_qty ";
-		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
-		$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$mftOrdProductArr = $this->orderModel->getMftOrderProductDetails();
-		$total_qty = (int)$mftOrdProductArr[0]['prod_qty'];
+		// Total Product Qty
+		$total_qty = (int)$this->Page->getRequest("total_qty");
 		
-		
-		if($proceed_qty < $total_qty)
+		if($proceed_qty <= $total_qty)
 		{
 			// Add menufecture Order status
 			$arrData = array();

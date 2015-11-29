@@ -90,12 +90,12 @@ $uid = $this->Page->getSession("intUserId");
                                                                             <tr>
                                                                                 <td><?php echo $i; ?></td>
                                                                                 <td><?php echo $productsArr[$product['prod_id']]['prod_name']; ?></td>
-                                                                                <td><?php echo $product['prod_qty']; ?></td>
-                                                                                <td>0</td>
-                                                                                <td>0</td>
+                                                                                <td><?php echo $product['prod_tot_qty']; ?></td>
+                                                                                <td><?php echo $product['proceed_qty']; ?></td>
+                                                                                <td><?php echo $product['remain_qty']; ?></td>
                                                                                 <td>
 																					<div class="hidden-phone visible-desktop btn-group">
-																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>">
+																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>">
 																							<!--<i class="icon-ok bigger-120"></i>-->
 																							Forward
 																						</button>
@@ -108,7 +108,7 @@ $uid = $this->Page->getSession("intUserId");
 
 																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																								<li>
-																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" >
+																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>">
 																										<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
 Forward
 																										</span>
@@ -162,6 +162,8 @@ Forward
                         <input type="hidden" id="hdn_stage_id" value="" />
                         <input type="hidden" id="hdn_order_id" value="" />
                         <input type="hidden" id="hdn_product_id" value="" />
+                        <input type="hidden" id="hdn_total_qty" value="" />
+                        <input type="hidden" id="hdn_proceed_qty" value="" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -205,19 +207,33 @@ Forward
 			//alert(id);
 		});
 		$(document).on("click",".opnModalShipQty",function(){
+			resetStyle("#prod_ship_qty");
+			$(".errmsg").remove();
 			$("#frmAddProdStatus")[0].reset();
 			$("#hdn_stage_id").val($(this).attr('stageid'));
 			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_total_qty").val($(this).attr('totqty'));
+			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
+			
 			$("#hdn_product_id").val(this.id);
 			
 			$("#ship-qty-form").modal('show');
 		});
 		
 		$(document).on("submit","#frmAddProdStatus",function(e){
+			$(".errmsg").remove();
 			if(!submit_form(this))
 			{
 				return false;
 			}
+			
+			if($("#prod_ship_qty").val() == 0)
+			{
+				setStyle("#prod_ship_qty");
+				$("#prod_ship_qty").after('<span class="errmsg red clearfix">Qty must be greater than zero</span>');
+				return false;
+			}
+			
 			e.preventDefault();
 			var data={};
 			data['qty'] = $("#prod_ship_qty").val();
@@ -225,6 +241,8 @@ Forward
 			data['order_id'] = $("#hdn_order_id").val();
 			data['stage_id'] = $("#hdn_stage_id").val();
 			data['product_id'] = $("#hdn_product_id").val();
+			data['total_qty'] = $("#hdn_total_qty").val();
+			data['proceed_qty'] = $("#hdn_proceed_qty").val();
 			//alert(data.toSource());
 			
 			$.ajax({
@@ -238,6 +256,7 @@ Forward
 					{
 						alert("Status updated succesfully");
 						$("#ship-qty-form").modal('hide');
+						location.reload();
 					}
 					else if(res == "2")
 					{

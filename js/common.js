@@ -74,7 +74,7 @@ function submit_form(form)
 		if(blnIsValidEmail == false)
 		{
 			setStyle(this);
-			$(this).after('<br /><span class="errmsg red">Please enter valid Email</span>');
+			$(this).after('<span class="errmsg red clearfix">Please enter valid Email</span>');
 			blnError	=	true;
 		}
 		else
@@ -108,7 +108,7 @@ function submit_form(form)
 		if(blnIsNumber == false)
 		{
 			setStyle(this);
-			$(this).after('<br /><span class="errmsg red">Please enter numeric value</span>');
+			$(this).after('<span class="errmsg red clearfix">Please enter numeric value</span>');
 			blnError	=	true;
 		}
 		else
