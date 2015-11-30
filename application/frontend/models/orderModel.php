@@ -94,7 +94,7 @@ class orderModel extends Data {
 					   JOIN map_process_stage AS prcstg
 						ON mps.stage_id = prcstg.stage_id
 					   WHERE mps.mft_id = mm.mft_id
-						   AND prcstg.process_id = mup.p_id  AND prcstg.seq=prc_stg.seq-1) AS prv_proceed_qty     
+						   AND mps.prod_id = mpd.prod_id AND prcstg.process_id = mup.p_id  AND prcstg.seq=prc_stg.seq-1) AS prv_proceed_qty     
 					FROM map_user_pstage AS mup
 					  JOIN map_prod_proc AS mpp
 						ON mup.p_id = mpp.proc_id
