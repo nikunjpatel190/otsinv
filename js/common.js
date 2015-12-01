@@ -1,4 +1,14 @@
-/* Common List and Validation functions and Common functions */ 
+/* Common List and Validation functions and Common functions */
+
+$(document).ready(function() {
+	$('.date-picker').datepicker();
+	/*$('.date-picker').datepicker().next().on(ace.click_event, function(){
+		$(this).prev().focus();
+	});*/
+	$('.date-picker').on('changeDate', function(ev){
+		$(this).datepicker('hide');
+	});
+}); 
 
 Array.prototype.contains = function (element) 
 {

@@ -69,7 +69,6 @@
 <!--<script src="./js/flot/jquery.flot.min.js"></script>
 <script src="./js/flot/jquery.flot.pie.min.js"></script>
 <script src="./js/flot/jquery.flot.resize.min.js"></script>-->
-<script src="./js/common.js" language="javascript"></script>
 <script src="./js/jquery.maskedinput.min.js" language="javascript"></script>
 <script src="./js/date-time/bootstrap-datepicker.min.js"></script>
 <script src="./js/date-time/bootstrap-timepicker.min.js"></script>
@@ -81,7 +80,7 @@
 <!--ace scripts-->
 <script src="./js/ace-elements.min.js"></script>
 <script src="./js/ace.min.js"></script>
-
+<script src="./js/common.js" language="javascript"></script>
 
 </body>
 </html>

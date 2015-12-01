@@ -1,2 +1,11 @@
 .login-container h2{font-size:21px !important;}
 .plus{cursor:pointer;}
+
+
+/***** Start Addd Order form *****/
+.divTotal .control-group{border-bottom:1px dotted #e2e2e2; margin-bottom:0px; padding-top:5px;}
+.divTotal .controls{padding-right:15px;}
+.divTotal .controls label{float:right; text-align:right;}
+.divTotal .controls input[type="text"]{margin-left:26px;}
+.div-final-total{background:#f7f7f7 none repeat scroll 0 0;}
+/***** End Addd Order form *****/

@@ -3,99 +3,180 @@
     <h1>Create Order</h1>
 </div>
 <div class="row-fluid">
-    <div class="span6">
-        <div class="row-fluid">
-            <div class="widget-main">
-                <form class="form-horizontal" />
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
+    <div class="span12">                 
+    	<form class="form-horizontal" id="frmOrderProdAdd"/>
+        	<div class="control-group">
+                <label class="control-label" for="form-input-readonly">Order #</label>
 
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
-
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
-
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                </form>
+                <div class="controls">
+                    <input readonly="" type="text" class="span5" id="form-input-readonly" value="ORD-001" disabled="disabled" />
+                </div>
             </div>
-        </div>                  
-    </div>
-    
-    <div class="span6">
-        <div class="row-fluid">
-            <div class="widget-main">
-                <form class="form-horizontal" />
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
+            
+            <div class="control-group">
+                <label class="control-label" for="form-field-1">Order Type</label>
 
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
-
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="form-field-1">Text Field</label>
-
-                        <div class="controls">
-                            <input type="text" id="form-field-1" placeholder="Username" />
-                        </div>
-                    </div>
-                </form>
+                <div class="controls">
+                    <select id="form-field-select-1" class="span5">
+                        <option value="product">Product</option>
+                        <option value="row_material">Row Material</option>
+                    </select>
+                </div>
             </div>
-        </div>                  
-    </div>
-</div>
-                 
-<div class="row-fluid">
-    <div class="controls">
-        <div class="entry" style="margin:10px 0px;">
-            <label class="span2" style="margin:5px;">Product Name</label>
-            <label class="span2" style="margin:5px;">Quantity</label>
-            <label class="span2" style="margin:5px;">Price</label>
-            <label class="span2" style="margin:5px;">Tax</label>
-            <label class="span2" style="margin:5px;">Total</label>
-            <label class="span2" style="margin:5px;"></label><br />
-        </div>
-    </div>
-    <div class="controls"> 
-        <form class = "form-inline" id="frmOrderProdAdd" role="form" autocomplete="off">
-            <div class="entry form-group" style="margin:10px 0px;">
-                <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
-                <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
-                <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
-                <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
-                <input class="form-control span2" name="fields[]" type="text" placeholder="Type something" />
-                <button class="btn btn-success btn-add" type="button" id="btnOrderProdAdd">
-                    <span class="icon-plus bigger-110"></span>
-                </button><br />
-            </div>
-        </form>
-    </div>
-    
-    <div class="form-actions" align="center">
-        <button class="btn btn-info" type="button" id="btnManufecture" href="#mft-form" data-toggle="modal"><i class="icon-ok bigger-110"></i>Manufecture</button>
-        <button class="btn btn-info" type="button"><i class="icon-ok bigger-110"></i>Submit</button>
-        <button class="btn" type="reset"><i class="icon-undo bigger-110"></i>Reset</button>
-    </div>
 
+            <div class="control-group">
+                <label class="control-label" for="form-field-2">Customer</label>
+
+                <div class="controls">
+                    <select id="form-field-select-1" class="span5">
+                        <option value="product">Product</option>
+                        <option value="row_material">Row Material</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="form-field-4">Order Date</label>
+                
+                <div class="controls">
+                    <input type="text" data-date-format="dd-mm-yyyy" id="id-date-picker-1" class="date-picker" placeholder="dd-mm-yyyy">
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="form-field-4">Shipment Date</label>
+                
+                <div class="controls">
+                    <input type="text" data-date-format="dd-mm-yyyy" id="id-date-picker-1" class="date-picker" placeholder="dd-mm-yyyy">
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="form-field-2">Discount Type</label>
+
+                <div class="controls" class="span5">
+                    <select id="form-field-select-1" class="span5">
+                        <option value="product">Percentage</option>
+                        <option value="row_material">Direct Amount</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="form-input-readonly">Discount Amount</label>
+
+                <div class="controls">
+                    <input type="text" id="form-input-readonly" value="" class="span5" />
+                </div>
+            </div>
+           
+           <!-- START ADD ITEM DETAILS -->
+           <div class="widget-box transparent"> 
+                <div class="widget-body">
+                    <div class="widget-main">
+                    	<h3 class="smaller lighter blue">
+                            Item Details
+                        </h3>
+                        <!-- START ITEM DETAILS -->
+                    	<table class="table table-striped tbl-item-dtl">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Tax</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr class="entry">
+                                    <td>
+                                    	<input class="form-control" name="fields[]" type="text" placeholder="Type something" />
+                                    </td>
+                                    <td>
+                                    	<input class="form-control span6" name="fields[]" type="text" placeholder="QTY" />
+                                    </td>
+                                    <td>
+                                    	<input class="form-control span6" name="fields[]" type="text" placeholder="INR" />
+                                    </td>
+									<td>
+                                    	<input class="form-control span6" name="fields[]" type="text" placeholder="%" />
+                                    </td>
+                                    <td>
+                                    	<label>1200</label>
+                                    </td>
+                                    <td>
+                                    	<button class="btn btn-success btn-add" type="button" id="btnOrderProdAdd">
+                                    <span class="icon-plus bigger-110"></span>
+                                </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- END ITEM DETAILS -->
+                        
+                        <!-- START TOTAL -->
+                        <table class="table">
+                        	<tbody>
+                                <tr>
+                                	<td align="right">
+                                    	<div class="span12">
+                                           <div class="span7"></div> 
+                                           <div class="span5 divTotal">
+                                               <div class="control-group">
+                                                    <label class="control-label" for="form-input-readonly">Sub Total</label>
+                                                    <div class="controls">
+														<label class="control-label span5" for="form-input-readonly">5000</label>
+                                                    </div>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="form-input-readonly">Total Tax</label>
+                                                    <div class="controls">
+                                                        <label class="control-label span5" for="form-input-readonly">500</label>
+                                                    </div>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label" for="form-input-readonly">Adjustment</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span6" id="form-input-readonly" value="" placeholder="INR" />
+                                                        <label class="control-label span4" for="form-input-readonly">500</label>
+                                                    </div>
+                                                </div>	
+                                                <div class="control-group div-final-total">
+                                                	<label class="control-label" for="form-input-readonly">TOTAL</label>
+                                                    <div class="controls">
+                                                        <label class="control-label span5" for="form-input-readonly">500</label>
+                                                </div>
+                                           </div>
+                                       </div> 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- END TOTAL -->
+                    </div>
+                </div>
+            </div>
+           <!-- END ITEM DETAILS -->
+           
+           <!-- START BUTTON SECTION -->
+           <div class="form-actions" align="left">
+                <button class="btn btn-info" type="button" id="btnManufecture" href="#mft-form" data-toggle="modal"><i class="icon-ok bigger-110"></i>Manufecture</button>
+                <button class="btn btn-info" type="button"><i class="icon-ok bigger-110"></i>Submit</button>
+                <button class="btn" type="reset"><i class="icon-undo bigger-110"></i>Reset</button>
+           </div>
+		   <!-- END BUTTON SECTION -->
+        </form>						
+    </div>
+</div>    
 </div>
 
 <!-- START Modal popup for Manufacture -->
@@ -148,12 +229,12 @@ $(document).ready(function(){
 	/* Add product for order entry */
 	$(document).on('click', '#frmOrderProdAdd .btn-add', function(e)
     {
-        e.preventDefault();
-
-        var controlForm = $('.controls form#frmOrderProdAdd:first'),
-            currentEntry = $(this).parents('.entry:first'),
+		e.preventDefault();
+		
+        var controlForm = $('table.tbl-item-dtl tbody'),
+            currentEntry = $('table.tbl-item-dtl tbody tr:last'),
             newEntry = $(currentEntry.clone()).appendTo(controlForm);
-			
+		
         newEntry.find('input').val('');
         controlForm.find('.entry:not(:last) .btn-add')
             .removeClass('btn-add').addClass('btn-remove')
@@ -162,7 +243,7 @@ $(document).ready(function(){
     }).on('click', '.btn-remove', function(e)
     {
 		e.preventDefault();
-		$(this).parents('.entry:first').remove();
+		$(this).parents('.entry:last').remove();
 		return false;
 	});
 	
