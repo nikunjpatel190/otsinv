@@ -70,6 +70,8 @@ class order extends CI_Controller {
 				$temp["prod_tot_qty"] = $prod_tot_qty;
 				$temp["proceed_qty"] = $prod_proceed_qty;
 				$temp["remain_qty"] = $remain_proceed_qty;
+				$temp["seq"] = $row['seq'];
+				$temp["last_seq"] = $row['last_seq'];
 				$orderProductListArr[$row['u_id']][$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
 				$productIds .= $row['prod_id'].",";
 			}
@@ -161,8 +163,10 @@ class order extends CI_Controller {
 		$proceed_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
 		$proceed_qty = $proceed_qty + $this->Page->getRequest("qty");
 
-		// Total Product Qty
-		$total_qty = (int)$this->Page->getRequest("total_qty");
+		
+		$total_qty = (int)$this->Page->getRequest("total_qty"); // Total Product Qty
+		$seq = (int)$this->Page->getRequest("seq"); // seq
+		$last_seq = (int)$this->Page->getRequest("last_seq"); // last seq
 		
 		if($proceed_qty <= $total_qty)
 		{
@@ -180,6 +184,34 @@ class order extends CI_Controller {
 			$lst_id = $this->orderModel->insert($arrData);
 			if($lst_id > 0)
 			{
+				if($seq == $last_seq)
+				{
+					// Add inventory details
+					$arrData = array();
+					$arrData['mft_id'] = $this->Page->getRequest("order_id");
+					$arrData['prod_id'] = $this->Page->getRequest("product_id");
+					$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
+					$arrData['action'] = "minus";
+					$arrData['in_process'] = 1;
+					$arrData['insertby'] =	$this->Page->getSession("intUserId");
+					$arrData['insertdate'] = date('Y-m-d H:i:s');
+					
+					$this->inventoryModel->tbl = "inventory_master";
+					$this->inventoryModel->insert($arrData);
+					
+					// Add inventory details
+					$arrData = array();
+					$arrData['mft_id'] = $this->Page->getRequest("order_id");
+					$arrData['prod_id'] = $this->Page->getRequest("product_id");
+					$arrData['prod_qty'] = $this->Page->getRequest("qty");
+					$arrData['action'] = "plus";
+					$arrData['in_stock'] = 1;
+					$arrData['insertby'] =	$this->Page->getSession("intUserId");
+					$arrData['insertdate'] = date('Y-m-d H:i:s');
+					
+					$this->inventoryModel->tbl = "inventory_master";
+					$this->inventoryModel->insert($arrData);
+				}
 				echo "1";
 			}
 			else

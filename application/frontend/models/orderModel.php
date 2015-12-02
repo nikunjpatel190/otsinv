@@ -83,13 +83,17 @@ class orderModel extends Data {
 					  mup.stage_id,
 					  prc_stg.seq,
 					  (SELECT
-						 IFNULL(SUM(mps.qty),0) AS proceed_qty
+						 IFNULL(MAX(seq),0)
+					   FROM map_process_stage
+					   WHERE process_id = prc_stg.process_id) AS last_seq,
+					  (SELECT
+						 IFNULL(SUM(mps.qty),0)
 					   FROM manufacture_prod_status AS mps
 					   WHERE mps.mft_id = mm.mft_id
 						   AND mps.prod_id = mpd.prod_id
 						   AND mps.stage_id = mup.stage_id) AS proceed_qty,
 					  (SELECT
-						 SUM(mps.qty) AS proceed_qty
+						 IFNULL(SUM(mps.qty),0)
 					   FROM manufacture_prod_status AS mps
 					   JOIN map_process_stage AS prcstg
 						ON mps.stage_id = prcstg.stage_id
@@ -110,7 +114,7 @@ class orderModel extends Data {
 						HAVING proceed_qty < prod_tot_qty AND(prv_proceed_qty > 0 OR seq = 1)
 					ORDER BY mup.id ASC";
 		
-		//echo $sqlQuery; exit;
+		// echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;	

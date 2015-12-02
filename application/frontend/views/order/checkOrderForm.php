@@ -95,7 +95,7 @@ $uid = $this->Page->getSession("intUserId");
                                                                                 <td><?php echo $product['remain_qty']; ?></td>
                                                                                 <td>
 																					<div class="hidden-phone visible-desktop btn-group">
-																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>">
+																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>">
 																							<!--<i class="icon-ok bigger-120"></i>-->
 																							Forward
 																						</button>
@@ -108,7 +108,7 @@ $uid = $this->Page->getSession("intUserId");
 
 																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																								<li>
-																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>">
+																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>">
 																										<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
 Forward
 																										</span>
@@ -164,6 +164,8 @@ Forward
                         <input type="hidden" id="hdn_product_id" value="" />
                         <input type="hidden" id="hdn_total_qty" value="" />
                         <input type="hidden" id="hdn_proceed_qty" value="" />
+                        <input type="hidden" id="hdn_seq" value="" />
+                        <input type="hidden" id="hdn_last_seq" value="" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -214,6 +216,8 @@ Forward
 			$("#hdn_order_id").val($(this).attr('mftid'));
 			$("#hdn_total_qty").val($(this).attr('totqty'));
 			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
+			$("#hdn_seq").val($(this).attr('seq'));
+			$("#hdn_last_seq").val($(this).attr('last_seq'));
 			
 			$("#hdn_product_id").val(this.id);
 			
@@ -243,6 +247,8 @@ Forward
 			data['product_id'] = $("#hdn_product_id").val();
 			data['total_qty'] = $("#hdn_total_qty").val();
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();
+			data['seq'] = $("#hdn_seq").val();
+			data['last_seq'] = $("#hdn_last_seq").val();
 			//alert(data.toSource());
 			
 			$.ajax({
