@@ -117,8 +117,9 @@
                 ?>
             </div>
         	<div class="main-content">
-                <div class="breadcrumbs" id="breadcrumbs">
-					<!--<ul class="breadcrumb">
+                <!--<div class="breadcrumbs" id="breadcrumbs">
+                	######### breadcrumb #######
+					<ul class="breadcrumb">
 						<li>
 							<i class="icon-home home-icon"></i>
 							<a href="#">Home</a>
@@ -137,14 +138,15 @@
 						</li>
 						<li class="active">Wizard &amp; Validation</li>
 					</ul>--><!--.breadcrumb-->
-
+					
 					<!--<div class="nav-search" id="nav-search">
+                        ######### nav-search #######
 						<form class="form-search" />
 							<span class="input-icon">
 								<input type="text" placeholder="Search ..." class="input-small nav-search-input" id="nav-search-input" autocomplete="off" />
 								<i class="icon-search nav-search-icon"></i>
 							</span>
 						</form>
-					</div>--><!--#nav-search-->
-				</div>
+					</div>
+				</div>-->
                 <div class="page-content">

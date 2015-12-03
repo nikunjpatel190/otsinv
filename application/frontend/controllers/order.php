@@ -137,7 +137,7 @@ class order extends CI_Controller {
 				$arrData['prod_id'] = $row["prodId"];
 				$arrData['prod_qty'] = $row["prodQty"];
 				$arrData['action'] = "plus";
-				$arrData['in_process'] = 1;
+				$arrData['status'] = "in_process";
 				$arrData['insertby'] =	$this->Page->getSession("intUserId");
 				$arrData['insertdate'] = date('Y-m-d H:i:s');
 				
@@ -186,26 +186,26 @@ class order extends CI_Controller {
 			{
 				if($seq == $last_seq)
 				{
-					// Add inventory details
+					// Add inventory (in process reverse entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");
 					$arrData['prod_id'] = $this->Page->getRequest("product_id");
 					$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
 					$arrData['action'] = "minus";
-					$arrData['in_process'] = 1;
+					$arrData['status'] = "in_process";
 					$arrData['insertby'] =	$this->Page->getSession("intUserId");
 					$arrData['insertdate'] = date('Y-m-d H:i:s');
 					
 					$this->inventoryModel->tbl = "inventory_master";
 					$this->inventoryModel->insert($arrData);
 					
-					// Add inventory details
+					// Add inventory (in stock entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");
 					$arrData['prod_id'] = $this->Page->getRequest("product_id");
 					$arrData['prod_qty'] = $this->Page->getRequest("qty");
 					$arrData['action'] = "plus";
-					$arrData['in_stock'] = 1;
+					$arrData['status'] = "in_stock";
 					$arrData['insertby'] =	$this->Page->getSession("intUserId");
 					$arrData['insertdate'] = date('Y-m-d H:i:s');
 					
