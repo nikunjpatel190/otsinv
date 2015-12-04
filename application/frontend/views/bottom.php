@@ -13,14 +13,14 @@
                     <div class="control-group">
                         <label for="form-field-select-3">Product</label>
                         <div class="controls">
-                            <select class="chzn-select" id="form-field-select-3" data-placeholder="Choose a Product...">
+                            <select class="chzn-select" id="btnSelProd" data-placeholder="Choose a Product...">
                                 <?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","","","Select Product"); ?>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div class="span3">
+                <div class="span3" id="divInventoryRes">
                     <div class="infobox infobox-green infobox-custom">
                         <div class="infobox-data infobox-data-custom">
                             <span class="infobox-data-number">32</span>
@@ -81,6 +81,35 @@
 <script src="./js/ace-elements.min.js"></script>
 <script src="./js/ace.min.js"></script>
 <script src="./js/common.js" language="javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on("change","#btnSelProd",function(){
+			$("#divInventoryRes").html('');
+			var prod_id = $(this).val();
+			if(prod_id == 0 || prod_id == "")
+			{
+				alert("Please select product");
+				return false;
+			}
+			var param = {};
+			param['prod_id'] = prod_id;
+			$.ajax({
+				type:"POST",
+				data:param,
+				dataType: "json",
+				url:"index.php?c=inventory&m=getInventoryDetail",
+				success:function(res)
+				{
+					var html = "";
+					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+res.in_stock+'</span><div class="infobox-content">In Stock</div></div></div>';
+                    
+                    html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+res.in_process+'</span><div class="infobox-content">In Process</div></div></div>';
 
+					$("#divInventoryRes").html(html);
+				}
+			});
+		});
+	});
+</script>
 </body>
 </html>
