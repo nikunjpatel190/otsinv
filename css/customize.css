@@ -11,6 +11,6 @@
 /***** End Addd Order form *****/
 
 /**** start info box ****/
-.infobox-custom{width:auto !important; min-width:100px;}
-.infobox-data-custom{min-width:0px !important;}
+#divInventoryRes .infobox-custom{width:auto !important; min-width:100px; margin:0px 5px 0px 0px !important;}
+#divInventoryRes .infobox-data-custom{min-width:0px !important;}
 /**** start info box ****/
