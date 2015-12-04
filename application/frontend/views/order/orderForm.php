@@ -99,7 +99,10 @@
                             <tbody>
                                 <tr class="entry">
                                     <td>
-                                    	<input class="form-control" name="fields[]" type="text" placeholder="Type something" />
+                                    	<!--<input class="form-control" name="fields[]" type="text" placeholder="Type something" />-->
+										<select class="chzn-select" name="product" data-placeholder="Choose a Product...">
+											<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","","","Select Product"); ?>
+										</select>
                                     </td>
                                     <td>
                                     	<input class="form-control span6" name="fields[]" type="text" placeholder="QTY" />
@@ -227,19 +230,23 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	/* Add product for order entry */
+	var clone = $('table.tbl-item-dtl tbody tr:first').clone(true);
 	$(document).on('click', '#frmOrderProdAdd .btn-add', function(e)
     {
 		e.preventDefault();
+        var ParentRow = $("table.tbl-item-dtl tbody tr.entry").last();
+		clone.clone(true).insertAfter(ParentRow);
+		$('table.tbl-item-dtl tbody tr:last select').chosen();
+
+		//var controlForm = $('table.tbl-item-dtl tbody');
+        //var currentEntry = $('table.tbl-item-dtl tbody tr:last');
+        //var newEntry = clone.appendTo(controlForm);
 		
-        var controlForm = $('table.tbl-item-dtl tbody'),
-            currentEntry = $('table.tbl-item-dtl tbody tr:last'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
-		
-        newEntry.find('input').val('');
-        controlForm.find('.entry:not(:last) .btn-add')
-            .removeClass('btn-add').addClass('btn-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="icon-minus bigger-110"></span>');
+        //newEntry.find('input').val('');
+        //controlForm.find('.entry:not(:last) .btn-add')
+          //  .removeClass('btn-add').addClass('btn-remove')
+            //.removeClass('btn-success').addClass('btn-danger')
+            //html('<span class="icon-minus bigger-110"></span>');
     }).on('click', '.btn-remove', function(e)
     {
 		e.preventDefault();
