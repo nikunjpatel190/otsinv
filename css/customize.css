@@ -9,3 +9,8 @@
 .divTotal .controls input[type="text"]{margin-left:26px;}
 .div-final-total{background:#f7f7f7 none repeat scroll 0 0;}
 /***** End Addd Order form *****/
+
+/**** start info box ****/
+.infobox-custom{width:auto !important; min-width:100px;}
+.infobox-data-custom{min-width:0px !important;}
+/**** start info box ****/

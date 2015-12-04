@@ -17,6 +17,8 @@
         <link rel="stylesheet" href="./css/daterangepicker.css" />
         <link rel="stylesheet" href="./css/colorpicker.css" />
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+        <!-- chosen combobox -->
+        <link rel="stylesheet" href="./css/chosen.css" />
         <!--ace styles-->
         <link rel="stylesheet" href="./css/ace.min.css" />
         <link rel="stylesheet" href="./css/ace-responsive.min.css" />
@@ -35,8 +37,8 @@
     <?php 
         $strUserType	=	strtolower($this->Page->getSession("strUserType")); 
         ?>
-    <body>
-        <div class="navbar">
+    <body class="navbar-fixed">
+        <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
                     <a href="#" class="brand">

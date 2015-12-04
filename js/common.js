@@ -8,6 +8,7 @@ $(document).ready(function() {
 	$('.date-picker').on('changeDate', function(ev){
 		$(this).datepicker('hide');
 	});
+	$(".chzn-select").chosen(); 
 }); 
 
 Array.prototype.contains = function (element) 
