@@ -352,7 +352,7 @@ $(document).ready(function(){
 				{
 					if(prodQty > res.in_stock)
 					{
-						$("#txtProductQty"+trid).after("<span class='text-error'>In Stock : "+res.in_stock+"</span>");
+						$("#txtProductQty"+trid).after("<span>In Stock : "+res.in_stock+"</span>");
 						return false;
 					}
 				}

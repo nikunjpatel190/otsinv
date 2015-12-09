@@ -220,6 +220,18 @@ class product extends CI_Controller {
 		redirect('c=product&m=Category_list', 'location');
 	}
 	
+	## Auther : Nikunj Bambhroliya
+	## Desc   : return product qty
+	public function getProductQty()
+	{
+		$prod_id = $this->Page->getRequest('prod_id');
+		$searchCriteria	=	array();
+		$searchCriteria['prod_id'] = $prod_id;
+		$this->productModel->searchCriteria = $searchCriteria;
+		$rsProduct = $this->productModel->getProduct();
+		echo $rsProduct[0]['prod_price_per_unit']; exit;
+	}
+	
 	
 }
 

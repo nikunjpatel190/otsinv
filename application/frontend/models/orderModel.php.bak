@@ -18,7 +18,6 @@ class orderModel extends Data {
 		$query = "SELECT (order_id+1) AS new_order_no FROM order_master ORDER BY order_id DESC LIMIT 1";
 		$new_order_no = $this->db->query($query)->row()->new_order_no;
 		$new_order_no = "CO-".sprintf("%04d", $new_order_no);
-		return $new_order_no;
 	}
 	
 	//@Author : Nikunj Bambhroliya
