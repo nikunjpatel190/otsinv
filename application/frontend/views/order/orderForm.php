@@ -18,7 +18,7 @@
 
                 <div class="controls">
                     <select id="selOrderType" name="selOrderType" class="span4 required">
-						<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='ORDER_TYPE' order by seq",$rsEdit->ps_type,"Select Order Type"); ?>
+						<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='PRODUCT_TYPE' order by seq",$rsEdit->ps_type,"Select Order Type"); ?>
             		</select>
                 </div>
             </div>
