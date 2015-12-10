@@ -115,7 +115,27 @@ class product extends CI_Controller {
 		$this->Page->setMessage("DELETE_RECORD");
 		// redirect to listing screen
 		redirect('c=Product', 'location');
-	}	
+	}
+	
+	## Auther : Nikunj Bambhroliya
+	## Desc   : return product details
+	public function getProductDetail()
+	{
+		$res_type = $this->Page->getRequest('res_type');
+		$prod_type = $this->Page->getRequest('prod_type');
+
+		$searchCriteria	=	array();
+		if($prod_type != "")
+			$searchCriteria['prod_type'] = $prod_type;
+		$this->productModel->searchCriteria = $searchCriteria;
+		$rsProduct = $this->productModel->getProduct();
+
+		if($res_type != "" && $res_type = "json")
+			echo json_encode($rsProduct);
+		else 
+			echo $rsProduct;
+		
+	}
 	
 	public function frmMapProductComponent()
 	{
@@ -235,8 +255,6 @@ class product extends CI_Controller {
 		$rsProduct = $this->productModel->getProduct();
 		echo $rsProduct[0]['prod_price_per_unit']; exit;
 	}
-	
-	
 }
 
 /* End of file welcome.php */
