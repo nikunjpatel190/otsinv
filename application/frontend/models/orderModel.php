@@ -124,7 +124,7 @@ class orderModel extends Data {
 						HAVING proceed_qty < prod_tot_qty AND(prv_proceed_qty > 0 OR seq = 1)
 					ORDER BY mup.id ASC";
 		
-		// echo $sqlQuery; exit;
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;	

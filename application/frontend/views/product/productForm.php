@@ -16,6 +16,15 @@ echo form_open('c=product&m=saveProduct', $attributes);
 <div class="row-fluid" id="printFrmDiv">
     <div class="span10">
         <fieldset>
+			<div class="control-group">
+                <label for="form-field-1" class="control-label">Product Type <span class="red">*</span></label>
+                <div class="controls">
+                  <select class="required span6" name="slt_prod_type" id="slt_prod_type" >
+                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='PRODUCT_TYPE' order by seq",$rsEdit->prod_type,"Select Type"); ?>
+                    </select>
+                </div>
+			</div>
+
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Product Category <span class="red">*</span></label>
                 <div class="controls">
@@ -23,7 +32,7 @@ echo form_open('c=product&m=saveProduct', $attributes);
                     	<?php echo $this->Page->generateComboByTable("product_category","cat_id","cat_name","","",$rsEdit->prod_categoty,"Select Category"); ?>
                     </select>
                 </div>
-        </div>
+			</div>
             
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Product Name <span class="red">*</span></label>

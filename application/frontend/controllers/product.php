@@ -76,6 +76,7 @@ class product extends CI_Controller {
 			redirect('c=product&m=AddProd_cat', 'location');
 		}
 		
+		$arrHeader["prod_type"]   	=	$this->Page->getRequest('slt_prod_type');
 		$arrHeader["prod_categoty"]   	=	$this->Page->getRequest('slt_prod_categoty');
         $arrHeader["prod_name"]     	=	$this->Page->getRequest('txt_prod_name');
         $arrHeader["prod_code"]        =   $this->Page->getRequest('txt_prod_code');
@@ -116,11 +117,14 @@ class product extends CI_Controller {
 		redirect('c=Product', 'location');
 	}	
 	
-	public function frmAssignRowMaterial()
+	public function frmMapProductComponent()
 	{
+		$searchCriteria = array();
+		$searchCriteria['prod_type'] = "product";
+		$searchCriteria["status"] = "ACTIVE";
+		$this->productModel->searchCriteria=$searchCriteria;
 		$data['ProductsArr'] = $this->productModel->getProduct();
-		//$this->Page->pr($pro); exit;
-		$this->load->view('product/assignRowMaterialForm',$data);
+		$this->load->view('product/mapProductComponentForm',$data);
 	}
 	
 	public function frmAssignProcess()

@@ -42,6 +42,7 @@ echo form_open('c=product', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
+                    <th>Product Type</th>
                     <th>Product Category</th>
                     <th>Product Name</th>
                     <th>Product Code</th>
@@ -68,6 +69,7 @@ echo form_open('c=product', $attributes);
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['prod_id'].'" value="'.$arrRecord['prod_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
+						echo '<td>'. $this->Page->getComboValueByCase("PRODUCT_TYPE",$arrRecord['prod_type']) .'</td>';
 						echo '<td>'. $arrRecord['cat_name'] .'</td>';
 						echo '<td>'. $arrRecord['prod_name'] .'</td>';
                         echo '<td>'. $arrRecord['prod_code'] .'</td>';

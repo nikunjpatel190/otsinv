@@ -180,72 +180,74 @@ class Commonajax extends CI_Controller {
 		}
 	}
 	
-	function getProdRmDetails()
+	function getProdComponentDetails()
 	{
 		$prod_id = $this->Page->getRequest("prod_id");
 		
-		// Get All Products
+		// Get All Products Components
+		$searchCriteria = array();
+		$searchCriteria['prod_type'] = "component";
 		$searchCriteria["status"] = "ACTIVE";
-		$rsRawmaterials = $this->raw_materialModel->getRowMaterial();
-		//$this->Page->pr($rsRawmaterials); exit;
+		$this->productModel->searchCriteria=$searchCriteria;
+		$rsProdComponent = $this->productModel->getProduct();
+		//$this->Page->pr($rsProdComponent); exit;
 		
 		$rsMapDtl = array();
 		if($prod_id != "")
 		{
 			$searchCriteria = array();
-			$searchCriteria['selectField'] = 'rm.rm_id';
+			$searchCriteria['selectField'] = 'map.prod_component_id';
 			$searchCriteria["prodId"] = $prod_id;
 			$this->productModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->productModel->getAssignRowMaterialDetail();
+			$rsMapDtl = $this->productModel->getMapProdComponentDetails();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
-		$assignRawMaterialArr = array();
-		foreach($rsRawmaterials AS $row)
+		$assignProdComponentArr = array();
+		foreach($rsProdComponent AS $row)
 		{
 			$map = 0;
 			foreach($rsMapDtl AS $mapRow)
 			{
-				if($row['rm_id'] == $mapRow['rm_id'])
+				if($row['prod_id'] == $mapRow['prod_component_id'])
 				{
 					$map = 1;
 				}
 			}
-			$assignRawMaterialArr[$row['rm_id']] = 	$row;
-			$assignRawMaterialArr[$row['rm_id']]['map'] = $map;
+			$assignProdComponentArr[$row['prod_id']] = 	$row;
+			$assignProdComponentArr[$row['prod_id']]['map'] = $map;
 		}
-		//$this->Page->pr($assignRawMaterialArr); exit;
-		$rsListing['rsMapDtl'] = $assignRawMaterialArr;
+		//$this->Page->pr($assignProdComponentArr); exit;
+		$rsListing['rsMapDtl'] = $assignProdComponentArr;
 		$rsListing['prod_id'] = $prod_id;
-		$this->load->view('product/list_prod_row_material', $rsListing);	
-		//$this->Page->pr($rsRawmaterials); exit;
+		$this->load->view('product/list_prod_component', $rsListing);
 	}
 	
-	function mapProdRow_material()
+	function mapProductComponent()
 	{
 		$prodid = $this->Page->getRequest("prodid");
-		$rmid = $this->Page->getRequest("rmid");
+		$component_id = $this->Page->getRequest("component_id");
 		
 		$searchCriteria = array();
-		$searchCriteria['selectField'] = 'rm.rm_id';
+		$searchCriteria['selectField'] = 'map.prod_component_id';
 		$searchCriteria["prodId"] = $prodid;
-		$searchCriteria["rmId"] = $rmid;
+		$searchCriteria["componentId"] = $component_id;
 		$this->productModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->productModel->getAssignRowMaterialDetail();
+		$rsMapDtl = $this->productModel->getMapProdComponentDetails();
 		if(count($rsMapDtl)>0)
 		{		
-			$strQuery = "DELETE FROM map_prod_raw_material WHERE prod_id=".$prodid." AND rm_id=".$rmid."";
+			$strQuery = "DELETE FROM map_prod_to_component WHERE prod_id=".$prodid." AND prod_component_id=".$component_id."";
 			$this->db->query($strQuery);
 		}
 		else
 		{
 			$arrRecord = array();
 			$arrRecord["prod_id"] = $prodid;
-			$arrRecord["rm_id"] = $rmid;
+			$arrRecord["prod_component_id"] = $component_id;
 			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
 			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
 			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
-			$this->db->insert("map_prod_raw_material", $arrRecord);
+			$this->db->insert("map_prod_to_component", $arrRecord);
 			$this->db->insert_id();
 		}
 	}

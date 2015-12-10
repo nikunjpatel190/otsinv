@@ -30,6 +30,12 @@ class productModel extends Data {
 		{
 			$whereClaue .= 	" AND pm.prod_id IN (".$searchCriteria['prod_id'].") ";
 		}
+
+		// By Product Type (E.g product and product component)
+		if(isset($searchCriteria['prod_type']) && $searchCriteria['prod_type'] != "")
+		{
+			$whereClaue .= 	" AND pm.prod_type = '".$searchCriteria['prod_type']."' ";
+		}
 		
 		// By Category
 		if(isset($searchCriteria['cat_id']) && $searchCriteria['cat_id'] != "")
@@ -84,7 +90,7 @@ class productModel extends Data {
 		
 	}
 	
-	public function getAssignRowMaterialDetail()
+	public function getMapProdComponentDetails()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
@@ -103,9 +109,9 @@ class productModel extends Data {
 		}
 		
 		// By rawmaterial
-		if(isset($searchCriteria['rmId']) && $searchCriteria['rmId'] != "")
+		if(isset($searchCriteria['componentId']) && $searchCriteria['componentId'] != "")
 		{
-			$whereClaue .= 	" AND map.rm_id='".$searchCriteria['rmId']."' ";
+			$whereClaue .= 	" AND map.prod_component_id='".$searchCriteria['componentId']."' ";
 		}
 		
 		$orderField = " map.id";
@@ -125,11 +131,7 @@ class productModel extends Data {
 		
 		$sqlQuery = "SELECT
 					  	".$selectField."
-					 FROM map_prod_raw_material AS map
-					 	JOIN product_master AS pm
-							ON map.prod_id = pm.prod_id
-					  	JOIN row_material_master AS rm
-							ON map.rm_id = rm.rm_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+					 FROM map_prod_to_component AS map ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		
 		//echo $sqlQuery; exit;
