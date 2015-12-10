@@ -13,3 +13,7 @@
 #divInventoryRes .infobox-custom{width:auto !important; min-width:100px; margin:0px 5px 0px 0px !important;}
 #divInventoryRes .infobox-data-custom{min-width:0px !important;}
 /**** start info box ****/
+
+/**** Start Assign Process to product ****/
+#chk_prod_typ label{float:left; margin:0px 10px 10px 0;}
+/**** End Assign Process to product ****/
