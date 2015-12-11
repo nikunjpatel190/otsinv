@@ -77,8 +77,8 @@ class processModel extends Data {
 	}
 	
 	// Auther : Nikunj Bambhroliya
-	// Description : Function will process assigned stages
-	function getProcessStage()
+	// Description : Function will return process assigned stages
+	public function getProcessStage()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
@@ -137,6 +137,49 @@ class processModel extends Data {
 						".$selectField."
 					FROM 
 						process_stage_master AS sm ".$additionalTable.$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		//echo $sqlQuery; exit;				
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;
+	}
+
+	// Auther : Nikunj Bambhroliya
+	// Description : Function will return process assigned stages by product
+	public function getProcessStageByProduct()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "mpp.*,mps.*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+
+		$whereClaue = "WHERE 1=1 ";
+		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "" && $searchCriteria['prod_id'] != 0)
+		{
+			$whereClaue .= " AND mpp.prod_id=".$searchCriteria['prod_id']." ";
+		}
+		
+		/*$sqlQuery = "SELECT 
+						".$selectField."
+					FROM 
+						map_prod_proc AS mpp 
+					JOIN map_process_stage AS mps 
+					ON mpp.proc_id=mps.process_id
+					".$whereClaue."
+					ORDER BY mps.seq";*/
+		
+		$sqlQuery = "SELECT ".$selectField." FROM 
+						map_prod_proc AS mpp 
+					JOIN map_process_stage AS mps 
+						ON mpp.proc_id=mps.process_id
+					JOIN map_user_pstage AS mup
+						ON mup.p_id = mpp.proc_id AND mup.stage_id=mps.stage_id
+					".$whereClaue."
+					GROUP BY mps.process_id,mps.stage_id ORDER BY mps.seq";
+
 		//echo $sqlQuery; exit;				
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();

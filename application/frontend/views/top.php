@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <!--<title>Order Management System</title>-->
+        <title>Order Management System</title>
         <link href="./css/bootstrap.min.css" rel="stylesheet" />
         <link href="./css/bootstrap-responsive.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="./css/font-awesome.min.css" />
@@ -42,7 +42,7 @@
             <div class="navbar-inner">
                 <div class="container-fluid">
                     <a href="#" class="brand">
-                    <!--<strong><i class="icon-leaf"></i>&nbsp;<span>Order Management System</span></strong>-->
+                    <strong><i class="icon-leaf"></i>&nbsp;<span>Order Management System</span></strong>
                     </a><!--/.brand-->
                     <ul class="nav ace-nav pull-right">
                         <!--<li class="grey">

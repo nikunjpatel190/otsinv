@@ -27,64 +27,8 @@ class orderModel extends Data {
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
-		
-		/*$selectField = "*";
-		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
-		{
-			$selectField = 	$searchCriteria['selectField'];
-		}
-		
-		$whereClaue = "WHERE 1=1 ";
-		
-		// By user
-		if(isset($searchCriteria['userId']) && $searchCriteria['userId'] != "")
-		{
-			$whereClaue .= 	" AND mup.u_id =".$searchCriteria['userId']." ";
-		}
-		
-		// By Stage
-		if(isset($searchCriteria['stageId']) && $searchCriteria['stageId'] != "")
-		{
-			$whereClaue .= 	" AND mup.stage_id IN (".$searchCriteria['stageId'].") ";
-		}
-		
-		// Set Group by
-		$groupField = "";
-		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
-		{
-			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
-		}
-		
-		// Set Order Field
-		$orderField = " mup.id";
-		$orderDir = " ASC";
-		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
-		{
-			$orderField = $searchCriteria['orderField'];
-		}
-		
-		// Set Group by
-		$groupField = "";
-		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
-		{
-			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
-		}
-		
-		// Set Order Field
-		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
-		{
-			$orderDir = $searchCriteria['orderDir'];
-		}
-		
-		$sqlQuery = "SELECT ".$selectField." FROM map_user_pstage AS mup
-					JOIN map_prod_proc AS mpp
-					ON mup.p_id = mpp.proc_id
-					JOIN manufacture_prod_detail mpd
-					ON mpp.prod_id = mpd.prod_id
-					JOIN manufacture_master AS mm
-					ON mpd.mft_id=mm.mft_id
-					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";*/
-		$sqlQuery = "SELECT
+
+		/*$sqlQuery = "SELECT
 					  mm.mft_id,
 					  mm.mft_no,
 					  mpd.prod_id,
@@ -98,13 +42,13 @@ class orderModel extends Data {
 					   WHERE process_id = prc_stg.process_id) AS last_seq,
 					  (SELECT
 						 IFNULL(SUM(mps.qty),0)
-					   FROM manufacture_prod_status AS mps
+					   FROM mft_prod_status AS mps
 					   WHERE mps.mft_id = mm.mft_id
 						   AND mps.prod_id = mpd.prod_id
 						   AND mps.stage_id = mup.stage_id) AS proceed_qty,
 					  (SELECT
 						 IFNULL(SUM(mps.qty),0)
-					   FROM manufacture_prod_status AS mps
+					   FROM mft_prod_status AS mps
 					   JOIN map_process_stage AS prcstg
 						ON mps.stage_id = prcstg.stage_id
 					   WHERE mps.mft_id = mm.mft_id
@@ -114,15 +58,58 @@ class orderModel extends Data {
 						ON mup.p_id = mpp.proc_id
 					  JOIN map_process_stage AS prc_stg
 						ON mup.p_id = prc_stg.process_id AND mup.stage_id = prc_stg.stage_id 	
-					  JOIN manufacture_prod_detail mpd
+					  JOIN mft_prod_detail mpd
 						ON mpp.prod_id = mpd.prod_id
-					  JOIN manufacture_master AS mm
+					  JOIN mft_master AS mm
 						ON mpd.mft_id = mm.mft_id
 					WHERE 1 = 1
 						AND mup.u_id = ".$searchCriteria['userId']."
 						AND mup.stage_id IN(".$searchCriteria['stageId'].")
 						HAVING proceed_qty < prod_tot_qty AND(prv_proceed_qty > 0 OR seq = 1)
-					ORDER BY mup.id ASC";
+					ORDER BY mup.id ASC";	*/
+		
+		$sqlQuery = "SELECT
+						  mm.mft_id,
+						  mm.mft_no,
+						  mpd.prod_id,
+						  mpd.prod_qty AS prod_tot_qty,
+						  mup.u_id,
+						  mup.stage_id,
+						  prc_stg.stage_seq AS seq,
+						  (SELECT
+							 IFNULL(MAX(seq),0)
+						   FROM mft_order_time_process_stage
+						   WHERE process_id = prc_stg.process_id) AS last_seq,
+						  (SELECT
+							 IFNULL(SUM(mps.qty),0)
+						   FROM mft_prod_status AS mps
+						   WHERE mps.mft_id = mm.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND mps.stage_id = mup.stage_id) AS proceed_qty,
+						  (SELECT
+							 IFNULL(SUM(mps.qty),0)
+						   FROM mft_prod_status AS mps
+							 JOIN mft_order_time_process_stage AS prcstg
+							   ON mps.stage_id = prcstg.stage_id
+						   WHERE mps.mft_id = mm.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND prcstg.process_id = mup.p_id
+							   AND prcstg.stage_seq = prc_stg.stage_seq - 1) AS prv_proceed_qty
+						FROM map_user_pstage AS mup
+						  JOIN mft_order_time_process_stage AS prc_stg
+							ON mup.p_id = prc_stg.process_id AND mup.stage_id = prc_stg.stage_id
+						  JOIN mft_prod_detail mpd
+							ON prc_stg.prod_id = mpd.prod_id
+						  JOIN mft_master AS mm
+							ON mpd.mft_id = mm.mft_id
+						WHERE 1 = 1
+							AND mup.u_id = ".$searchCriteria['userId']."
+							AND mup.stage_id IN(".$searchCriteria['stageId'].")
+						HAVING proceed_qty < prod_tot_qty
+							AND (prv_proceed_qty > 0
+								  OR seq = 1)
+						ORDER BY mup.id ASC";
+
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
@@ -185,7 +172,7 @@ class orderModel extends Data {
 			$orderDir = $searchCriteria['orderDir'];
 		}
 		
-		$sqlQuery = "SELECT ".$selectField." FROM manufacture_prod_detail AS mpd
+		$sqlQuery = "SELECT ".$selectField." FROM mft_prod_detail AS mpd
 					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
@@ -255,7 +242,7 @@ class orderModel extends Data {
 			$orderDir = $searchCriteria['orderDir'];
 		}
 		
-		$sqlQuery = "SELECT ".$selectField." FROM manufacture_prod_status AS mps
+		$sqlQuery = "SELECT ".$selectField." FROM mft_prod_status AS mps
 					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;

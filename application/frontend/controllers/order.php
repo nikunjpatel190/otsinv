@@ -103,7 +103,7 @@ class order extends CI_Controller {
 		
 		// Get Orders
 		$searchCriteria = array();
-		/*$searchCriteria['selectField'] = "mm.mft_id,mm.mft_no,mpd.prod_id,mpd.prod_qty AS prod_tot_qty,mup.u_id,mup.stage_id,(SELECT SUM(mps.qty) AS proceed_qty FROM manufacture_prod_status AS mps WHERE mps.mft_id = mm.mft_id AND mps.prod_id = mpd.prod_id AND mps.stage_id=mup.stage_id) AS proceed_qty ";*/
+		/*$searchCriteria['selectField'] = "mm.mft_id,mm.mft_no,mpd.prod_id,mpd.prod_qty AS prod_tot_qty,mup.u_id,mup.stage_id,(SELECT SUM(mps.qty) AS proceed_qty FROM mft_prod_status AS mps WHERE mps.mft_id = mm.mft_id AND mps.prod_id = mpd.prod_id AND mps.stage_id=mup.stage_id) AS proceed_qty ";*/
 		$searchCriteria['userId'] = $this->Page->getSession("intUserId");
 		$searchCriteria['stageId'] = $stageIds;
 		$this->orderModel->searchCriteria = $searchCriteria;
@@ -177,13 +177,39 @@ class order extends CI_Controller {
 		$arrData['insertby']		=	$this->Page->getSession("intUserId");
 		$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 		
-		$this->orderModel->tbl = "manufacture_master";
+		$this->orderModel->tbl = "mft_master";
 		$menufectureId = $this->orderModel->insert($arrData);
 		
 		if(count($dataArr)>0 && $menufectureId != "")
 		{
 			foreach($dataArr AS $row)
 			{
+				// Get Process Stage Details
+				$searchCriteria = array();
+				$searchCriteria['selectField'] = "mpp.prod_id,mps.process_id,mps.stage_id,mps.seq,GROUP_CONCAT(mup.u_id) AS user_id";
+				$searchCriteria['prod_id'] = $row["prodId"];
+				$this->processModel->searchCriteria=$searchCriteria;
+				$rsProcessStage = $this->processModel->getProcessStageByProduct();
+				if(count($rsProcessStage) > 0)
+				{
+					foreach($rsProcessStage AS $rowStage)
+					{
+						// Add Order time process stage details
+						$arrData = array();
+						$arrData['mft_id'] = $menufectureId;
+						$arrData['prod_id'] = $row["prodId"];
+						$arrData['process_id'] = $rowStage["process_id"];
+						$arrData['stage_id'] = $rowStage["stage_id"];
+						$arrData['stage_seq'] = $rowStage["seq"];
+						$arrData['user_id'] = $rowStage["user_id"];
+						$arrData['insertby'] =	$this->Page->getSession("intUserId");
+						$arrData['insertdate'] = date('Y-m-d H:i:s');
+						
+						$this->processModel->tbl = "mft_order_time_process_stage";
+						$this->processModel->insert($arrData);
+					}
+				}
+
 				// Add menufecture product details
 				$arrData = array();
 				$arrData['mft_id'] = $menufectureId;
@@ -192,7 +218,7 @@ class order extends CI_Controller {
 				$arrData['insertby'] =	$this->Page->getSession("intUserId");
 				$arrData['insertdate'] = date('Y-m-d H:i:s');
 				
-				$this->orderModel->tbl = "manufacture_prod_detail";
+				$this->orderModel->tbl = "mft_prod_detail";
 				$this->orderModel->insert($arrData);
 				
 				// Add inventory details
@@ -244,7 +270,7 @@ class order extends CI_Controller {
 			$arrData['insertby'] =	$this->Page->getSession("intUserId");
 			$arrData['insertdate'] = date('Y-m-d H:i:s');
 			
-			$this->orderModel->tbl = "manufacture_prod_status";
+			$this->orderModel->tbl = "mft_prod_status";
 			$lst_id = $this->orderModel->insert($arrData);
 			if($lst_id > 0)
 			{
