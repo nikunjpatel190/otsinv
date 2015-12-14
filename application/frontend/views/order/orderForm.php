@@ -12,16 +12,6 @@
                     <input readonly="" type="text" class="span4" id="txtOrderNo" name="txtOrderNo" value="<?php echo $orderNo; ?>" disabled="disabled" />
                 </div>
             </div>
-            
-            <div class="control-group">
-                <label class="control-label" for="form-field-1">Order Type</label>
-
-                <div class="controls">
-                    <select id="selOrderType" name="selOrderType" class="span4 required">
-						<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value","","where combo_case='PRODUCT_TYPE' order by seq",$rsEdit->ps_type,"Select Order Type"); ?>
-            		</select>
-                </div>
-            </div>
 
             <div class="control-group">
                 <label class="control-label" for="form-field-2">Customer</label>
@@ -66,21 +56,63 @@
                     	<table class="table table-striped tbl-item-dtl">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th class="span2">Quantity</th>
+									<th class="span2">Type</th>
+                                    <th class="span2">Product Name</th>
+                                    <th class="span1">Quantity</th>
                                     <th class="span2">Price</th>
-                                    <th class="span2">Tax</th>
-                                    <th class="span3">Discount</th>
-                                    <th class="span2">Amount</th>
+                                    <th class="span1">Tax</th>
+                                    <th class="span2">Discount</th>
+                                    <th class="span1">Amount</th>
                                     <th class="span1">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
+								<tr class="entry-hidden hide">
+									<td class="span2">
+										<select class="form-control span12 productType" name="selProductType" id="selProductType">
+											<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='PRODUCT_TYPE' order by seq","",""); ?>
+										</select>
+                                    </td>
+                                    <td class="span2">
+										<select class="form-control span12 product" name="selProduct" id="selProduct">
+											<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","where prod_type='product' and status='ACTIVE'","","Select Product"); ?>
+										</select>
+                                    </td>
+                                    <td class="span1">
+                                    	<input class="form-control span12 calc" type="text" name="txtProductQty" id="txtProductQty" placeholder="QTY" />
+                                    </td>
+                                    <td class="span2">
+                                    	<input class="form-control span12 calc" name="txtProductPrice" id="txtProductPrice" type="text" placeholder="INR" />
+                                    </td>
+                                    <td class="span1">
+                                    	<input class="form-control span12 calc" name="txtProductTax" id="txtProductTax" type="text" placeholder="%" />
+                                        <small class="small-tax" id="txtProductTaxAmt" name="txtProductTaxAmt"></small>
+                                    </td>
+                                    <td class="span2">
+                                    	<input class="form-control span8 calc" name="txtProductDiscountValue" id="txtProductDiscountValue" type="text" placeholder="INR" />
+                                        <select class="span4" name="txtProductDiscountType" id="txtProductDiscountType" onChange="javascript:$('.calc').blur();">
+                                        	<option value="rs">Rs.</option>
+                                            <option value="%">%</option>
+                                        </select>
+										<small id="txtProductDiscountAmt" name="txtProductDiscountAmt"></small>
+                                    </td>
+                                    <td class="span1">
+                                    	<label id="prodTotalAmount" name="prodTotalAmount" class="span12">0.0</label>
+                                    </td>
+                                    <td class="span1">
+                                    	<button id="btnOrderProdAdd" type="button" class="btn btn-remove btn-danger"><span class="icon-minus bigger-110"></span></button>
+                                    </td>
+                                </tr>
                                 <tr class="entry" id="0">
+									<td class="span2">
+										<select class="form-control span12 required productType" name="selProductType" id="selProductType0">
+											<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='PRODUCT_TYPE' order by seq","",""); ?>
+										</select>
+                                    </td>
                                     <td class="span2">
 										<select class="form-control span12 required product" name="selProduct" id="selProduct0">
-											<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","","","Select Product"); ?>
+											<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","where prod_type='product' and status='ACTIVE'","","Select Product"); ?>
 										</select>
                                     </td>
                                     <td class="span1">
@@ -89,19 +121,19 @@
                                     <td class="span2">
                                     	<input class="form-control span12 required calc" name="txtProductPrice" id="txtProductPrice0" type="text" placeholder="INR" />
                                     </td>
-                                    <td class="span2">
-                                    	<input class="form-control span6 calc" name="txtProductTax" id="txtProductTax0" type="text" placeholder="%" />
-                                        <small id="txtProductTaxAmt0" name="txtProductTaxAmt"></small>
+                                    <td class="span1">
+                                    	<input class="form-control span12 calc" name="txtProductTax" id="txtProductTax0" type="text" placeholder="%" />
+                                        <small class="small-tax" id="txtProductTaxAmt0" name="txtProductTaxAmt"></small>
                                     </td>
-                                    <td class="span3">
-                                    	<input class="form-control span4 calc" name="txtProductDiscountValue" id="txtProductDiscountValue0" type="text" placeholder="INR" />
-                                        <select class="span3" name="txtProductDiscountType" id="txtProductDiscountType0" onChange="javascript:$('.calc').blur();">
+                                    <td class="span2">
+                                    	<input class="form-control span8 calc" name="txtProductDiscountValue" id="txtProductDiscountValue0" type="text" placeholder="INR" />
+                                        <select class="span4" name="txtProductDiscountType" id="txtProductDiscountType0" onChange="javascript:$('.calc').blur();">
                                         	<option value="rs">Rs.</option>
                                             <option value="%">%</option>
                                         </select>
 										<small id="txtProductDiscountAmt0" name="txtProductDiscountAmt"></small>
                                     </td>
-                                    <td class="span2">
+                                    <td class="span1">
                                     	<label id="prodTotalAmount0" name="prodTotalAmount" class="span12">0.0</label>
                                     </td>
                                     <td class="span1">
@@ -254,32 +286,29 @@ $(document).ready(function(){
 		row++;
 		e.preventDefault();
 		var controlForm =  $('table.tbl-item-dtl tbody');
-        var currentEntry = $('table.tbl-item-dtl tbody tr:first');
+        var currentEntry = $('table.tbl-item-dtl tbody tr.entry-hidden');
         var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-		
+
+		newEntry.removeClass("entry-hidden hide").addClass("entry");
         newEntry.attr('id',row);
-		newEntry.find('input').val('');
-		newEntry.find('select option:eq(0)').attr("selected","selected");
-		newEntry.find('label').text('0.0');
-		newEntry.find('small').text('');
+
+		newEntry.find('#selProduct').addClass("required");
+		newEntry.find('#txtProductQty').addClass("required");
+		newEntry.find('#txtProductPrice').addClass("required");
 
 		newEntry.find('input').removeClass('border-red');
 		newEntry.find('select').removeClass('border-red');
 
-		newEntry.find('#selProduct0').attr('id','selProduct'+row);
-		newEntry.find('#txtProductQty0').attr('id','txtProductQty'+row);
-		newEntry.find('#txtProductPrice0').attr('id','txtProductPrice'+row);
-		newEntry.find('#txtProductDiscountValue0').attr('id','txtProductDiscountValue'+row);
-		newEntry.find('#txtProductDiscountType0').attr('id','txtProductDiscountType'+row);
-		newEntry.find('#txtProductDiscountAmt0').attr('id','txtProductDiscountAmt'+row);
-		newEntry.find('#txtProductTax0').attr('id','txtProductTax'+row);
-		newEntry.find('#txtProductTaxAmt0').attr('id','txtProductTaxAmt'+row);
-		newEntry.find('#prodTotalAmount0').attr('id','prodTotalAmount'+row);
-		
-        controlForm.find('.entry:not(:first) .btn-add')
-            .removeClass('btn-add').addClass('btn-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="icon-minus bigger-110"></span>');
+		newEntry.find('#selProductType').attr('id','selProductType'+row);
+		newEntry.find('#selProduct').attr('id','selProduct'+row);
+		newEntry.find('#txtProductQty').attr('id','txtProductQty'+row);
+		newEntry.find('#txtProductPrice').attr('id','txtProductPrice'+row);
+		newEntry.find('#txtProductDiscountValue').attr('id','txtProductDiscountValue'+row);
+		newEntry.find('#txtProductDiscountType').attr('id','txtProductDiscountType'+row);
+		newEntry.find('#txtProductDiscountAmt').attr('id','txtProductDiscountAmt'+row);
+		newEntry.find('#txtProductTax').attr('id','txtProductTax'+row);
+		newEntry.find('#txtProductTaxAmt').attr('id','txtProductTaxAmt'+row);
+		newEntry.find('#prodTotalAmount').attr('id','prodTotalAmount'+row);
     }).on('click', '.btn-remove', function(e)
     {
 		e.preventDefault();
@@ -306,6 +335,23 @@ $(document).ready(function(){
 		e.preventDefault();
 		$(this).parents('.entry:first').remove();
 		return false;
+	});
+
+	$(document).on("change",".productType",function(){
+		var trid = $(this).parent().parent().attr("id");
+		var param = {};
+		param['prod_type'] = $(this).val();
+		$.ajax({
+			type:"POST",
+			data:param,
+			url:"index.php?c=commonajax&m=getProductComboByType",
+			success:function(res)
+			{
+				$("#selProduct"+trid).html(res);
+				$("#selProduct"+trid).trigger("liszt:updated");
+			}
+		});
+		
 	});
 	
 	$(document).on("change",".product",function(){
@@ -435,7 +481,7 @@ $(document).ready(function(){
 		});
 		
 		// calculate total tax amount
-		$('table.tbl-item-dtl tbody tr small').each(function(){
+		$('table.tbl-item-dtl tbody tr small.small-tax').each(function(){
 			if($(this).text() != "")
 			{
 				totalTax = parseFloat(totalTax) + parseFloat($(this).text());
@@ -494,6 +540,7 @@ $(document).ready(function(){
 			var trid = $(this).attr('id');
 			var prod_id = $(this).find('select[name="selProduct"]').val();
 			productArr[prod_id] = {};
+			productArr[prod_id]['prodType'] = $(this).find('select[name="selProductType"]').val();
 			productArr[prod_id]['prodQty'] = $(this).find('input[name="txtProductQty"]').val();
 			productArr[prod_id]['pricePerQty'] = $(this).find('input[name="txtProductPrice"]').val();
 			productArr[prod_id]['prodTax'] = $(this).find('input[name="txtProductTax"]').val();
@@ -522,7 +569,6 @@ $(document).ready(function(){
 		
 		var param = {};
 		param['txtOrderNo'] = $("#txtOrderNo").val();
-		param['selOrderType'] = $("#selOrderType").val();
 		param['selCustomer'] = $("#selCustomer").val();
 		param['txtOrderDate'] = $("#txtOrderDate").val();
 		param['txtShipDate'] = $("#txtShipDate").val();
@@ -537,7 +583,7 @@ $(document).ready(function(){
 		param['adjustAmount'] = $("#txtAdjustAmount").val();
 		param['finalTotalAmount'] = $("#lblFinalTotal").text();
 		param['productArr'] = productArr;
-
+		
 		$.ajax({
 			type:"POST",
 			data:param,

@@ -22,6 +22,24 @@ class orderModel extends Data {
 	}
 	
 	//@Author : Nikunj Bambhroliya
+	//@Description : function will return distinct stages from created order
+	public function getOrderStages()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+
+		$sqlQuery = "SELECT DISTINCT(ps.ps_id),ps.ps_name FROM mft_order_time_process_stage AS main
+						JOIN process_stage_master AS ps
+						ON main.stage_id=ps.ps_id
+					 WHERE FIND_IN_SET(".$searchCriteria["userId"].",main.user_id)";
+
+		//echo $sqlQuery;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;	
+	}
+	
+	//@Author : Nikunj Bambhroliya
 	//@Description : function will return menufecturing orders to users in deffrent stages
 	public function getMftOrders()
 	{
@@ -68,7 +86,7 @@ class orderModel extends Data {
 						HAVING proceed_qty < prod_tot_qty AND(prv_proceed_qty > 0 OR seq = 1)
 					ORDER BY mup.id ASC";	*/
 		
-		$sqlQuery = "SELECT
+		/*$sqlQuery = "SELECT
 						  mm.mft_id,
 						  mm.mft_no,
 						  mpd.prod_id,
@@ -77,7 +95,7 @@ class orderModel extends Data {
 						  mup.stage_id,
 						  prc_stg.stage_seq AS seq,
 						  (SELECT
-							 IFNULL(MAX(seq),0)
+							 IFNULL(MAX(stage_seq),0)
 						   FROM mft_order_time_process_stage
 						   WHERE process_id = prc_stg.process_id) AS last_seq,
 						  (SELECT
@@ -108,7 +126,45 @@ class orderModel extends Data {
 						HAVING proceed_qty < prod_tot_qty
 							AND (prv_proceed_qty > 0
 								  OR seq = 1)
-						ORDER BY mup.id ASC";
+						ORDER BY mup.id ASC";*/
+		
+		$sqlQuery = "SELECT
+						  mm.mft_id,
+						  mm.mft_no,
+						  mpd.prod_id,
+						  mpd.prod_qty      AS prod_tot_qty,
+						  main.stage_id,
+						  main.stage_seq AS seq,
+						  (SELECT
+							 IFNULL(MAX(stage_seq),0)
+						   FROM mft_order_time_process_stage
+						   WHERE process_id = main.process_id AND mft_id=main.mft_id) AS last_seq,
+						  (SELECT
+							 IFNULL(SUM(mps.qty),0)
+						   FROM mft_prod_status AS mps
+						   WHERE mps.mft_id = mm.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND mps.stage_id = main.stage_id) AS proceed_qty,
+						  (SELECT
+							 CONCAT(IFNULL(prcstg.stage_id,0),'|',IFNULL(SUM(mps.qty),0))
+						   FROM mft_prod_status AS mps
+							 JOIN mft_order_time_process_stage AS prcstg
+							   ON mps.stage_id = prcstg.stage_id
+						   WHERE mps.mft_id = mm.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND prcstg.process_id = main.process_id
+							   AND prcstg.stage_seq = main.stage_seq - 1) AS prv_proceed_qty
+						FROM mft_order_time_process_stage AS main
+						  JOIN mft_prod_detail mpd
+							ON main.prod_id = mpd.prod_id
+						  JOIN mft_master AS mm
+							ON mpd.mft_id = mm.mft_id
+						WHERE 1 = 1
+							AND FIND_IN_SET(".$searchCriteria['userId'].",main.user_id)
+							AND main.stage_id IN(".$searchCriteria['stageId'].")
+						HAVING proceed_qty < prod_tot_qty
+							AND (prv_proceed_qty > 0
+								  OR seq = 1)";
 
 		
 		//echo $sqlQuery; exit;
