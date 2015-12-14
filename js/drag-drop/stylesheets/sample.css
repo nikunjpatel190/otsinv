@@ -31,8 +31,8 @@
       background: rgba(255, 255, 255, 0.2);
       width: 40px;
       height: 40px;
-      top: -1px;
-      right:17px;
+      top: 0px;
+      right:0px;
       position: absolute;
       text-align: center;
       line-height: 40px; 
@@ -89,11 +89,14 @@
 	  
 /* Customized CSS*/
 .example .brick {
-	border-radius:50% !important;
+	border-radius:13% !important;
+	display:table;
 }
 .brick h3 {
     color: #fff;
-    margin-top: 50px;
     position: relative;
     text-align: center;
+	line-height:27px;
+	display:table-cell;
+	vertical-align:middle;
 }
