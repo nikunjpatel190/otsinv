@@ -297,19 +297,12 @@ class Commonajax extends CI_Controller {
 	{
 		$prodid = $this->Page->getRequest("prodid");
 		$procid = $this->Page->getRequest("procid");
-		
-		$searchCriteria = array();
-		$searchCriteria['selectField'] = 'proc.proc_id';
-		$searchCriteria["prodId"] = $prodid;
-		$searchCriteria["procId"] = $procid;
-		$this->productModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->productModel->getAssignProcessDetail();
-		if(count($rsMapDtl)>0)
-		{		
-			$strQuery = "DELETE FROM map_prod_proc WHERE prod_id=".$prodid." AND proc_id=".$procid."";
-			$this->db->query($strQuery);
-		}
-		else
+		$status = $this->Page->getRequest("status");
+
+		$strQuery = "DELETE FROM map_prod_proc WHERE prod_id=".$prodid."";
+		$this->db->query($strQuery);
+	
+		if($status == "ACTIVE")
 		{
 			$arrRecord = array();
 			$arrRecord["prod_id"] = $prodid;
