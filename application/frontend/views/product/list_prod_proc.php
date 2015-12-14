@@ -53,6 +53,7 @@
 			url:"index.php?c=commonajax&m=mapProdProcess",
 			data:param,
 			beforeSend:function(){
+
 			},
 			success:function(res){
 				
