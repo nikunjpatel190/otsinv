@@ -43,15 +43,19 @@
 
 <script type="text/javascript">
 	$(".asn").click(function(){
-		var prodid = $(this).attr('prodid');
-		var procid = $(this).attr('procid');
+		var param = {};
+		param["prodid"] = $(this).attr('prodid');
+		param["procid"] = $(this).attr('procid');
+		param["status"] = $(this).is(":checked")?"ACTIVE":"DEACTIVE";
+
 		$.ajax({
 			type:"POST",
 			url:"index.php?c=commonajax&m=mapProdProcess",
-			data:"prodid="+prodid+"&procid="+procid,
+			data:param,
 			beforeSend:function(){
 			},
 			success:function(res){
+				
 			}
 		});
 	});
