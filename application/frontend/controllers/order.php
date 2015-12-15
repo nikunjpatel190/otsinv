@@ -101,46 +101,52 @@ class order extends CI_Controller {
 		}
 		
 		// Get Orders
-		$searchCriteria = array();
-		$searchCriteria['userId'] = $this->Page->getSession("intUserId");
-		$searchCriteria['stageId'] = $stageIds;
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$usrOrderArr = $this->orderModel->getMftOrders();
+		if($stageIds != "")
+		{
+			$searchCriteria = array();
+			$searchCriteria['userId'] = $this->Page->getSession("intUserId");
+			$searchCriteria['stageId'] = $stageIds;
+			$this->orderModel->searchCriteria = $searchCriteria;
+			$usrOrderArr = $this->orderModel->getMftOrders();
+		}
 		
 		$orderListArr = array();
 		$orderProductListArr = array();
 		$productIds = "";
-		foreach($usrOrderArr AS $row)
-		{
-			$prv_arr = explode("|",$row['prv_proceed_qty']);
-			$prv_stage_id = (int)$prv_arr[0];
-			$prv_proceed_qty = (int)$prv_arr[1];
 
-			if($row['seq'] == 1)
+		if(count($usrOrderArr) > 0)
+		{
+			foreach($usrOrderArr AS $row)
 			{
-				$prod_tot_qty = (int)$row['prod_tot_qty'];
-			}
-			else
-			{
-				$prod_tot_qty = (int)$prv_proceed_qty;
-			}
-			$prod_proceed_qty = (int)$row['proceed_qty'];
-			$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
-			
-			if($prod_proceed_qty < $prod_tot_qty)
-			{
-				$orderListArr[$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
+				$nxt_stage_id = (int)$row['nxt_stage_id'];
+				$prv_proceed_qty = (int)$row['prv_proceed_qty'];
+
+				if($row['seq'] == 1)
+				{
+					$prod_tot_qty = (int)$row['prod_tot_qty'];
+				}
+				else
+				{
+					$prod_tot_qty = (int)$prv_proceed_qty;
+				}
+				$prod_proceed_qty = (int)$row['proceed_qty'];
+				$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
 				
-				$temp = array();
-				$temp["prod_id"] = $row['prod_id'];
-				$temp["prod_tot_qty"] = $prod_tot_qty;
-				$temp["proceed_qty"] = $prod_proceed_qty;
-				$temp["remain_qty"] = $remain_proceed_qty;
-				$temp["seq"] = $row['seq'];
-				$temp["last_seq"] = $row['last_seq'];
-				$temp["prv_stage_id"] = $prv_stage_id;
-				$orderProductListArr[$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
-				$productIds .= $row['prod_id'].",";
+				if($prod_proceed_qty < $prod_tot_qty)
+				{
+					$orderListArr[$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
+					
+					$temp = array();
+					$temp["prod_id"] = $row['prod_id'];
+					$temp["prod_tot_qty"] = $prod_tot_qty;
+					$temp["proceed_qty"] = $prod_proceed_qty;
+					$temp["remain_qty"] = $remain_proceed_qty;
+					$temp["seq"] = $row['seq'];
+					$temp["last_seq"] = $row['last_seq'];
+					$temp["nxt_stage_id"] = $nxt_stage_id;
+					$orderProductListArr[$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
+					$productIds .= $row['prod_id'].",";
+				}
 			}
 		}
 		
@@ -150,16 +156,22 @@ class order extends CI_Controller {
 		}
 		
 		// Get Products
-		$searchCriteria = array();
-		$searchCriteria['prod_id'] = $productIds;
-		$searchCriteria['status'] = 'ACTIVE';
-		$this->productModel->searchCriteria = $searchCriteria;
-		$rsProducts = $this->productModel->getProduct();
+		if($productIds != "")
+		{
+			$searchCriteria = array();
+			$searchCriteria['prod_id'] = $productIds;
+			$searchCriteria['status'] = 'ACTIVE';
+			$this->productModel->searchCriteria = $searchCriteria;
+			$rsProducts = $this->productModel->getProduct();
+		}
 		
 		$productsArr = array();
-		foreach($rsProducts as $row)
+		if(count($rsProducts) > 0)
 		{
-			$productsArr[$row['prod_id']] = $row;
+			foreach($rsProducts as $row)
+			{
+				$productsArr[$row['prod_id']] = $row;
+			}
 		}
 		
 		$rsListing['productsArr']	=	$productsArr;
@@ -187,6 +199,7 @@ class order extends CI_Controller {
 		{
 			foreach($dataArr AS $row)
 			{
+				$initialStage = 0;
 				// Get Process Stage Details
 				$searchCriteria = array();
 				$searchCriteria['selectField'] = "mpp.prod_id,mps.process_id,mps.stage_id,mps.seq,GROUP_CONCAT(mup.u_id) AS user_id";
@@ -197,6 +210,10 @@ class order extends CI_Controller {
 				{
 					foreach($rsProcessStage AS $rowStage)
 					{
+						// set initial stageid
+						if($rowStage["seq"] == 1){
+							$initialStage = $rowStage["stage_id"];
+						}
 						// Add Order time process stage details
 						$arrData = array();
 						$arrData['mft_id'] = $menufectureId;
@@ -236,6 +253,16 @@ class order extends CI_Controller {
 				
 				$this->inventoryModel->tbl = "inventory_master";
 				$this->inventoryModel->insert($arrData);
+
+				// Add inventory stage details for initial stage
+				$arrData = array();
+				$arrData['mft_id'] = $menufectureId;
+				$arrData['prod_id'] = $row["prodId"];
+				$arrData['stage_id'] = $initialStage;
+				$arrData['prod_qty'] = $row["prodQty"];
+				$arrData['action'] = "plus";
+				$this->inventoryModel->tbl = "inventory_stage_detail";
+				$this->inventoryModel->insert($arrData);
 			}
 		}
 	}
@@ -260,7 +287,7 @@ class order extends CI_Controller {
 		$total_qty = (int)$this->Page->getRequest("total_qty"); // Total Product Qty
 		$seq = (int)$this->Page->getRequest("seq"); // seq
 		$last_seq = (int)$this->Page->getRequest("last_seq"); // last seq
-		$prv_stage_id = $this->Page->getRequest("prv_stage_id");
+		$nxt_stage_id = $this->Page->getRequest("nxt_stage_id");
 		
 		if($proceed_qty <= $total_qty)
 		{
@@ -284,20 +311,20 @@ class order extends CI_Controller {
 				$arrData['mft_id'] = $this->Page->getRequest("order_id");
 				$arrData['prod_id'] = $this->Page->getRequest("product_id");
 				$arrData['stage_id'] = $this->Page->getRequest("stage_id");
-				$arrData['prod_qty'] = $this->Page->getRequest("qty");
-				$arrData['action'] = "plus";
+				$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
+				$arrData['action'] = "minus";
 				$this->inventoryModel->tbl = "inventory_stage_detail";
 				$this->inventoryModel->insert($arrData);
 
-				if($prv_stage_id !=0)
+				if($nxt_stage_id !=0)
 				{
 					// Add inventory stage details (in process revese entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");
 					$arrData['prod_id'] = $this->Page->getRequest("product_id");
-					$arrData['stage_id'] = $prv_stage_id;
-					$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
-					$arrData['action'] = "minus";
+					$arrData['stage_id'] = $nxt_stage_id;
+					$arrData['prod_qty'] = $this->Page->getRequest("qty");
+					$arrData['action'] = "plus";
 					
 					$this->inventoryModel->tbl = "inventory_stage_detail";
 					$this->inventoryModel->insert($arrData);
@@ -305,17 +332,6 @@ class order extends CI_Controller {
 
 				if($seq == $last_seq)
 				{
-					// Add inventory stage details (in process revese entry)
-					$arrData = array();
-					$arrData['mft_id'] = $this->Page->getRequest("order_id");
-					$arrData['prod_id'] = $this->Page->getRequest("product_id");
-					$arrData['stage_id'] = $this->Page->getRequest("stage_id");
-					$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
-					$arrData['action'] = "minus";
-					
-					$this->inventoryModel->tbl = "inventory_stage_detail";
-					$this->inventoryModel->insert($arrData);
-
 					// Add inventory (in process reverse entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");

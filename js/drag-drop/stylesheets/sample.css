@@ -94,7 +94,7 @@
 }
 .brick h3 {
     color: #fff;
-    position: relative;
+    /*position: relative;*/
     text-align: center;
 	line-height:27px;
 	display:table-cell;

@@ -43,101 +43,108 @@ $uid = $this->Page->getSession("intUserId");
 
             <div class="tab-content">
             	<?php 
-					foreach($usrStageArr AS $key=>$row)
+					if(count($usrStageArr) > 0)
 					{
-						$className=($key==0)?"active":"";
+						foreach($usrStageArr AS $key=>$row)
+						{
+							$className=($key==0)?"active":"";
 				?>
-                        <div id="<?php echo $row['ps_id']; ?>" class="tab-pane <?php echo $className; ?>">
-                        	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-								<?php
-                                    if(count($orderListArr[$row['ps_id']]) > 0)
-                                    {
-                                        $cnt = 0;
-                                        foreach($orderListArr[$row['ps_id']] as $orderId=>$orderNo)
-                                        {
-                                        ?>
-                                               <div class="panel">
-                                               	   <div class="panel-head" style="border-bottom:1px dotted lightgray;">	 
-                                                       <h4 class="panel-title">	
-                                                           <span id="<?php echo $cnt.$row['ps_id']; ?>">
-                                                              <i class="icon-angle-down"></i> Manufacture Order No. (<?php echo $orderNo; ?>) 
-                                                           </span>
-                                                           <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$orderNo]); ?></span>
-                                                       </h4>
-                    							   </div>	 
-                                                   <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
-                                                   <div class="widget-box transparent">
-													   <div class="widget-body">
-														    <div class="widget-main no-padding">
-                                                               <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
-                                                                   <thead>
-                                                                        <tr>
-                                                                            <th>No</th>
-                                                                            <th>Product Name</th>
-                                                                            <th>Total Qty</th>
-                                                                            <th>Proceed Qty</th>
-                                                                            <th>Remaining Qty</th>
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                        
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $i=1;
-                                                                        foreach($orderProductListArr[$row['ps_id']][$orderNo] AS $key=>$product)
-                                                                        {
-                                                                        ?>
-                                                                            <tr>
-                                                                                <td><?php echo $i; ?></td>
-                                                                                <td><?php echo $productsArr[$product['prod_id']]['prod_name']; ?></td>
-                                                                                <td><?php echo $product['prod_tot_qty']; ?></td>
-                                                                                <td><?php echo $product['proceed_qty']; ?></td>
-                                                                                <td><?php echo $product['remain_qty']; ?></td>
-                                                                                <td>
-																					<div class="hidden-phone visible-desktop btn-group">
-																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" prv_stage_id="<?php echo $product['prv_stage_id']; ?>">
-																							<!--<i class="icon-ok bigger-120"></i>-->
-																							Forward
-																						</button>
-																					</div>
-																					<div class="hidden-desktop visible-phone">
-																						<div class="inline position-relative">
-																							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-																								<i class="icon-cog icon-only bigger-110"></i>
+							<div id="<?php echo $row['ps_id']; ?>" class="tab-pane <?php echo $className; ?>">
+								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+									<?php
+										if(count($orderListArr[$row['ps_id']]) > 0)
+										{
+											$cnt = 0;
+											foreach($orderListArr[$row['ps_id']] as $orderId=>$orderNo)
+											{
+											?>
+												   <div class="panel">
+													   <div class="panel-head" style="border-bottom:1px dotted lightgray;">	 
+														   <h4 class="panel-title">	
+															   <span id="<?php echo $cnt.$row['ps_id']; ?>">
+																  <i class="icon-angle-down"></i> Manufacture Order No. (<?php echo $orderNo; ?>) 
+															   </span>
+															   <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$orderNo]); ?></span>
+														   </h4>
+													   </div>	 
+													   <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
+													   <div class="widget-box transparent">
+														   <div class="widget-body">
+																<div class="widget-main no-padding">
+																   <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+																	   <thead>
+																			<tr>
+																				<th>No</th>
+																				<th>Product Name</th>
+																				<th>Total Qty</th>
+																				<th>Proceed Qty</th>
+																				<th>Remaining Qty</th>
+																				<th>Action</th>
+																			</tr>
+																		</thead>
+							
+																		<tbody>
+																			<?php
+																			$i=1;
+																			foreach($orderProductListArr[$row['ps_id']][$orderNo] AS $key=>$product)
+																			{
+																			?>
+																				<tr>
+																					<td><?php echo $i; ?></td>
+																					<td><?php echo $productsArr[$product['prod_id']]['prod_name']; ?></td>
+																					<td><?php echo $product['prod_tot_qty']; ?></td>
+																					<td><?php echo $product['proceed_qty']; ?></td>
+																					<td><?php echo $product['remain_qty']; ?></td>
+																					<td>
+																						<div class="hidden-phone visible-desktop btn-group">
+																							<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																								<!--<i class="icon-ok bigger-120"></i>-->
+																								Forward
 																							</button>
-
-																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
-																								<li>
-																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" prv_stage_id="<?php echo $product['prv_stage_id']; ?>">
-																										<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
-Forward
-																										</span>
-																									</a>
-																								</li>
-																							</ul>
 																						</div>
-																					</div>
-																				</td>
-                                                                            </tr>
-                                                                        <?php
-                                                                            $i++;
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                           </div> 
-                                                           </div> 
-                                                           </div> 
-                                                    </div>
-                                                </div>
-                                        <?php
-                                            $cnt++;
-                                        }
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                <?php	
+																						<div class="hidden-desktop visible-phone">
+																							<div class="inline position-relative">
+																								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																									<i class="icon-cog icon-only bigger-110"></i>
+																								</button>
+
+																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
+																									<li>
+																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																											<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
+	Forward
+																											</span>
+																										</a>
+																									</li>
+																								</ul>
+																							</div>
+																						</div>
+																					</td>
+																				</tr>
+																			<?php
+																				$i++;
+																			}
+																			?>
+																		</tbody>
+																	</table>
+															   </div> 
+															   </div> 
+															   </div> 
+														</div>
+													</div>
+											<?php
+												$cnt++;
+											}
+										}
+									?>
+								</div>
+							</div>
+					<?php	
+						}
+					}
+					else
+					{
+						echo "<h5 class='text-error text-center'>Order not found</h5>";
 					}
 				?>
             </div>
@@ -166,7 +173,7 @@ Forward
                         <input type="hidden" id="hdn_proceed_qty" value="" />
                         <input type="hidden" id="hdn_seq" value="" />
                         <input type="hidden" id="hdn_last_seq" value="" />
-                        <input type="hidden" id="hdn_prv_stage_id" value="" />
+                        <input type="hidden" id="hdn_nxt_stage_id" value="" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -219,7 +226,7 @@ Forward
 			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
 			$("#hdn_seq").val($(this).attr('seq'));
 			$("#hdn_last_seq").val($(this).attr('last_seq'));
-			$("#hdn_prv_stage_id").val($(this).attr('prv_stage_id'));
+			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
 			
 			$("#hdn_product_id").val(this.id);
 			
@@ -251,7 +258,7 @@ Forward
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();
 			data['seq'] = $("#hdn_seq").val();
 			data['last_seq'] = $("#hdn_last_seq").val();
-			data['prv_stage_id'] = $("#hdn_prv_stage_id").val();
+			data['nxt_stage_id'] = $("#hdn_nxt_stage_id").val();
 			//alert(data.toSource());
 			
 			$.ajax({
