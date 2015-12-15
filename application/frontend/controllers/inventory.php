@@ -26,6 +26,8 @@ class inventory extends CI_Controller {
 		$resultArr = $this->inventoryModel->getInventoryDetail();
 		
 		$inventoryDetailArr = array();
+		$inventoryDetailArr["in_stock"] = 0;
+		$inventoryDetailArr["in_process"] = 0;
 		foreach($resultArr AS $row)
 		{
 			$inventoryDetailArr[$row['status']] = $row['qty'];

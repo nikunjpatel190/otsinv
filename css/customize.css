@@ -17,3 +17,7 @@
 /**** Start Assign Process to product ****/
 #chk_prod_typ label{float:left; margin:0px 10px 10px 0;}
 /**** End Assign Process to product ****/
+
+/**** Start Check inventory box ****/
+#radio_prod_typ label{float:left; margin:0px 10px 10px 0;}
+/**** End Check inventory box ****/

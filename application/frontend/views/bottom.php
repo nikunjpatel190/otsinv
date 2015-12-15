@@ -11,17 +11,28 @@
             	<h4 class="header lighter blue">Check Inventory</h4>
                 <div class="span3">
                     <div class="control-group">
-                        <label for="form-field-select-3">Product</label>
+						<div id="radio_prod_typ">
+							<label>
+								<input type="radio" value="product" name="rdo-prodtype" checked="checked">
+								<span class="lbl"> Product</span>
+							</label>
+
+							<label>
+								<input type="radio" value="component" name="rdo-prodtype">
+								<span class="lbl"> Component</span>
+							</label>
+						</div>
+                        <div class="clearfix"></div>
                         <div class="controls">
                             <select class="chzn-select" id="btnSelProd" data-placeholder="Choose a Product...">
-                                <?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","","","Select Product"); ?>
+                                <?php  echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","where prod_type='product' and status='ACTIVE'","","Select Product"); ?>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="span3" id="divInventoryRes">
-                    <div class="infobox infobox-green infobox-custom">
+                    <!--<div class="infobox infobox-green infobox-custom">
                         <div class="infobox-data infobox-data-custom">
                             <span class="infobox-data-number">32</span>
                             <div class="infobox-content">In Stock</div>
@@ -33,7 +44,7 @@
                             <span class="infobox-data-number">11</span>
                             <div class="infobox-content">In Process</div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -88,7 +99,6 @@
 			var prod_id = $(this).val();
 			if(prod_id == 0 || prod_id == "")
 			{
-				alert("Please select product");
 				return false;
 			}
 			var param = {};
@@ -101,11 +111,27 @@
 				success:function(res)
 				{
 					var html = "";
-					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+res.in_stock+'</span><div class="infobox-content">In Stock</div></div></div>';
+					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_stock)+'</span><div class="infobox-content">In Stock</div></div></div>';
                     
-                    html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+res.in_process+'</span><div class="infobox-content">In Process</div></div></div>';
+                    html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_process)+'</span><div class="infobox-content">In Process</div></div></div>';
 
 					$("#divInventoryRes").html(html);
+				}
+			});
+		});
+
+		// chnage product dropdown according to selected type E.g Product or Component
+		$(document).on("click","#radio_prod_typ input[type='radio']",function(){
+			var param = {};
+			param['prod_type'] = $(this).val();
+			$.ajax({
+				type:"POST",
+				data:param,
+				url:"index.php?c=commonajax&m=getProductComboByType",
+				success:function(res)
+				{
+					$("#btnSelProd").html(res);
+					$("#btnSelProd").trigger("liszt:updated");
 				}
 			});
 		});

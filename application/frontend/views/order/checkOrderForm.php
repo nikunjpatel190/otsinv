@@ -33,7 +33,7 @@ $uid = $this->Page->getSession("intUserId");
                 	<li class="<?php echo $className; ?>">
                         <a data-toggle="tab" href="#<?php echo $row['ps_id']; ?>">
                             <?php echo $row['ps_name']; ?>
-                            <span class="badge badge-important"><?php echo count($orderListArr[$uid][$row['ps_id']]); ?></span>
+                            <span class="badge badge-important"><?php echo count($orderListArr[$row['ps_id']]); ?></span>
                         </a>
                     </li>
                 <?php	
@@ -50,10 +50,10 @@ $uid = $this->Page->getSession("intUserId");
                         <div id="<?php echo $row['ps_id']; ?>" class="tab-pane <?php echo $className; ?>">
                         	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 								<?php
-                                    if(count($orderListArr[$uid][$row['ps_id']]) > 0)
+                                    if(count($orderListArr[$row['ps_id']]) > 0)
                                     {
                                         $cnt = 0;
-                                        foreach($orderListArr[$uid][$row['ps_id']] as $orderId=>$orderNo)
+                                        foreach($orderListArr[$row['ps_id']] as $orderId=>$orderNo)
                                         {
                                         ?>
                                                <div class="panel">
@@ -62,7 +62,7 @@ $uid = $this->Page->getSession("intUserId");
                                                            <span id="<?php echo $cnt.$row['ps_id']; ?>">
                                                               <i class="icon-angle-down"></i> Manufacture Order No. (<?php echo $orderNo; ?>) 
                                                            </span>
-                                                           <span class="badge badge-yellow"><?php echo count($orderProductListArr[$uid][$row['ps_id']][$orderNo]); ?></span>
+                                                           <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$orderNo]); ?></span>
                                                        </h4>
                     							   </div>	 
                                                    <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
@@ -84,7 +84,7 @@ $uid = $this->Page->getSession("intUserId");
                                                                     <tbody>
                                                                         <?php
                                                                         $i=1;
-                                                                        foreach($orderProductListArr[$uid][$row['ps_id']][$orderNo] AS $key=>$product)
+                                                                        foreach($orderProductListArr[$row['ps_id']][$orderNo] AS $key=>$product)
                                                                         {
                                                                         ?>
                                                                             <tr>
@@ -95,7 +95,7 @@ $uid = $this->Page->getSession("intUserId");
                                                                                 <td><?php echo $product['remain_qty']; ?></td>
                                                                                 <td>
 																					<div class="hidden-phone visible-desktop btn-group">
-																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>">
+																						<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" prv_stage_id="<?php echo $product['prv_stage_id']; ?>">
 																							<!--<i class="icon-ok bigger-120"></i>-->
 																							Forward
 																						</button>
@@ -108,7 +108,7 @@ $uid = $this->Page->getSession("intUserId");
 
 																							<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																								<li>
-																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>">
+																									<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" prv_stage_id="<?php echo $product['prv_stage_id']; ?>">
 																										<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
 Forward
 																										</span>
@@ -166,6 +166,7 @@ Forward
                         <input type="hidden" id="hdn_proceed_qty" value="" />
                         <input type="hidden" id="hdn_seq" value="" />
                         <input type="hidden" id="hdn_last_seq" value="" />
+                        <input type="hidden" id="hdn_prv_stage_id" value="" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -218,6 +219,7 @@ Forward
 			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
 			$("#hdn_seq").val($(this).attr('seq'));
 			$("#hdn_last_seq").val($(this).attr('last_seq'));
+			$("#hdn_prv_stage_id").val($(this).attr('prv_stage_id'));
 			
 			$("#hdn_product_id").val(this.id);
 			
@@ -249,6 +251,7 @@ Forward
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();
 			data['seq'] = $("#hdn_seq").val();
 			data['last_seq'] = $("#hdn_last_seq").val();
+			data['prv_stage_id'] = $("#hdn_prv_stage_id").val();
 			//alert(data.toSource());
 			
 			$.ajax({

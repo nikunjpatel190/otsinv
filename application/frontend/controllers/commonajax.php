@@ -382,6 +382,14 @@ class Commonajax extends CI_Controller {
 			$this->db->insert_id();
 		}
 	}
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : This function return combo option for products E.g Product,Component
+	function getProductComboByType()
+	{
+		$type = $this->Page->getRequest("prod_type");
+		echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","where prod_type='".$type."' and status='ACTIVE'","","Select ".ucfirst($type)."");
+	}
 }
 
 
