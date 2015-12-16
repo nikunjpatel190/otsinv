@@ -173,7 +173,7 @@ class order extends CI_Controller {
 				$productsArr[$row['prod_id']] = $row;
 			}
 		}
-		
+
 		$rsListing['productsArr']	=	$productsArr;
 		$rsListing['orderListArr'] = $orderListArr;
 		$rsListing['orderProductListArr'] = $orderProductListArr;

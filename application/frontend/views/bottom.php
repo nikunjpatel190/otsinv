@@ -32,7 +32,7 @@
                 </div>
                 <div class="clearfix"></div>
                 <div class="span3" id="divInventoryRes">
-                    <!--<div class="infobox infobox-green infobox-custom">
+                    <div class="infobox infobox-green infobox-custom">
                         <div class="infobox-data infobox-data-custom">
                             <span class="infobox-data-number">32</span>
                             <div class="infobox-content">In Stock</div>
@@ -44,8 +44,30 @@
                             <span class="infobox-data-number">11</span>
                             <div class="infobox-content">In Process</div>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
+				<div class="clearfix"></div>
+
+				<div class="span3" id="divInventoryStageRes">
+					<div class="widget-box transparent">
+						<div class="widget-header">
+							<h5 class="bigger lighter">Stage wise quantity</h5>
+						</div>
+
+						<div class="widget-body">
+							<div class="widget-main no-padding">
+								<ul class="unstyled list-striped pricing-table-header">
+									<li>Disk Space <span class="span-inv-box">234</span></li>
+									<li>Bandwidth <span class="span-inv-box">234</span></li>
+									<li>Email Accounts <span class="span-inv-box">234</span></li>
+									<li>MySQL Databases <span class="span-inv-box">234</span></li>
+									<li>Ad Credit <span class="span-inv-box">234</span></li>
+									<li>Free Domain <span class="span-inv-box">234</span></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
         

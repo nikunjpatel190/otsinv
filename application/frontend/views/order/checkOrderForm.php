@@ -97,7 +97,7 @@ $uid = $this->Page->getSession("intUserId");
 																					<td><?php echo $product['remain_qty']; ?></td>
 																					<td>
 																						<div class="hidden-phone visible-desktop btn-group">
-																							<button class="btn btn-mini btn-success opnModalShipQty" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																							<button class="btn btn-mini btn-success opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
 																								<!--<i class="icon-ok bigger-120"></i>-->
 																								Forward
 																							</button>
@@ -110,7 +110,7 @@ $uid = $this->Page->getSession("intUserId");
 
 																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																									<li>
-																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $orderId; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
 																											<span class="green">																								<!--<i class="icon-ok bigger-120"></i>-->
 	Forward
 																											</span>
@@ -228,7 +228,7 @@ $uid = $this->Page->getSession("intUserId");
 			$("#hdn_last_seq").val($(this).attr('last_seq'));
 			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
 			
-			$("#hdn_product_id").val(this.id);
+			$("#hdn_product_id").val($(this).attr('prod_id'));
 			
 			$("#ship-qty-form").modal('show');
 		});

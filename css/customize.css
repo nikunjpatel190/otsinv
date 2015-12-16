@@ -2,7 +2,7 @@
 .plus{cursor:pointer;}
 
 
-/***** Start Addd Order form *****/
+/***** Start Add Order form *****/
 .divTotal .control-group{border-bottom:1px dotted #e2e2e2; margin-bottom:0px; padding-top:5px;}
 .divTotal .controls{padding-right:15px;}
 .divTotal .controls label{float:right; text-align:right;}
@@ -12,6 +12,7 @@
 /**** start info box ****/
 #divInventoryRes .infobox-custom{width:auto !important; min-width:100px; margin:0px 5px 0px 0px !important;}
 #divInventoryRes .infobox-data-custom{min-width:0px !important;}
+#divInventoryStageRes .span-inv-box{float:right; margin-right:10px;}
 /**** start info box ****/
 
 /**** Start Assign Process to product ****/

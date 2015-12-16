@@ -177,7 +177,7 @@ class orderModel extends Data {
 							  OR seq = 1)";
 
 		
-		// echo $sqlQuery; exit;
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;	
