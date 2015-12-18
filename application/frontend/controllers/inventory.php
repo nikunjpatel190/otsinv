@@ -32,6 +32,27 @@ class inventory extends CI_Controller {
 		{
 			$inventoryDetailArr[$row['status']] = $row['qty'];
 		}
+
+		if($this->Page->getRequest("stage_inventory") == 1)
+		{
+			// Get stage wise inventory details
+			$searchCriteria = array();
+			$searchCriteria['selectField'] = "isd.stage_id,psm.ps_name,SUM(isd.prod_qty) AS total_qty ";
+			$searchCriteria['prod_id'] = $this->Page->getRequest("prod_id");
+			$searchCriteria['groupField'] = "isd.prod_id,isd.stage_id";
+			
+			$this->inventoryModel->searchCriteria = $searchCriteria;
+			$stageResultArr = $this->inventoryModel->getInventoryStageDetail();
+			
+			$inventoryStageDetailArr = array();
+			foreach($stageResultArr AS $stgRow)
+			{
+				$inventoryStageDetailArr[$stgRow['stage_id']] = $stgRow;
+			}
+
+			$inventoryDetailArr["stage_inventory_detail"] = $inventoryStageDetailArr;
+		}
+		//$this->Page->pr($inventoryDetailArr); exit;
 		echo json_encode($inventoryDetailArr);
 	}
 }

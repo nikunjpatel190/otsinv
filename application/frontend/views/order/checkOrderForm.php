@@ -253,6 +253,7 @@ $uid = $this->Page->getSession("intUserId");
 			data['note'] = $("#sts_note").val();
 			data['order_id'] = $("#hdn_order_id").val();
 			data['stage_id'] = $("#hdn_stage_id").val();
+			data['stage_seq'] = $("#hdn_seq").val();
 			data['product_id'] = $("#hdn_product_id").val();
 			data['total_qty'] = $("#hdn_total_qty").val();
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();

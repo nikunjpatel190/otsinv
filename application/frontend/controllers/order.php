@@ -297,6 +297,7 @@ class order extends CI_Controller {
 			$arrData['mft_id'] = $this->Page->getRequest("order_id");
 			$arrData['prod_id'] = $this->Page->getRequest("product_id");
 			$arrData['stage_id'] = $this->Page->getRequest("stage_id");
+			$arrData['stage_seq'] = $this->Page->getRequest("stage_seq");
 			$arrData['qty'] = $this->Page->getRequest("qty");
 			$arrData['note'] = $this->Page->getRequest("note");
 			$arrData['insertby'] =	$this->Page->getSession("intUserId");

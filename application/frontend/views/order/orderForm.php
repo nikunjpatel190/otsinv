@@ -277,6 +277,7 @@
 <?php include(APPPATH.'views/bottom.php'); ?>
 
 <script type="text/javascript">
+var error = 0;
 $(document).ready(function(){
 	$(".calc").blur();
 	/* Add product for order entry */
@@ -396,9 +397,10 @@ $(document).ready(function(){
 				url:"index.php?c=inventory&m=getInventoryDetail",
 				success:function(res)
 				{
-					if(prodQty > res.in_stock)
+					var total_stock = parseInt(res.in_stock)+parseInt(res.in_process);
+					if(prodQty > total_stock)
 					{
-						$("#txtProductQty"+trid).after("<span class='text-error'>In Stock : "+res.in_stock+"</span>");
+						$("#txtProductQty"+trid).after("<span class='text-error'>In Stock : "+total_stock+"</span>");
 						return false;
 					}
 				}
@@ -530,12 +532,12 @@ $(document).ready(function(){
 		$(".errmsg").remove();
 		if(!submit_form(this))
 		{
-			return false;
+			error++;
 		}
 
 		var productArr = {};
 		var chkProductArr = [];
-		var error = 0;
+		var prodError = 0;
 		$('table.tbl-item-dtl tbody tr.entry').each(function(){
 			var trid = $(this).attr('id');
 			var prod_id = $(this).find('select[name="selProduct"]').val();
@@ -555,15 +557,20 @@ $(document).ready(function(){
 			if (found >= 0) {
 				$("#selProduct"+trid).addClass("border-red"); 
 				$("#selProduct"+found).addClass("border-red");
-				error++;
+				prodError++;
 			} else {
 				chkProductArr[trid] = prod_id;
 			}
 		});
 
-		if(error > 0)
+		if(prodError > 0)
 		{
 			alert("Same product selected more than one time");
+			error++;
+		}
+
+		if(error > 0)
+		{
 			return false;
 		}
 		

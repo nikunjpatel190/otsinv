@@ -128,7 +128,7 @@ class orderModel extends Data {
 								  OR seq = 1)
 						ORDER BY mup.id ASC";*/
 
-		$sqlQuery = "SELECT 
+		/*$sqlQuery = "SELECT 
 						mm.mft_id,
 						mm.mft_no,
 						mpd.prod_id,
@@ -156,6 +156,51 @@ class orderModel extends Data {
 						   WHERE main1.mft_id = main.mft_id
 							   AND main1.prod_id = mpd.prod_id
 							   AND main1.stage_seq = main.stage_seq - 1) AS prv_proceed_qty,
+						IFNULL((SELECT 
+							   main2.stage_id 
+							FROM mft_order_time_process_stage AS main2 
+							WHERE main2.mft_id = main.mft_id 
+							AND main2.prod_id = mpd.prod_id
+							AND main2.stage_seq = main.stage_seq + 1),0) AS nxt_stage_id
+						FROM 
+						mft_order_time_process_stage AS main
+						JOIN mft_prod_detail mpd
+							ON main.prod_id = mpd.prod_id AND main.mft_id = mpd.mft_id
+						JOIN mft_master AS mm
+							ON main.mft_id = mm.mft_id
+						WHERE 1 = 1
+							AND FIND_IN_SET(".$searchCriteria['userId'].",main.user_id)
+							AND main.stage_id IN(".$searchCriteria['stageId'].")
+						GROUP BY main.mft_id,main.prod_id,main.stage_id
+						HAVING proceed_qty < prod_tot_qty
+						AND (prv_proceed_qty > 0
+							  OR seq = 1)";*/
+
+		$sqlQuery = "SELECT 
+						mm.mft_id,
+						mm.mft_no,
+						mpd.prod_id,
+						mpd.prod_qty AS prod_tot_qty,
+						main.stage_id,
+						main.stage_seq AS seq,
+						main.process_id,
+						(SELECT
+							 IFNULL(MAX(stage_seq),0)
+						   FROM mft_order_time_process_stage
+						   WHERE process_id = main.process_id
+							   AND mft_id = main.mft_id) AS last_seq,
+						(SELECT
+							 IFNULL(SUM(mps.qty),0)
+						   FROM mft_prod_status AS mps
+						   WHERE mps.mft_id = main.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND mps.stage_id = main.stage_id) AS proceed_qty,
+						(SELECT
+							 IFNULL(SUM(mps.qty),0)
+						   FROM mft_prod_status AS mps
+						   WHERE mps.mft_id = main.mft_id
+							   AND mps.prod_id = mpd.prod_id
+							   AND mps.stage_seq = main.stage_seq - 1) AS prv_proceed_qty,
 						IFNULL((SELECT 
 							   main2.stage_id 
 							FROM mft_order_time_process_stage AS main2 

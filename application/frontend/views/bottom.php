@@ -31,43 +31,15 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
+				<!-- Product Stock Details -->
                 <div class="span3" id="divInventoryRes">
-                    <div class="infobox infobox-green infobox-custom">
-                        <div class="infobox-data infobox-data-custom">
-                            <span class="infobox-data-number">32</span>
-                            <div class="infobox-content">In Stock</div>
-                        </div>
-                    </div>
-                    
-                    <div class="infobox infobox-blue infobox-custom">
-                        <div class="infobox-data infobox-data-custom">
-                            <span class="infobox-data-number">11</span>
-                            <div class="infobox-content">In Process</div>
-                        </div>
-                    </div>
                 </div>
+				<!-- End Product Stock Details -->
 				<div class="clearfix"></div>
-
+				<!-- Product Stage wise stock details -->
 				<div class="span3" id="divInventoryStageRes">
-					<div class="widget-box transparent">
-						<div class="widget-header">
-							<h5 class="bigger lighter">Stage wise quantity</h5>
-						</div>
-
-						<div class="widget-body">
-							<div class="widget-main no-padding">
-								<ul class="unstyled list-striped pricing-table-header">
-									<li>Disk Space <span class="span-inv-box">234</span></li>
-									<li>Bandwidth <span class="span-inv-box">234</span></li>
-									<li>Email Accounts <span class="span-inv-box">234</span></li>
-									<li>MySQL Databases <span class="span-inv-box">234</span></li>
-									<li>Ad Credit <span class="span-inv-box">234</span></li>
-									<li>Free Domain <span class="span-inv-box">234</span></li>
-								</ul>
-							</div>
-						</div>
-					</div>
 				</div>
+				<!-- End Product Stage wise stock details -->
             </div>
         </div>
         
@@ -118,6 +90,7 @@
 	$(document).ready(function(){
 		$(document).on("change","#btnSelProd",function(){
 			$("#divInventoryRes").html('');
+			$("#divInventoryStageRes").html('');
 			var prod_id = $(this).val();
 			if(prod_id == 0 || prod_id == "")
 			{
@@ -125,6 +98,7 @@
 			}
 			var param = {};
 			param['prod_id'] = prod_id;
+			param['stage_inventory'] = 1;
 			$.ajax({
 				type:"POST",
 				data:param,
@@ -132,12 +106,27 @@
 				url:"index.php?c=inventory&m=getInventoryDetail",
 				success:function(res)
 				{
+					//return false;
 					var html = "";
+					var stageHtml = "";
 					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_stock)+'</span><div class="infobox-content">In Stock</div></div></div>';
                     
                     html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_process)+'</span><div class="infobox-content">In Process</div></div></div>';
 
+					if(Object.keys(res.stage_inventory_detail).length > 0)
+					{
+						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise quantity</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
+
+						$.each(res.stage_inventory_detail,function(key,value){
+							stageHtml += '<li>'+value.ps_name+' <span class="span-inv-box">'+value.total_qty+'</span></li>'
+						});
+
+						stageHtml += '</ul></div></div></div>';
+					}
+
+
 					$("#divInventoryRes").html(html);
+					$("#divInventoryStageRes").html(stageHtml);
 				}
 			});
 		});
