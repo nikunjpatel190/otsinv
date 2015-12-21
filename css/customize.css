@@ -22,3 +22,8 @@
 /**** Start Check inventory box ****/
 #radio_prod_typ label{float:left; margin:0px 10px 10px 0;}
 /**** End Check inventory box ****/
+
+/***** Customer Modal Form ****/
+#cust-form.modal{left:42% !important; width:750px !important; top:0 !important;}
+#cust-form.modal .modal-body{max-height:none;}
+/***** Customer Modal Form ****/

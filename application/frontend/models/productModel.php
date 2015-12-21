@@ -113,6 +113,12 @@ class productModel extends Data {
 		{
 			$whereClaue .= 	" AND map.prod_component_id='".$searchCriteria['componentId']."' ";
 		}
+
+		// By Status
+		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		{
+			$whereClaue .= 	" AND map.status='".$searchCriteria['status']."' ";
+		}
 		
 		$orderField = " map.id";
 		$orderDir = " ASC";

@@ -110,8 +110,9 @@ class order extends CI_Controller {
 			$usrOrderArr = $this->orderModel->getMftOrders();
 		}
 		
-		$orderListArr = array();
-		$orderProductListArr = array();
+		$productListArr = array(); // stage wise product array
+		$orderListArr = array(); // stage wise order array
+		$orderProductListArr = array(); // stage and order wise product array
 		$productIds = "";
 
 		if(count($usrOrderArr) > 0)
@@ -120,23 +121,18 @@ class order extends CI_Controller {
 			{
 				$nxt_stage_id = (int)$row['nxt_stage_id'];
 				$prv_proceed_qty = (int)$row['prv_proceed_qty'];
-
-				if($row['seq'] == 1)
-				{
-					$prod_tot_qty = (int)$row['prod_tot_qty'];
-				}
-				else
-				{
-					$prod_tot_qty = (int)$prv_proceed_qty;
-				}
+				$prod_tot_qty = ($row['seq'] == 1)?(int)$row['prod_tot_qty']:(int)$prv_proceed_qty;
 				$prod_proceed_qty = (int)$row['proceed_qty'];
 				$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
 				
 				if($prod_proceed_qty < $prod_tot_qty)
 				{
+					// set stage wise order array
 					$orderListArr[$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
 					
+					// set stage and order wise product array
 					$temp = array();
+					$temp["mft_id"] = $row['mft_id'];
 					$temp["prod_id"] = $row['prod_id'];
 					$temp["prod_tot_qty"] = $prod_tot_qty;
 					$temp["proceed_qty"] = $prod_proceed_qty;
@@ -144,11 +140,19 @@ class order extends CI_Controller {
 					$temp["seq"] = $row['seq'];
 					$temp["last_seq"] = $row['last_seq'];
 					$temp["nxt_stage_id"] = $nxt_stage_id;
-					$orderProductListArr[$row['stage_id']][$row['mft_no']][$row['prod_id']] =  $temp;
+					$orderProductListArr[$row['stage_id']][$row['prod_id']][$row['mft_no']] =  $temp;
+
+					// set stage wise product array
+					$productListArr[$row['stage_id']][$row['prod_id']]['prod_tot_qty'] += $prod_tot_qty;
+					$productListArr[$row['stage_id']][$row['prod_id']]['proceed_qty'] += $prod_proceed_qty;
+					$productListArr[$row['stage_id']][$row['prod_id']]['remain_qty'] += $remain_proceed_qty;
+
 					$productIds .= $row['prod_id'].",";
 				}
 			}
 		}
+
+		//$this->Page->pr($productListArr); exit;
 		
 		if(strpos($productIds,",") == true)
 		{
@@ -176,6 +180,7 @@ class order extends CI_Controller {
 
 		$rsListing['productsArr']	=	$productsArr;
 		$rsListing['orderListArr'] = $orderListArr;
+		$rsListing['productListArr'] = $productListArr;
 		$rsListing['orderProductListArr'] = $orderProductListArr;
 		// Load Views
 		$this->load->view('order/checkOrderForm', $rsListing);	

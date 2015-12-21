@@ -20,7 +20,7 @@
                     <select id="selCustomer" name="selCustomer" class="span4 required">
                         <?php echo $this->Page->generateComboByTable("customer_master","cust_id","CONCAT(cust_first_name,' ',cust_last_name)","","where status='ACTIVE' order by cust_first_name","","Select Customer"); ?>
                     </select>
-                    <button class="btn btn-info" type="button" id="btnManufecture" href="#cust-form" data-toggle="modal">Add New</button>
+					<a id="" href="#cust-form" data-toggle="modal">Add new customer<i class="icon-external-plus"></i></a>
                 </div>
             </div>
 
@@ -282,152 +282,154 @@
         <h4 class="blue bigger">Add New Customer</h4>
     </div>
 
-<div class="row-fluid" id="printFrmDiv">
-    <div class="span10 offset1">
-        <fieldset>
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">First Name <span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_first_name" name="txt_cust_first_name" class="required span6" value="<?php echo $rsEdit->cust_first_name; ?>" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Last Name <span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_last_name" name="txt_cust_last_name" class="required span6" value="<?php echo $rsEdit->cust_last_name; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Display Name<span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_display_name" name="txt_cust_display_name" class="span6 required" value="<?php echo $rsEdit->cust_display_name; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Company Name<span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_company_name" name="txt_cust_company_name" class="span6 required" value="<?php echo $rsEdit->cust_company_name; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Email</label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_email" name="txt_cust_email" class="span6" value="<?php echo $rsEdit->cust_email; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Phone<span class="red">*</span></label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_phone" name="txt_cust_phone" class="span6 required" value="<?php echo $rsEdit->cust_phone; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Mobile</label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_mobile" name="txt_cust_mobile" class="span6" value="<?php echo $rsEdit->cust_mobile; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Website</label>
-                <div class="controls">
-                    <input type="text" id="txt_cust_website" name="txt_cust_website" class="span6" value="<?php echo $rsEdit->cust_website; ?>" />
-                </div>
-            </div>
-            
-            <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Status<span class="red">*</span></label>
-                <div class="controls">
-                	<select class="required span6" name="slt_status" id="slt_status" >
-                    	<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0,"where combo_case='STATUS' order by seq",$rsEdit->status,""); ?>
-                    </select>
-                </div>
-            </div>
-        </fieldset>
+	<div class="modal-body overflow-visible">
+		<div class="row-fluid">
+			<form class="form-horizontal">
+				<div class="span10">
+					<fieldset>
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">First Name <span class="red">*</span></label>
+							<div class="controls">
+								<input type="text" id="txt_cust_first_name" name="txt_cust_first_name" class="required" value="<?php echo $rsEdit->cust_first_name; ?>" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Last Name <span class="red">*</span></label>
+							<div class="controls">
+								<input type="text" id="txt_cust_last_name" name="txt_cust_last_name" class="required" value="<?php echo $rsEdit->cust_last_name; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Display Name<span class="red">*</span></label>
+							<div class="controls">
+								<input type="text" id="txt_cust_display_name" name="txt_cust_display_name" class="required" value="<?php echo $rsEdit->cust_display_name; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Company Name<span class="red">*</span></label>
+							<div class="controls">
+								<input type="text" id="txt_cust_company_name" name="txt_cust_company_name" class="required" value="<?php echo $rsEdit->cust_company_name; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Email</label>
+							<div class="controls">
+								<input type="text" id="txt_cust_email" name="txt_cust_email" class="" value="<?php echo $rsEdit->cust_email; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Phone<span class="red">*</span></label>
+							<div class="controls">
+								<input type="text" id="txt_cust_phone" name="txt_cust_phone" class="required" value="<?php echo $rsEdit->cust_phone; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Mobile</label>
+							<div class="controls">
+								<input type="text" id="txt_cust_mobile" name="txt_cust_mobile" class="" value="<?php echo $rsEdit->cust_mobile; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Website</label>
+							<div class="controls">
+								<input type="text" id="txt_cust_website" name="txt_cust_website" class="" value="<?php echo $rsEdit->cust_website; ?>" />
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label for="form-field-1" class="control-label">Status<span class="red">*</span></label>
+							<div class="controls">
+								<select class="required span6" name="slt_status" id="slt_status" >
+									<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0,"where combo_case='STATUS' order by seq",$rsEdit->status,""); ?>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="span12">
+					<div class="span6">
+						 <div class="control-group">
+							<h6 class="blue bigger">Shipping Address</h6>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Street</label>
+							<div class="controls span9">
+								<input type="text" id="txt_shipping_street" name="txt_shipping_street" class="span8" value="<?php echo $rsEdit->shipping_street; ?>" />
+							</div>
+						 </div>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">City</label>
+							<div class="controls span9">
+								<input type="text" id="txt_shipping_city" name="txt_shipping_city" class="span8" value="<?php echo $rsEdit->shipping_city; ?>" />
+							</div>
+						 </div>
+						  <div class="control-group">
+							<label for="form-field-1" class="control-label span3">State</label>
+							<div class="controls span9">
+								<input type="text" id="txt_shipping_state" name="txt_shipping_state" class="span8" value="<?php echo $rsEdit->shipping_state; ?>" />
+							</div>
+						 </div>
+						  <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Zip Code</label>
+							<div class="controls span9">
+								<input type="text" id="txt_shipping_zipcode" name="txt_shipping_zipcode" class="span8" value="<?php echo $rsEdit->shipping_zipcode; ?>" />
+							</div>
+						 </div>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Country</label>
+							<div class="controls span9">
+								<input type="text" id="txt_shipping_country" name="txt_shipping_country" class="span8" value="<?php echo $rsEdit->shipping_country; ?>" />
+							</div>
+						 </div>
+						
+						</div>	
+					</div>
+					<div class="span6">
+						 <div class="control-group">
+							<h6 class="blue bigger">Billing Address</h6>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Street</label>
+							<div class="controls span9">
+								<input type="text" id="txt_billing_street" name="txt_billing_street" class="span8" value="<?php echo $rsEdit->billing_street; ?>" />
+							</div>
+						 </div>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">City</label>
+							<div class="controls span9">
+								<input type="text" id="txt_billing_city" name="txt_billing_city" class="span8" value="<?php echo $rsEdit->billing_city; ?>" />
+							</div>
+						 </div>
+						  <div class="control-group">
+							<label for="form-field-1" class="control-label span3">State</label>
+							<div class="controls span9">
+								<input type="text" id="txt_billing_state" name="txt_billing_state" class="span8" value="<?php echo $rsEdit->billing_state; ?>" />
+							</div>
+						 </div>
+						  <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Zip Code</label>
+							<div class="controls span9">
+								<input type="text" id="txt_billing_zipcode" name="txt_billing_zipcode" class="span8" value="<?php echo $rsEdit->billing_zipcode; ?>" />
+							</div>
+						 </div>
+						 <div class="control-group">
+							<label for="form-field-1" class="control-label span3">Country</label>
+							<div class="controls span9">
+								<input type="text" id="txt_billing_country" name="txt_billing_country" class="span8" value="<?php echo $rsEdit->billing_country; ?>" />
+							</div>
+						 </div>
+						
+						</div>	
+					</div>
+				</div>
+			</form>
+		</div>
     </div>
-    <div class="span12">
-    	<div class="span6">
-        	 <div class="control-group">
-                <h6 class="blue bigger">Shipping Address</h6>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Street</label>
-                <div class="controls">
-                    <input type="text" id="txt_shipping_street" name="txt_shipping_street" class="span6" value="<?php echo $rsEdit->shipping_street; ?>" />
-                </div>
-             </div>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">City</label>
-                <div class="controls">
-                    <input type="text" id="txt_shipping_city" name="txt_shipping_city" class="span6" value="<?php echo $rsEdit->shipping_city; ?>" />
-                </div>
-             </div>
-              <div class="control-group">
-                <label for="form-field-1" class="control-label span5">State</label>
-                <div class="controls">
-                    <input type="text" id="txt_shipping_state" name="txt_shipping_state" class="span6" value="<?php echo $rsEdit->shipping_state; ?>" />
-                </div>
-             </div>
-              <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Zip Code</label>
-                <div class="controls">
-                    <input type="text" id="txt_shipping_zipcode" name="txt_shipping_zipcode" class="span6" value="<?php echo $rsEdit->shipping_zipcode; ?>" />
-                </div>
-             </div>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Country</label>
-                <div class="controls">
-                    <input type="text" id="txt_shipping_country" name="txt_shipping_country" class="span6" value="<?php echo $rsEdit->shipping_country; ?>" />
-                </div>
-             </div>
-            
-            </div>	
-        </div>
-        <div class="span6">
-        	 <div class="control-group">
-                <h6 class="blue bigger">Billing Address</h6>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Street</label>
-                <div class="controls">
-                    <input type="text" id="txt_billing_street" name="txt_billing_street" class="span6" value="<?php echo $rsEdit->billing_street; ?>" />
-                </div>
-             </div>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">City</label>
-                <div class="controls">
-                    <input type="text" id="txt_billing_city" name="txt_billing_city" class="span6" value="<?php echo $rsEdit->billing_city; ?>" />
-                </div>
-             </div>
-              <div class="control-group">
-                <label for="form-field-1" class="control-label span5">State</label>
-                <div class="controls">
-                    <input type="text" id="txt_billing_state" name="txt_billing_state" class="span6" value="<?php echo $rsEdit->billing_state; ?>" />
-                </div>
-             </div>
-              <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Zip Code</label>
-                <div class="controls">
-                    <input type="text" id="txt_billing_zipcode" name="txt_billing_zipcode" class="span6" value="<?php echo $rsEdit->billing_zipcode; ?>" />
-                </div>
-             </div>
-             <div class="control-group">
-                <label for="form-field-1" class="control-label span5">Country</label>
-                <div class="controls">
-                    <input type="text" id="txt_billing_country" name="txt_billing_country" class="span6" value="<?php echo $rsEdit->billing_country; ?>" />
-                </div>
-             </div>
-            
-            </div>	
-        </div>
-        
-        
-    </div>
-</div>
-    
+
     <div class="modal-footer">
         <button class="btn btn-small btn-primary" id="saveCustomer">
             <i class="icon-ok"></i>

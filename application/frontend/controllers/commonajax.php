@@ -196,7 +196,8 @@ class Commonajax extends CI_Controller {
 		if($prod_id != "")
 		{
 			$searchCriteria = array();
-			$searchCriteria['selectField'] = 'map.prod_component_id';
+			$searchCriteria['selectField'] = 'map.prod_component_id,map.qty';
+			$searchCriteria['status'] = 'ACTIVE';
 			$searchCriteria["prodId"] = $prod_id;
 			$this->productModel->searchCriteria=$searchCriteria;
 			$rsMapDtl = $this->productModel->getMapProdComponentDetails();
@@ -207,15 +208,18 @@ class Commonajax extends CI_Controller {
 		foreach($rsProdComponent AS $row)
 		{
 			$map = 0;
+			$qty = 0;
 			foreach($rsMapDtl AS $mapRow)
 			{
 				if($row['prod_id'] == $mapRow['prod_component_id'])
 				{
 					$map = 1;
+					$qty = $mapRow["qty"];
 				}
 			}
 			$assignProdComponentArr[$row['prod_id']] = 	$row;
 			$assignProdComponentArr[$row['prod_id']]['map'] = $map;
+			$assignProdComponentArr[$row['prod_id']]['qty'] = $qty;
 		}
 		//$this->Page->pr($assignProdComponentArr); exit;
 		$rsListing['rsMapDtl'] = $assignProdComponentArr;
@@ -227,6 +231,8 @@ class Commonajax extends CI_Controller {
 	{
 		$prodid = $this->Page->getRequest("prodid");
 		$component_id = $this->Page->getRequest("component_id");
+		$qty = $this->Page->getRequest("qty");
+		$status = $this->Page->getRequest("status");
 		
 		$searchCriteria = array();
 		$searchCriteria['selectField'] = 'map.prod_component_id';
@@ -235,8 +241,8 @@ class Commonajax extends CI_Controller {
 		$this->productModel->searchCriteria=$searchCriteria;
 		$rsMapDtl = $this->productModel->getMapProdComponentDetails();
 		if(count($rsMapDtl)>0)
-		{		
-			$strQuery = "DELETE FROM map_prod_to_component WHERE prod_id=".$prodid." AND prod_component_id=".$component_id."";
+		{	
+			$strQuery = "UPDATE map_prod_to_component SET qty=".$qty.",status='".$status."',updatedate = '".date('Y-m-d H:i:s')."' WHERE prod_id=".$prodid." AND prod_component_id=".$component_id."";
 			$this->db->query($strQuery);
 		}
 		else
@@ -244,6 +250,8 @@ class Commonajax extends CI_Controller {
 			$arrRecord = array();
 			$arrRecord["prod_id"] = $prodid;
 			$arrRecord["prod_component_id"] = $component_id;
+			$arrRecord["qty"] = $qty;
+			$arrRecord["status"] = $status;
 			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
 			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
 			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
