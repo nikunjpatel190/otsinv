@@ -7,6 +7,11 @@
 .divTotal .controls{padding-right:15px;}
 .divTotal .controls label{float:right; text-align:right;}
 .div-final-total{background:#f7f7f7 none repeat scroll 0 0;}
+
+#invDetails .infobox-custom{width:auto !important; min-width:100px; margin:0px 5px 0px 0px !important;}
+#invDetails .infobox-data-custom{min-width:0px !important;}
+#invStageDetails .span-inv-box{float:right; margin-right:10px;}
+#invStageDetails span{width:auto;}
 /***** End Addd Order form *****/
 
 /**** start info box ****/
@@ -27,3 +32,10 @@
 #cust-form.modal{left:42% !important; width:750px !important; top:0 !important;}
 #cust-form.modal .modal-body{max-height:none;}
 /***** Customer Modal Form ****/
+
+/*** Start Check Order Form ***/
+.product-grid-head {border-bottom:1px dotted lightgray; padding:10px 0 2px;}
+.product-grid-head div{padding:0 5px;}
+.product-grid-body {border-bottom:1px dotted lightgray; padding:10px 0 2px;}
+.product-grid-body div{padding:0 5px;}
+/*** End Check Order Form ***/

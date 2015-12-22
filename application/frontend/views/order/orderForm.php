@@ -439,6 +439,30 @@
 </div>
 <!-- END Modal popup for Customer Form -->
 
+<!-- START Modal popup for inventory details -->
+<div id="inv-form" class="modal hide" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="blue bigger">Inventory Status</h4>
+    </div>
+
+    <div class="modal-body overflow-visible">
+    	<div class="vspace"></div>
+		<div class="row-fluid">
+			<div class="span12" id="invDetails"></div>
+			<div class="span11" id="invStageDetails"></div>
+		</div>
+	</div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-small btn-primary" id="saveMenuOrder">
+            <i class="icon-ok"></i>
+            Save
+        </button>
+    </div>
+</div>
+<!-- END Modal popup for inventory details -->
+
 <?php include(APPPATH.'views/bottom.php'); ?>
 
 <script type="text/javascript">
@@ -541,6 +565,42 @@ $(document).ready(function(){
 					$(".calc").blur();
 				}
 			});
+
+			var param = {};
+			param['prod_id'] = prod_id;
+			param['stage_inventory'] = 1;
+			$.ajax({
+				type:"POST",
+				data:param,
+				dataType: "json",
+				url:"index.php?c=inventory&m=getInventoryDetail",
+				success:function(res)
+				{
+					//return false;
+					var html = "";
+					var stageHtml = "";
+					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_stock)+'</span><div class="infobox-content">In Stock</div></div></div>';
+                    
+                    html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_process)+'</span><div class="infobox-content">In Process</div></div></div>';
+
+					if(Object.keys(res.stage_inventory_detail).length > 0)
+					{
+						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise quantity</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
+
+						$.each(res.stage_inventory_detail,function(key,value){
+							stageHtml += '<li>'+value.ps_name+' <span class="span-inv-box">'+value.total_qty+'</span></li>'
+						});
+
+						stageHtml += '</ul></div></div></div>';
+					}
+
+
+					$("#invDetails").html(html);
+					$("#invStageDetails").html(stageHtml);
+				}
+			});
+
+			$("#inv-form").modal();
 		}
 	});
 	

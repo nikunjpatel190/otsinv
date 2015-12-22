@@ -37,20 +37,35 @@ $uid = $this->Page->getSession("intUserId");
 									<?php
 										if(count($productListArr[$row['ps_id']]) > 0)
 										{
+											?>
+											<div class="span12 product-grid-head">
+											   <div class="span3"><strong>Product Name</strong></div>
+											   <div class="span2"><strong>Total Qty</strong></div>	
+											   <div class="span2"><strong>Proceed Qty</strong></div>	
+											   <div class="span2"><strong>Remaining Qty</strong></div>
+											   <div class="span3"><strong>Qty In Priority</strong></div>
+										   </div>
+											<?php
 											$cnt = 0;
 											foreach($productListArr[$row['ps_id']] as $productId=>$arr)
 											{
 											?>
 												   <div class="panel">
 													   <div class="panel-head">	 
-														   <div class="panel-title span12" style="border-bottom:1px dotted lightgray;">
-															   <span id="<?php echo $cnt.$row['ps_id']; ?>" class="span3">
-																   <i class="icon-angle-down"></i>
-																   <?php echo $productsArr[$productId]['prod_name']; ?></span>
-															   <span class="span3"><?php echo $arr["prod_tot_qty"]; ?></span>	
-															   <span class="span3"><?php echo $arr["proceed_qty"]; ?></span>	
-															   <span class="span2"><?php echo $arr["remain_qty"]; ?></span>
-															   <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$productId]); ?></span>
+														   <div class="panel-title">
+															   <div class="span12 product-grid-body" id="<?php echo $cnt.$row['ps_id']; ?>">
+																   <div class="span3">
+																	   <i class="icon-angle-down"></i>
+																	   <?php echo $productsArr[$productId]['prod_name']; ?>
+																	   <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$productId]); ?></span>
+																   </div>
+																   <div class="span2"><?php echo $arr["prod_tot_qty"]; ?></div>	
+																   <div class="span2"><?php echo $arr["proceed_qty"]; ?></div>	
+																   <div class="span2"><?php echo $arr["remain_qty"]; ?></div>
+																   <div class="span3">
+																		<span class="label label-large label-purple">150</span>
+																   </div>
+															   </div>
 														   </div>
 													   </div>	 
 													   <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
@@ -187,14 +202,14 @@ $uid = $this->Page->getSession("intUserId");
 <?php include(APPPATH.'views/bottom.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".panel-title span").click(function(){
-			if($(this).children().hasClass("icon-angle-down"))
+		$(".panel-title > div").click(function(){
+			if($(this).children().children("i").hasClass("icon-angle-down"))
 			{
-				$(this).children().removeClass("icon-angle-down").addClass("icon-angle-up");
+				$(this).children().children("i").removeClass("icon-angle-down").addClass("icon-angle-up");
 			}
 			else
 			{
-				$(this).children().removeClass("icon-angle-up").addClass("icon-angle-down");
+				$(this).children().children("i").removeClass("icon-angle-up").addClass("icon-angle-down");
 			}
 			var id = this.id;
 			$("#body_"+id).toggle();
