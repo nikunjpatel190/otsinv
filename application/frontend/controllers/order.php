@@ -122,7 +122,8 @@ class order extends CI_Controller {
 				$nxt_stage_id = (int)$row['nxt_stage_id'];
 				$prv_proceed_qty = (int)$row['prv_proceed_qty'];
 				$prod_tot_qty = ($row['seq'] == 1)?(int)$row['prod_tot_qty']:(int)$prv_proceed_qty;
-				$prod_proceed_qty = (int)$row['proceed_qty'];
+				$stage_inv_qty = (int)$row['stage_inv'];
+				$prod_proceed_qty = (int)$row['proceed_qty']+(int)$stage_inv_qty;
 				$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
 				
 				if($prod_proceed_qty < $prod_tot_qty)
@@ -137,6 +138,7 @@ class order extends CI_Controller {
 					$temp["prod_tot_qty"] = $prod_tot_qty;
 					$temp["proceed_qty"] = $prod_proceed_qty;
 					$temp["remain_qty"] = $remain_proceed_qty;
+					$temp["stage_inv_qty"] = $stage_inv_qty;
 					$temp["seq"] = $row['seq'];
 					$temp["last_seq"] = $row['last_seq'];
 					$temp["nxt_stage_id"] = $nxt_stage_id;
@@ -146,6 +148,7 @@ class order extends CI_Controller {
 					$productListArr[$row['stage_id']][$row['prod_id']]['prod_tot_qty'] += $prod_tot_qty;
 					$productListArr[$row['stage_id']][$row['prod_id']]['proceed_qty'] += $prod_proceed_qty;
 					$productListArr[$row['stage_id']][$row['prod_id']]['remain_qty'] += $remain_proceed_qty;
+					$productListArr[$row['stage_id']][$row['prod_id']]['stage_inv_qty'] += $stage_inv_qty;
 
 					$productIds .= $row['prod_id'].",";
 				}

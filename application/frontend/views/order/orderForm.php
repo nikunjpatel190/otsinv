@@ -233,7 +233,7 @@
 </div>
 
 <!-- START Modal popup for Manufacture -->
-<div id="mft-form" class="modal hide" tabindex="-1">
+<div id="mft-form" class="modal hide fade" tabindex="-1">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="blue bigger">Please fill the following information</h4>
@@ -276,7 +276,7 @@
 <!-- END Modal popup for Manufacture -->
 
 <!-- START Modal popup for Customer Form -->
-<div id="cust-form" class="modal hide" tabindex="-1" style="position:absolute;">
+<div id="cust-form" class="modal hide fade" tabindex="-1" style="position:absolute;">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="blue bigger">Add New Customer</h4>
@@ -440,26 +440,25 @@
 <!-- END Modal popup for Customer Form -->
 
 <!-- START Modal popup for inventory details -->
-<div id="inv-form" class="modal hide" tabindex="-1">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="blue bigger">Inventory Status</h4>
-    </div>
-
-    <div class="modal-body overflow-visible">
-    	<div class="vspace"></div>
-		<div class="row-fluid">
-			<div class="span12" id="invDetails"></div>
-			<div class="span11" id="invStageDetails"></div>
+<div id="inv-form" class="modal hide fade" tabindex="-1">
+	<form name="frmTakeIn" id="frmTakeIn">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="blue bigger">Inventory Status</h4>
 		</div>
-	</div>
-    
-    <div class="modal-footer">
-        <button class="btn btn-small btn-primary" id="saveMenuOrder">
-            <i class="icon-ok"></i>
-            Save
-        </button>
-    </div>
+
+		<div class="modal-body overflow-visible">
+			<div class="row-fluid" id="invDetails">
+			</div>
+		</div>
+		
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-small btn-primary" id="saveTakeIn">
+				<i class="icon-ok"></i>
+				Save
+			</button>
+		</div>
+	</form>
 </div>
 <!-- END Modal popup for inventory details -->
 
@@ -544,7 +543,8 @@ $(document).ready(function(){
 		
 	});
 	
-	$(document).on("change",".product",function(){
+	$(".product").change(function(){
+	//$(document).on("change",".product",function(){
 		var trid = $(this).parent().parent().attr("id");
 		var prod_id = $(this).val();
 		if(prod_id == "" || prod_id == 0)
@@ -568,35 +568,16 @@ $(document).ready(function(){
 
 			var param = {};
 			param['prod_id'] = prod_id;
-			param['stage_inventory'] = 1;
+			param['from'] = 'orderForm';
+			param['stage_in_stock'] = 1;
+			param['stage_inventory_order'] = 1;
 			$.ajax({
 				type:"POST",
 				data:param,
-				dataType: "json",
 				url:"index.php?c=inventory&m=getInventoryDetail",
 				success:function(res)
 				{
-					//return false;
-					var html = "";
-					var stageHtml = "";
-					html += '<div class="infobox infobox-green infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_stock)+'</span><div class="infobox-content">In Stock</div></div></div>';
-                    
-                    html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_process)+'</span><div class="infobox-content">In Process</div></div></div>';
-
-					if(Object.keys(res.stage_inventory_detail).length > 0)
-					{
-						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise quantity</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
-
-						$.each(res.stage_inventory_detail,function(key,value){
-							stageHtml += '<li>'+value.ps_name+' <span class="span-inv-box">'+value.total_qty+'</span></li>'
-						});
-
-						stageHtml += '</ul></div></div></div>';
-					}
-
-
-					$("#invDetails").html(html);
-					$("#invStageDetails").html(stageHtml);
+					$("#invDetails").html(res);
 				}
 			});
 
@@ -895,6 +876,10 @@ $(document).ready(function(){
 			}
 		});
 	});
-	/* END Save menufecture order*/
+
+	$("#frmTakeIn").submit(function(e){
+		e.preventDefault();
+		alert("123"); return false;
+	});
 });
 </script>

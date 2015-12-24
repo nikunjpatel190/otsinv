@@ -196,6 +196,12 @@ class orderModel extends Data {
 							   AND mps.prod_id = mpd.prod_id
 							   AND mps.stage_id = main.stage_id) AS proceed_qty,
 						(SELECT
+							 IFNULL(SUM(iis.prod_qty),0)
+						   FROM inventory_in_stage AS iis
+						   WHERE iis.mft_id = main.mft_id
+							   AND iis.prod_id = mpd.prod_id
+							   AND iis.stage_id = main.stage_id) AS stage_inv,
+						(SELECT
 							 IFNULL(SUM(mps.qty),0)
 						   FROM mft_prod_status AS mps
 						   WHERE mps.mft_id = main.mft_id

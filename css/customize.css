@@ -33,9 +33,19 @@
 #cust-form.modal .modal-body{max-height:none;}
 /***** Customer Modal Form ****/
 
+/***** Inventory Take In Modal Form ****/
+#inv-form.modal{left:42% !important; width:750px !important;}
+#inv-form.modal .modal-body{max-height:none;}
+table#tblStgInvOrderList input[type="text"]{font-size: 12px;height: 23px !important;margin-bottom: 0;min-height: unset;}
+/***** Inventory Take In Form ****/
+
 /*** Start Check Order Form ***/
 .product-grid-head {border-bottom:1px dotted lightgray; padding:10px 0 2px;}
 .product-grid-head div{padding:0 5px;}
 .product-grid-body {border-bottom:1px dotted lightgray; padding:10px 0 2px;}
 .product-grid-body div{padding:0 5px;}
 /*** End Check Order Form ***/
+
+/*** Start General CSS ***/
+.rmargin5 {margin:0 5px !important;}
+/*** End General CSS

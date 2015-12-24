@@ -98,7 +98,9 @@
 			}
 			var param = {};
 			param['prod_id'] = prod_id;
-			param['stage_inventory'] = 1;
+			param['from'] = "bottom";
+			param['stage_in_process'] = 1;
+			param['stage_in_stock'] = 1;
 			$.ajax({
 				type:"POST",
 				data:param,
@@ -113,11 +115,22 @@
                     
                     html += '<div class="infobox infobox-blue infobox-custom"><div class="infobox-data infobox-data-custom"><span class="infobox-data-number">'+parseInt(res.in_process)+'</span><div class="infobox-content">In Process</div></div></div>';
 
-					if(Object.keys(res.stage_inventory_detail).length > 0)
+					/*if(Object.keys(res.stage_inventory_process).length > 0)
 					{
-						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise quantity</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
+						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise In Process</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
 
-						$.each(res.stage_inventory_detail,function(key,value){
+						$.each(res.stage_inventory_process,function(key,value){
+							stageHtml += '<li>'+value.ps_name+' <span class="span-inv-box">'+value.total_qty+'</span></li>'
+						});
+
+						stageHtml += '</ul></div></div></div>';
+					}*/
+
+					if(Object.keys(res.stage_inventory_stock).length > 0)
+					{
+						stageHtml += '<div class="widget-box transparent"><div class="widget-header"><h5 class="bigger lighter">Stage wise In Stock</h5></div><div class="widget-body"><div class="widget-main no-padding"><ul class="unstyled list-striped pricing-table-header">';
+
+						$.each(res.stage_inventory_stock,function(key,value){
 							stageHtml += '<li>'+value.ps_name+' <span class="span-inv-box">'+value.total_qty+'</span></li>'
 						});
 

@@ -43,7 +43,7 @@ $uid = $this->Page->getSession("intUserId");
 											   <div class="span2"><strong>Total Qty</strong></div>	
 											   <div class="span2"><strong>Proceed Qty</strong></div>	
 											   <div class="span2"><strong>Remaining Qty</strong></div>
-											   <div class="span3"><strong>Qty In Priority</strong></div>
+											   <div class="span3"><strong>Qty In Stock</strong></div>
 										   </div>
 											<?php
 											$cnt = 0;
@@ -63,7 +63,7 @@ $uid = $this->Page->getSession("intUserId");
 																   <div class="span2"><?php echo $arr["proceed_qty"]; ?></div>	
 																   <div class="span2"><?php echo $arr["remain_qty"]; ?></div>
 																   <div class="span3">
-																		<span class="label label-large label-purple">150</span>
+																		<span class="label label-large label-purple"><?php echo $arr["stage_inv_qty"]; ?></span>
 																   </div>
 															   </div>
 														   </div>
@@ -96,11 +96,19 @@ $uid = $this->Page->getSession("intUserId");
 																					<td><?php echo $product['proceed_qty']; ?></td>
 																					<td><?php echo $product['remain_qty']; ?></td>
 																					<td>
-																						<div class="hidden-phone visible-desktop btn-group">
-																							<button class="btn btn-mini btn-success opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
-																								<!--<i class="icon-ok bigger-120"></i>-->
+																						<div class="hidden-phone visible-desktop btn-group" id="">
+																							<!-- Start Button forward qty to next stage -->
+																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
 																								Forward
+																								<!--<i class="icon-ok bigger-120"></i>-->
 																							</button>
+																							<!-- End Button forward qty to next stage -->
+
+																							<!-- Start Button Add to inventory -->
+																							<button class="btn btn-mini btn-danger rmargin5 opnModalAddToInv" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																								Add To Inventory
+																							</button>
+																							<!-- End Button Add to inventory -->
 																						</div>
 																						<div class="hidden-desktop visible-phone">
 																							<div class="inline position-relative">
@@ -110,10 +118,19 @@ $uid = $this->Page->getSession("intUserId");
 
 																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																									<li>
+																										<!-- Start Button forward qty to next stage -->
 																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
-																											<span class="green">					<!--<i class="icon-ok bigger-120"></i>--> Forward
+																											<span class="green">					<!--<i class="icon-ok bigger-120"></i> --> Forward
 																											</span>
 																										</a>
+																										<!-- End Button forward qty to next stage -->
+
+																										<!-- Start Button Add to inventory -->
+																										<a class="tooltip-info opnModalAddToInv" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																											<span class="yellow"> <i class="icon-ok bigger-120"></i> Add To Inventory
+																											</span>
+																										</a>
+																										<!-- End Button Add to inventory -->
 																									</li>
 																								</ul>
 																							</div>
@@ -150,11 +167,25 @@ $uid = $this->Page->getSession("intUserId");
         </div>             
     </div>
 </div>
+
+<!-- START set hidden values -->
+<div id="divHiddenElements">
+	<input type="hidden" id="hdn_stage_id" value="" />
+	<input type="hidden" id="hdn_order_id" value="" />
+	<input type="hidden" id="hdn_product_id" value="" />
+	<input type="hidden" id="hdn_total_qty" value="" />
+	<input type="hidden" id="hdn_proceed_qty" value="" />
+	<input type="hidden" id="hdn_seq" value="" />
+	<input type="hidden" id="hdn_last_seq" value="" />
+	<input type="hidden" id="hdn_nxt_stage_id" value="" />
+</div>
+<!-- END set hidden values -->
+
 <!-- START Modal popup for Ship Quntity & update status -->
 <div id="ship-qty-form" class="modal hide" tabindex="-1">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="blue bigger">Please fill the following information</h4>
+        <h4 class="blue bigger">Forward Quantity to next stage</h4>
     </div>
 
     <div class="modal-body overflow-visible">
@@ -165,20 +196,12 @@ $uid = $this->Page->getSession("intUserId");
 					<label class="control-label" for="form-field-1">Quantity</label>
 					<div class="controls">
 						<input type="text" id="prod_ship_qty" placeholder="Product Quantity" class="required isnumber" />
-                        <input type="hidden" id="hdn_stage_id" value="" />
-                        <input type="hidden" id="hdn_order_id" value="" />
-                        <input type="hidden" id="hdn_product_id" value="" />
-                        <input type="hidden" id="hdn_total_qty" value="" />
-                        <input type="hidden" id="hdn_proceed_qty" value="" />
-                        <input type="hidden" id="hdn_seq" value="" />
-                        <input type="hidden" id="hdn_last_seq" value="" />
-                        <input type="hidden" id="hdn_nxt_stage_id" value="" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="form-field-1">Note</label>
 					<div class="controls">
-						<textarea placeholder="Status Note" id="sts_note"></textarea>
+						<textarea placeholder="Status Note" id="prod_ship_note"></textarea>
 					</div>
 				</div>
                 <div class="control-group">
@@ -199,6 +222,49 @@ $uid = $this->Page->getSession("intUserId");
 	</div>
 </div>
 <!-- END Modal popup for Ship Quntity & update status -->
+
+<!-- START Modal popup for add inventory in stage -->
+<div id="inv-qty-form" class="modal hide" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="blue bigger">Add Quantity into inventory</h4>
+    </div>
+
+    <div class="modal-body overflow-visible">
+    	<div class="vspace"></div>
+        <div class="row-fluid">
+			<form class="form-horizontal" id="frmAddInvToStage" />
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Quantity</label>
+					<div class="controls">
+						<input type="text" id="inv_send_qty" placeholder="Product Quantity" class="required isnumber" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Note</label>
+					<div class="controls">
+						<textarea placeholder="Status Note" id="inv_sts_note"></textarea>
+					</div>
+				</div>
+                <div class="control-group">
+                	<div class="controls">
+                        <button class="btn btn-small btn-info" type="submit">
+                            <i class="icon-ok bigger-110"></i>
+                            Submit
+                        </button>
+                        &nbsp;
+                        <button class="btn btn-small" type="reset">
+                            <i class="icon-undo bigger-110"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+			</form>
+    	</div>
+	</div>
+</div>
+<!-- END Modal popup for add inventory in stage -->
+
 <?php include(APPPATH.'views/bottom.php'); ?>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -215,10 +281,13 @@ $uid = $this->Page->getSession("intUserId");
 			$("#body_"+id).toggle();
 			//alert(id);
 		});
+
+		// Open  modal popup for forward qty
 		$(document).on("click",".opnModalShipQty",function(){
 			resetStyle("#prod_ship_qty");
 			$(".errmsg").remove();
 			$("#frmAddProdStatus")[0].reset();
+			$("#divHiddenElements input[type='hidden']").val('');
 			$("#hdn_stage_id").val($(this).attr('stageid'));
 			$("#hdn_order_id").val($(this).attr('mftid'));
 			$("#hdn_total_qty").val($(this).attr('totqty'));
@@ -231,7 +300,27 @@ $uid = $this->Page->getSession("intUserId");
 			
 			$("#ship-qty-form").modal('show');
 		});
+
+		// Open modal popup for Add inventory
+		$(document).on("click",".opnModalAddToInv",function(){
+			resetStyle("#inv_send_qty");
+			$(".errmsg").remove();
+			$("#frmAddInvToStage")[0].reset();
+			$("#divHiddenElements input[type='hidden']").val('');
+			$("#hdn_stage_id").val($(this).attr('stageid'));
+			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_total_qty").val($(this).attr('totqty'));
+			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
+			$("#hdn_seq").val($(this).attr('seq'));
+			$("#hdn_last_seq").val($(this).attr('last_seq'));
+			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
+			
+			$("#hdn_product_id").val($(this).attr('prod_id'));
+			
+			$("#inv-qty-form").modal('show');
+		});
 		
+		// save forward qty detail
 		$(document).on("submit","#frmAddProdStatus",function(e){
 			$(".errmsg").remove();
 			if(!submit_form(this))
@@ -249,7 +338,7 @@ $uid = $this->Page->getSession("intUserId");
 			e.preventDefault();
 			var data={};
 			data['qty'] = $("#prod_ship_qty").val();
-			data['note'] = $("#sts_note").val();
+			data['note'] = $("#prod_ship_note").val();
 			data['order_id'] = $("#hdn_order_id").val();
 			data['stage_id'] = $("#hdn_stage_id").val();
 			data['stage_seq'] = $("#hdn_seq").val();
@@ -286,6 +375,59 @@ $uid = $this->Page->getSession("intUserId");
 				}
 			});
 		});
+
+		// save add nventry to stage details
+		$(document).on("submit","#frmAddInvToStage",function(e){
+			$(".errmsg").remove();
+			if(!submit_form(this))
+			{
+				return false;
+			}
+			if($("#inv_send_qty").val() == 0)
+			{
+				setStyle("#inv_send_qty");
+				$("#inv_send_qty").after('<span class="errmsg red clearfix">Qty must be greater than zero</span>');
+				return false;
+			}
+
+			e.preventDefault();
+			var data={};
+			data['qty'] = $("#inv_send_qty").val();
+			data['note'] = $("#inv_sts_note").val();
+			data['order_id'] = $("#hdn_order_id").val();
+			data['stage_id'] = $("#hdn_stage_id").val();
+			data['product_id'] = $("#hdn_product_id").val();
+			data['total_qty'] = $("#hdn_total_qty").val();
+			data['proceed_qty'] = $("#hdn_proceed_qty").val();
+			data['remain_qty'] = data['total_qty'] - data['proceed_qty'];
+			//alert(data.toSource()); return false;
+			$.ajax({
+				type:"POST",
+				data:data,
+				url:"index.php?c=inventory&m=addStageInventory",
+				success:function(res)
+				{
+					var res = $.trim(res);
+					if(res == "1")
+					{
+						alert("Qty added succesfully");
+						$("#inv-qty-form").modal('hide');
+						location.reload();
+					}
+					else if(res == "2")
+					{
+						alert("Can not add qty more than remaining qty");
+					}
+					else
+					{
+						alert("Error! Please try again");
+					}
+					return false;
+				}
+			});
+		});
+
+
 		/*$('#myTabs a').click(function (e) {
 		  e.preventDefault()
 		  alert("111");

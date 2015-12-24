@@ -83,7 +83,7 @@ class inventoryModel extends Data {
 
 	//@Author : Nikunj Bambhroliya
 	//@Description : function will return stage wise product stock
-	public function getInventoryStageDetail()
+	public function getStageInprocessDetail()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
@@ -156,5 +156,77 @@ class inventoryModel extends Data {
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;	
+	}
+
+	//@Author : Nikunj Bambhroliya
+	//@Description : function will return stage inventory details
+	public function getStageInstockDetail()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By menufecture order id
+		if(isset($searchCriteria['mft_id']) && $searchCriteria['mft_id'] != "")
+		{
+			$whereClaue .= 	" AND iis.mft_id =".$searchCriteria['mft_id']." ";
+		}
+		
+		// By product id
+		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "")
+		{
+			$whereClaue .= 	" AND iis.prod_id IN (".$searchCriteria['prod_id'].") ";
+		}
+		
+		// By stage id
+		if(isset($searchCriteria['stage_id']) && $searchCriteria['stage_id'] != "")
+		{
+			$whereClaue .= 	" AND iis.stage_id IN (".$searchCriteria['stage_id'].") ";
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		$orderField = " iis.iis_id";
+		$orderDir = " ASC";
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT ".$selectField." FROM inventory_in_stage AS iis
+					 JOIN process_stage_master as psm ON iis.stage_id=psm.ps_id
+					 JOIN mft_master AS mm ON iis.mft_id=mm.mft_id 
+					 ".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;		
 	}
 }
