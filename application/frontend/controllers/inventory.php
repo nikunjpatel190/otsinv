@@ -17,7 +17,7 @@ class inventory extends CI_Controller {
 
 	public function getInventoryDetail()
 	{
-		$from = $this->Page->getRequest("from");
+		$json = $this->Page->getRequest("json");
 
 		// Get inventory details
 		$searchCriteria = array();
@@ -62,6 +62,7 @@ class inventory extends CI_Controller {
 			$searchCriteria['selectField'] = "iis.stage_id,psm.ps_name,SUM(iis.prod_qty) AS total_qty ";
 			$searchCriteria['prod_id'] = $this->Page->getRequest("prod_id");
 			$searchCriteria['groupField'] = "iis.prod_id,iis.stage_id";
+			$searchCriteria['having'] = 1;
 			
 			$this->inventoryModel->searchCriteria = $searchCriteria;
 			$stageInstockRes = $this->inventoryModel->getStageInstockDetail();
@@ -92,7 +93,7 @@ class inventory extends CI_Controller {
 			$inventoryDetailArr['stage_instock_orders'] = $stageInstockOrderArr;
 		}
 
-		if($from == "bottom")
+		if($json == "1")
 		{
 			echo json_encode($inventoryDetailArr);
 		}

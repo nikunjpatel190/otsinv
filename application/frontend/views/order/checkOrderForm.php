@@ -79,6 +79,7 @@ $uid = $this->Page->getSession("intUserId");
 																			   <th>Order No</th>
 																			   <th>Total Qty</th>
 																			   <th>Proceed Qty</th>
+																			   <th>Qty In Stock</th>
 																			   <th>Remaining Qty</th>
 																			   <th>Action</th>
 																			</tr>
@@ -94,20 +95,28 @@ $uid = $this->Page->getSession("intUserId");
 																					<td><?php echo $orderNo; ?></td>
 																					<td><?php echo $product['prod_tot_qty']; ?></td>
 																					<td><?php echo $product['proceed_qty']; ?></td>
+																					<td><?php echo $product['stage_inv_qty']; ?></td>
 																					<td><?php echo $product['remain_qty']; ?></td>
 																					<td>
 																						<div class="hidden-phone visible-desktop btn-group" id="">
 																							<!-- Start Button forward qty to next stage -->
-																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" >
 																								Forward
 																								<!--<i class="icon-ok bigger-120"></i>-->
 																							</button>
 																							<!-- End Button forward qty to next stage -->
 
 																							<!-- Start Button Add to inventory -->
-																							<button class="btn btn-mini btn-danger rmargin5 opnModalAddToInv" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
-																								Add To Inventory
-																							</button>
+																							<?php
+																							if($product['last_seq'] != $product['seq'])
+																							{
+																							?>
+																								<button class="btn btn-mini btn-danger rmargin5 opnModalAddToInv" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>">
+																									Add To Inventory
+																								</button>
+																							<?php
+																							}
+																							?>
 																							<!-- End Button Add to inventory -->
 																						</div>
 																						<div class="hidden-desktop visible-phone">
@@ -119,17 +128,24 @@ $uid = $this->Page->getSession("intUserId");
 																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																									<li>
 																										<!-- Start Button forward qty to next stage -->
-																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
+																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>">
 																											<span class="green">					<!--<i class="icon-ok bigger-120"></i> --> Forward
 																											</span>
 																										</a>
 																										<!-- End Button forward qty to next stage -->
 
 																										<!-- Start Button Add to inventory -->
-																										<a class="tooltip-info opnModalAddToInv" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>">
-																											<span class="yellow"> <i class="icon-ok bigger-120"></i> Add To Inventory
-																											</span>
-																										</a>
+																										<?php
+																										if($product['last_seq'] != $product['seq'])
+																										{
+																										?>
+																											<a class="tooltip-info opnModalAddToInv" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>">
+																												<span class="yellow"> <i class="icon-ok bigger-120"></i> Add To Inventory
+																												</span>
+																											</a>
+																										<?php
+																										}
+																										?>
 																										<!-- End Button Add to inventory -->
 																									</li>
 																								</ul>
@@ -173,6 +189,8 @@ $uid = $this->Page->getSession("intUserId");
 	<input type="hidden" id="hdn_stage_id" value="" />
 	<input type="hidden" id="hdn_order_id" value="" />
 	<input type="hidden" id="hdn_product_id" value="" />
+	<input type="hidden" id="hdn_order_qty" value="" />
+	<input type="hidden" id="hdn_prod_main_qty" value="" />
 	<input type="hidden" id="hdn_total_qty" value="" />
 	<input type="hidden" id="hdn_proceed_qty" value="" />
 	<input type="hidden" id="hdn_seq" value="" />
@@ -290,6 +308,8 @@ $uid = $this->Page->getSession("intUserId");
 			$("#divHiddenElements input[type='hidden']").val('');
 			$("#hdn_stage_id").val($(this).attr('stageid'));
 			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_order_qty").val($(this).attr('order_qty'));
+			$("#hdn_prod_main_qty").val($(this).attr('prod_main_qty'));
 			$("#hdn_total_qty").val($(this).attr('totqty'));
 			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
 			$("#hdn_seq").val($(this).attr('seq'));
@@ -309,6 +329,8 @@ $uid = $this->Page->getSession("intUserId");
 			$("#divHiddenElements input[type='hidden']").val('');
 			$("#hdn_stage_id").val($(this).attr('stageid'));
 			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_order_qty").val($(this).attr('order_qty'));
+			$("#hdn_prod_main_qty").val($(this).attr('prod_main_qty'));
 			$("#hdn_total_qty").val($(this).attr('totqty'));
 			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
 			$("#hdn_seq").val($(this).attr('seq'));
@@ -343,6 +365,8 @@ $uid = $this->Page->getSession("intUserId");
 			data['stage_id'] = $("#hdn_stage_id").val();
 			data['stage_seq'] = $("#hdn_seq").val();
 			data['product_id'] = $("#hdn_product_id").val();
+			data['order_qty'] = $("#hdn_order_qty").val();
+			data['prod_main_qty'] = $("#hdn_prod_main_qty").val();
 			data['total_qty'] = $("#hdn_total_qty").val();
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();
 			data['seq'] = $("#hdn_seq").val();
@@ -397,6 +421,8 @@ $uid = $this->Page->getSession("intUserId");
 			data['order_id'] = $("#hdn_order_id").val();
 			data['stage_id'] = $("#hdn_stage_id").val();
 			data['product_id'] = $("#hdn_product_id").val();
+			data['order_qty'] = $("#hdn_order_qty").val();
+			data['prod_main_qty'] = $("#hdn_prod_main_qty").val();
 			data['total_qty'] = $("#hdn_total_qty").val();
 			data['proceed_qty'] = $("#hdn_proceed_qty").val();
 			data['remain_qty'] = data['total_qty'] - data['proceed_qty'];

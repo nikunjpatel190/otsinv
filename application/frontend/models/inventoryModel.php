@@ -171,7 +171,7 @@ class inventoryModel extends Data {
 			$selectField = 	$searchCriteria['selectField'];
 		}
 		
-		$whereClaue = "WHERE 1=1 ";
+		$whereClaue = "WHERE 1=1 AND mm.is_completed = 0";
 		
 		// By menufecture order id
 		if(isset($searchCriteria['mft_id']) && $searchCriteria['mft_id'] != "")
@@ -218,11 +218,18 @@ class inventoryModel extends Data {
 		{
 			$orderDir = $searchCriteria['orderDir'];
 		}
+
+		// Set Having Clause
+		$havingClause = "";
+		if(isset($searchCriteria['having']) && $searchCriteria['having'] == "1")
+		{
+			$havingClause = " HAVING total_qty > 0 ";
+		}
 		
 		$sqlQuery = "SELECT ".$selectField." FROM inventory_in_stage AS iis
 					 JOIN process_stage_master as psm ON iis.stage_id=psm.ps_id
 					 JOIN mft_master AS mm ON iis.mft_id=mm.mft_id 
-					 ".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
+					 ".$whereClaue." ".$groupField.$havingClause." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);

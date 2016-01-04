@@ -79,7 +79,5 @@ class companyModel extends Data {
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;
-		
-		
 	}
 }

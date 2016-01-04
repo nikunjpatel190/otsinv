@@ -29,7 +29,7 @@
 /**** End Check inventory box ****/
 
 /***** Customer Modal Form ****/
-#cust-form.modal{left:42% !important; width:750px !important; top:0 !important;}
+#cust-form.modal{left:39% !important; width:850px !important; top:0 !important;}
 #cust-form.modal .modal-body{max-height:none;}
 /***** Customer Modal Form ****/
 
@@ -37,6 +37,7 @@
 #inv-form.modal{left:42% !important; width:750px !important;}
 #inv-form.modal .modal-body{max-height:none;}
 table#tblStgInvOrderList input[type="text"]{font-size: 12px;height: 23px !important;margin-bottom: 0;min-height: unset;}
+#frmTakeIn{margin:0 !important;}
 /***** Inventory Take In Form ****/
 
 /*** Start Check Order Form ***/
@@ -49,3 +50,8 @@ table#tblStgInvOrderList input[type="text"]{font-size: 12px;height: 23px !import
 /*** Start General CSS ***/
 .rmargin5 {margin:0 5px !important;}
 /*** End General CSS
+
+/*** Start css for customer popup ***/
+#chk-cust-copy-addr{float:right; margin-right:20px; color:#000;}
+#frmCustomer{margin:0 !important;}
+/*** End css for customer popup ***/

@@ -81,7 +81,8 @@ function submit_form(form)
 		blnIsValidEmail	=	true;
 		
 
-		blnIsValidEmail	=	checkValidEmail(strEmailVal);
+		if(strEmailVal != "")
+			blnIsValidEmail	=	checkValidEmail(strEmailVal);
 		
 		if(blnIsValidEmail == false)
 		{

@@ -31,7 +31,7 @@ class orderModel extends Data {
 		$sqlQuery = "SELECT DISTINCT(ps.ps_id),ps.ps_name FROM mft_order_time_process_stage AS main
 						JOIN process_stage_master AS ps
 						ON main.stage_id=ps.ps_id
-					 WHERE FIND_IN_SET(".$searchCriteria["userId"].",main.user_id)";
+					 WHERE main.is_completed = 0 AND FIND_IN_SET(".$searchCriteria["userId"].",main.user_id)";
 
 		//echo $sqlQuery;
 		$result     = $this->db->query($sqlQuery);
@@ -179,6 +179,7 @@ class orderModel extends Data {
 		$sqlQuery = "SELECT 
 						mm.mft_id,
 						mm.mft_no,
+						mm.mft_prod_qty,
 						mpd.prod_id,
 						mpd.prod_qty AS prod_tot_qty,
 						main.stage_id,
@@ -222,6 +223,7 @@ class orderModel extends Data {
 						WHERE 1 = 1
 							AND FIND_IN_SET(".$searchCriteria['userId'].",main.user_id)
 							AND main.stage_id IN(".$searchCriteria['stageId'].")
+							AND mm.is_completed = 0 AND main.is_completed = 0 AND mpd.is_completed = 0
 						GROUP BY main.mft_id,main.prod_id,main.stage_id
 						HAVING proceed_qty < prod_tot_qty
 						AND (prv_proceed_qty > 0
@@ -259,6 +261,12 @@ class orderModel extends Data {
 		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "")
 		{
 			$whereClaue .= 	" AND mpd.prod_id IN (".$searchCriteria['prod_id'].") ";
+		}
+
+		// By status
+		if(isset($searchCriteria['completed']) && $searchCriteria['completed'] != "")
+		{
+			$whereClaue .= 	" AND mpd.is_completed = ".$searchCriteria['completed']." ";
 		}
 		
 		// Set Group by
@@ -366,5 +374,87 @@ class orderModel extends Data {
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;		
+	}
+
+	//@Author : Nikunj Bambhroliya
+	//@Description : function will return order creation time process stage details
+	public function getCreateTimeOrderDetail()
+	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
+		
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE 1=1 ";
+		
+		// By menufecture order id
+		if(isset($searchCriteria['mft_id']) && $searchCriteria['mft_id'] != "")
+		{
+			$whereClaue .= 	" AND main.mft_id IN (".$searchCriteria['mft_id'].") ";
+		}
+		
+		// By product id
+		if(isset($searchCriteria['prod_id']) && $searchCriteria['prod_id'] != "")
+		{
+			$whereClaue .= 	" AND main.prod_id IN (".$searchCriteria['prod_id'].") ";
+		}
+
+		// By stage id
+		if(isset($searchCriteria['stage_id']) && $searchCriteria['stage_id'] != "")
+		{
+			$whereClaue .= 	" AND main.stage_id IN (".$searchCriteria['stage_id'].") ";
+		}
+
+		// By stage seq
+		if(isset($searchCriteria['stage_seq']) && $searchCriteria['stage_seq'] != "")
+		{
+			$whereClaue .= 	" AND main.stage_seq IN (".$searchCriteria['stage_seq'].") ";
+		}
+
+		// By status
+		if(isset($searchCriteria['completed']) && $searchCriteria['completed'] != "")
+		{
+			$whereClaue .= 	" AND main.is_completed = ".$searchCriteria['completed']." ";
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		$orderField = " main.id";
+		$orderDir = " ASC";
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Group by
+		$groupField = "";
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupField = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT ".$selectField." FROM mft_order_time_process_stage AS main
+					".$whereClaue." ".$groupField." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;	
 	}
 }

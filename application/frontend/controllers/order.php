@@ -23,6 +23,87 @@ class order extends CI_Controller {
 	public function saveOrder()
 	{
 		$productArr = $_REQUEST['productArr'];	
+		$jsonArr = $_REQUEST['jsonArr'];
+		foreach($jsonArr AS $key=>$jsonString)
+		{
+			$arr = json_decode($jsonString,1);
+			foreach($arr AS $prodId => $arr1)
+			{
+				foreach($arr1 AS $stageId => $arr2)
+				{
+					foreach($arr2 AS $mftId=>$qty)
+					{
+						// get current stage seq
+						$searchCriteria = array();
+						$searchCriteria['selectField'] = "main.stage_seq";
+						$searchCriteria['prod_id'] = $prodId;
+						$searchCriteria['stage_id'] = $stageId;
+						$searchCriteria['mft_id'] = $mftId;
+						$this->orderModel->searchCriteria=$searchCriteria;
+						$resultArr = array();
+						$resultArr = $this->orderModel->getCreateTimeOrderDetail();
+						$stage_seq = $resultArr[0]['stage_seq'];
+
+						// get next sequence stage id
+						$nxt_stage_seq = (int)($stage_seq+1);
+						$searchCriteria = array();
+						$searchCriteria['selectField'] = "main.stage_id";
+						$searchCriteria['prod_id'] = $prodId;
+						$searchCriteria['stage_seq'] = $nxt_stage_seq;
+						$searchCriteria['mft_id'] = $mftId;
+						$this->orderModel->searchCriteria=$searchCriteria;
+						$resultArr = array();
+						$resultArr = $this->orderModel->getCreateTimeOrderDetail();
+						$nxt_stage_id = $resultArr[0]['stage_id'];
+
+						// stage inventory revese entry
+						$arrData = array();
+						$arrData['prod_id'] = $prodId;
+						$arrData['stage_id'] = $stageId;
+						$arrData['mft_id'] = $mftId;
+						$arrData['prod_qty'] = -1 * abs($qty);
+						$arrData['action'] = "minus";
+						$arrData['date'] = date('Y-m-d H:i:s');
+						$this->inventoryModel->tbl = "inventory_in_stage";
+						$this->inventoryModel->insert($arrData);
+
+						// Add inventory stage details (in process revese entry)
+						$arrData = array();
+						$arrData['mft_id'] = $mftId;
+						$arrData['prod_id'] = $prodId;
+						$arrData['stage_id'] = $stageId;
+						$arrData['prod_qty'] = -1 * abs($qty);
+						$arrData['action'] = "minus";
+						$this->inventoryModel->tbl = "inventory_stage_detail";
+						$this->inventoryModel->insert($arrData);
+
+						// Add inventory stage details (in process forward entry)
+						$arrData = array();
+						$arrData['mft_id'] = $mftId;
+						$arrData['prod_id'] = $prodId;
+						$arrData['stage_id'] = $nxt_stage_id;
+						$arrData['prod_qty'] = $qty;
+						$arrData['action'] = "plus";
+						$this->inventoryModel->tbl = "inventory_stage_detail";
+						$this->inventoryModel->insert($arrData);
+
+						// Product status entry
+						$arrData = array();
+						$arrData['mft_id'] = $mftId;;
+						$arrData['prod_id'] = $prodId;
+						$arrData['stage_id'] = $stageId;
+						$arrData['stage_seq'] = $stage_seq;
+						$arrData['qty'] = $qty;
+						$arrData['note'] = "entry from create order";
+						$arrData['insertby'] =	$this->Page->getSession("intUserId");
+						$arrData['insertdate'] = date('Y-m-d H:i:s');
+						$this->orderModel->tbl = "mft_prod_status";
+						$this->orderModel->insert($arrData);
+					}
+				}
+			}
+		}
+		
 		$cnt = 0;
 		// Order Master Entry
 		$arrData = array();
@@ -39,8 +120,8 @@ class order extends CI_Controller {
 		$arrData['order_date'] = $this->Page->getRequest("txtOrderDate");
 		$arrData['order_ship_date'] = $this->Page->getRequest("txtShipDate");
 		$arrData['order_note'] = $this->Page->getRequest("txtNote");
-		$arrData['insertby']		=	$this->Page->getSession("intUserId");
-		$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
+		$arrData['insertby']	=	$this->Page->getSession("intUserId");
+		$arrData['insertdate'] 	= 	date('Y-m-d H:i:s');
 
 		$this->orderModel->tbl = "order_master";
 		$orderId = $this->orderModel->insert($arrData);
@@ -120,13 +201,15 @@ class order extends CI_Controller {
 			foreach($usrOrderArr AS $row)
 			{
 				$nxt_stage_id = (int)$row['nxt_stage_id'];
+				$order_prod_qty = (int)$row['mft_prod_qty'];
+				$prod_main_qty = (int)$row['prod_tot_qty'];
 				$prv_proceed_qty = (int)$row['prv_proceed_qty'];
-				$prod_tot_qty = ($row['seq'] == 1)?(int)$row['prod_tot_qty']:(int)$prv_proceed_qty;
+				$prod_tot_qty = ($row['seq'] == 1)?$prod_main_qty:$prv_proceed_qty;
 				$stage_inv_qty = (int)$row['stage_inv'];
 				$prod_proceed_qty = (int)$row['proceed_qty']+(int)$stage_inv_qty;
 				$remain_proceed_qty = $prod_tot_qty - $prod_proceed_qty;
 				
-				if($prod_proceed_qty < $prod_tot_qty)
+				if($prod_proceed_qty < $prod_tot_qty || $stage_inv_qty > 0)
 				{
 					// set stage wise order array
 					$orderListArr[$row['stage_id']][$row['mft_id']] =  $row['mft_no'];
@@ -135,6 +218,8 @@ class order extends CI_Controller {
 					$temp = array();
 					$temp["mft_id"] = $row['mft_id'];
 					$temp["prod_id"] = $row['prod_id'];
+					$temp["order_prod_qty"] = $order_prod_qty;
+					$temp["prod_main_qty"] = $prod_main_qty;
 					$temp["prod_tot_qty"] = $prod_tot_qty;
 					$temp["proceed_qty"] = $prod_proceed_qty;
 					$temp["remain_qty"] = $remain_proceed_qty;
@@ -194,9 +279,10 @@ class order extends CI_Controller {
 	public function saveMftOrder()
 	{
 		$dataArr = $_REQUEST['dataArr'];
-		
+
 		$arrData = array();
 		$arrData['mft_no'] = "mo_".mt_rand();
+		$arrData['mft_prod_qty'] = $_REQUEST['tot_qty'];
 		$arrData['insertby']		=	$this->Page->getSession("intUserId");
 		$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 		
@@ -262,7 +348,7 @@ class order extends CI_Controller {
 				$this->inventoryModel->tbl = "inventory_master";
 				$this->inventoryModel->insert($arrData);
 
-				// Add inventory stage details for initial stage
+				// Add inventory stage details for first stage
 				$arrData = array();
 				$arrData['mft_id'] = $menufectureId;
 				$arrData['prod_id'] = $row["prodId"];
@@ -275,23 +361,25 @@ class order extends CI_Controller {
 		}
 	}
 	
-	
 	### Auther : Nikunj Bambhroliya
-	### Desc : update order status submited by users from different stages with product qty.
+	### Desc : update menufecture order status submited by users from different stages.
 	public function addMftOrderStatus()
 	{
-		// Get Proceed Qty
+		// Get Proceed Qty In Stage
 		$searchCriteria = array();
 		$searchCriteria['selectField'] = "SUM(mps.qty) AS prod_qty ";
 		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
 		$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
 		$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
 		$this->orderModel->searchCriteria = $searchCriteria;
+		$mftOrdStatusArr = array();
 		$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
 		$proceed_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
 		$proceed_qty = $proceed_qty + $this->Page->getRequest("qty");
 
 		
+		$order_qty = (int)$this->Page->getRequest("order_qty"); // Total Order Qty
+		$prod_main_qty = (int)$this->Page->getRequest("prod_main_qty"); // Total Order Qty
 		$total_qty = (int)$this->Page->getRequest("total_qty"); // Total Product Qty
 		$seq = (int)$this->Page->getRequest("seq"); // seq
 		$last_seq = (int)$this->Page->getRequest("last_seq"); // last seq
@@ -315,7 +403,7 @@ class order extends CI_Controller {
 			$lst_id = $this->orderModel->insert($arrData);
 			if($lst_id > 0)
 			{
-				// Add inventory stage details (in process forward entry)
+				// Add inventory stage details (in process revese entry)
 				$arrData = array();
 				$arrData['mft_id'] = $this->Page->getRequest("order_id");
 				$arrData['prod_id'] = $this->Page->getRequest("product_id");
@@ -327,7 +415,7 @@ class order extends CI_Controller {
 
 				if($nxt_stage_id !=0)
 				{
-					// Add inventory stage details (in process revese entry)
+					// Add inventory stage details (in process forward entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");
 					$arrData['prod_id'] = $this->Page->getRequest("product_id");
@@ -341,6 +429,71 @@ class order extends CI_Controller {
 
 				if($seq == $last_seq)
 				{
+					############## START UPDATE COMPLETED STATUS ############
+
+					// Get Total Proceed Qty of Product
+					$searchCriteria = array();
+					$searchCriteria['selectField'] = "SUM(mps.qty) AS prod_qty ";
+					$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
+					$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
+					$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
+					$this->orderModel->searchCriteria = $searchCriteria;
+					$mftOrdStatusArr = array();
+					$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
+					$proceed_product_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
+
+					if($proceed_product_qty == $prod_main_qty)
+					{
+						// update status completed = 1 of product
+						$arrData = array();
+						$arrData['is_completed'] = 1;
+						$arrData['updatedate'] =	date('Y-m-d H:i:s');
+
+						$whereArr = array();
+						$whereArr['mft_id'] = $this->Page->getRequest("order_id");
+						$whereArr['prod_id'] = $this->Page->getRequest("product_id");
+
+						$this->orderModel->tbl = "mft_prod_detail";
+						$this->orderModel->update($arrData, $whereArr);
+					}
+
+					// Get Total Proceed Qty of Order
+					$searchCriteria = array();
+					$searchCriteria['selectField'] = "SUM(mps.qty) AS prod_qty ";
+					$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
+					$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
+					$this->orderModel->searchCriteria = $searchCriteria;
+					$mftOrdStatusArr = array();
+					$mftOrdStatusArr = $this->orderModel->getMftOrderStatus();
+					$proceed_order_qty = (int)$mftOrdStatusArr[0]['prod_qty'];
+
+					if($proceed_order_qty == $order_qty)
+					{
+						// update status completed = 1 of order
+						$arrData = array();
+						$arrData['is_completed'] = 1;
+						$arrData['updatedate'] =	date('Y-m-d H:i:s');
+
+						$whereArr = array();
+						$whereArr['mft_id'] = $this->Page->getRequest("order_id");
+
+						$this->orderModel->tbl = "mft_master";
+						$this->orderModel->update($arrData, $whereArr);
+
+						// update status completed = 1 in "mft_order_time_process_stage"
+						$arrData = array();
+						$arrData['is_completed'] = 1;
+						$arrData['updatedate'] =	date('Y-m-d H:i:s');
+
+						$whereArr = array();
+						$whereArr['mft_id'] = $this->Page->getRequest("order_id");
+
+						$this->orderModel->tbl = "mft_order_time_process_stage";
+						$this->orderModel->update($arrData, $whereArr);
+					}
+
+					############## END UPDATE COMPLETED STATUS ############
+					
 					// Add inventory (in process reverse entry)
 					$arrData = array();
 					$arrData['mft_id'] = $this->Page->getRequest("order_id");
