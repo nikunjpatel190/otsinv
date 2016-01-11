@@ -10,7 +10,10 @@ class order extends CI_Controller {
 		$this->load->model("processModel",'',true);
 		$this->load->model("productModel",'',true);
 	}
-	
+	####################################################################
+	#						START CLIENT ORDER					       #
+	####################################################################
+
 	public function index()
 	{
 		$rsListing['orderNo'] = $this->orderModel->generateOrderNo();
@@ -19,86 +22,119 @@ class order extends CI_Controller {
 	}
 
 	### Auther : Nikunj Bambhroliya
+	### Desc : list client order
+	public function listClientOrder()
+	{
+		$orderListArr = $this->orderModel->getOrderList();
+		//$this->Page->pr($orderListArr); exit;
+
+		$rsListing['orderListArr'] = $orderListArr;
+		//$this->Page->pr($orderListArr); exit;
+		$this->load->view('order/listClientOrder', $rsListing);
+	}
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : view client order
+	public function viewClientOrder()
+	{
+		$orderId = $this->Page->getRequest("orderId");
+
+		// Get Order Details
+		$searchCriteria = array();
+		$searchCriteria['orderId'] = $orderId;
+		$searchCriteria['fetchProductDetail'] = 1;
+		$searchCriteria['fetchOrderStatus'] = 1;
+		$this->orderModel->searchCriteria = $searchCriteria;
+		$orderDetailArr = $this->orderModel->getOrderDetails();
+
+		$rsListing['orderDetailArr'] = $orderDetailArr[0];
+		$this->load->view('order/viewClientOrder', $rsListing);
+	}
+
+	### Auther : Nikunj Bambhroliya
 	### Desc : save Order
 	public function saveOrder()
 	{
 		$productArr = $_REQUEST['productArr'];	
 		$jsonArr = $_REQUEST['jsonArr'];
-		foreach($jsonArr AS $key=>$jsonString)
+		if(count($jsonArr) > 0)
 		{
-			$arr = json_decode($jsonString,1);
-			foreach($arr AS $prodId => $arr1)
+			foreach($jsonArr AS $key=>$jsonString)
 			{
-				foreach($arr1 AS $stageId => $arr2)
+				$arr = json_decode($jsonString,1);
+				foreach($arr AS $prodId => $arr1)
 				{
-					foreach($arr2 AS $mftId=>$qty)
+					foreach($arr1 AS $stageId => $arr2)
 					{
-						// get current stage seq
-						$searchCriteria = array();
-						$searchCriteria['selectField'] = "main.stage_seq";
-						$searchCriteria['prod_id'] = $prodId;
-						$searchCriteria['stage_id'] = $stageId;
-						$searchCriteria['mft_id'] = $mftId;
-						$this->orderModel->searchCriteria=$searchCriteria;
-						$resultArr = array();
-						$resultArr = $this->orderModel->getCreateTimeOrderDetail();
-						$stage_seq = $resultArr[0]['stage_seq'];
+						foreach($arr2 AS $mftId=>$qty)
+						{
+							// get current stage seq
+							$searchCriteria = array();
+							$searchCriteria['selectField'] = "main.stage_seq";
+							$searchCriteria['prod_id'] = $prodId;
+							$searchCriteria['stage_id'] = $stageId;
+							$searchCriteria['mft_id'] = $mftId;
+							$this->orderModel->searchCriteria=$searchCriteria;
+							$resultArr = array();
+							$resultArr = $this->orderModel->getCreateTimeOrderDetail();
+							$stage_seq = $resultArr[0]['stage_seq'];
 
-						// get next sequence stage id
-						$nxt_stage_seq = (int)($stage_seq+1);
-						$searchCriteria = array();
-						$searchCriteria['selectField'] = "main.stage_id";
-						$searchCriteria['prod_id'] = $prodId;
-						$searchCriteria['stage_seq'] = $nxt_stage_seq;
-						$searchCriteria['mft_id'] = $mftId;
-						$this->orderModel->searchCriteria=$searchCriteria;
-						$resultArr = array();
-						$resultArr = $this->orderModel->getCreateTimeOrderDetail();
-						$nxt_stage_id = $resultArr[0]['stage_id'];
+							// get next sequence stage id
+							$nxt_stage_seq = (int)($stage_seq+1);
+							$searchCriteria = array();
+							$searchCriteria['selectField'] = "main.stage_id";
+							$searchCriteria['prod_id'] = $prodId;
+							$searchCriteria['stage_seq'] = $nxt_stage_seq;
+							$searchCriteria['mft_id'] = $mftId;
+							$this->orderModel->searchCriteria=$searchCriteria;
+							$resultArr = array();
+							$resultArr = $this->orderModel->getCreateTimeOrderDetail();
+							$nxt_stage_id = $resultArr[0]['stage_id'];
 
-						// stage inventory revese entry
-						$arrData = array();
-						$arrData['prod_id'] = $prodId;
-						$arrData['stage_id'] = $stageId;
-						$arrData['mft_id'] = $mftId;
-						$arrData['prod_qty'] = -1 * abs($qty);
-						$arrData['action'] = "minus";
-						$arrData['date'] = date('Y-m-d H:i:s');
-						$this->inventoryModel->tbl = "inventory_in_stage";
-						$this->inventoryModel->insert($arrData);
+							// stage inventory revese entry
+							$arrData = array();
+							$arrData['prod_id'] = $prodId;
+							$arrData['stage_id'] = $stageId;
+							$arrData['mft_id'] = $mftId;
+							$arrData['prod_qty'] = -1 * abs($qty);
+							$arrData['action'] = "minus";
+							$arrData['date'] = date('Y-m-d H:i:s');
+							$this->inventoryModel->tbl = "inventory_in_stage";
+							$this->inventoryModel->insert($arrData);
 
-						// Add inventory stage details (in process revese entry)
-						$arrData = array();
-						$arrData['mft_id'] = $mftId;
-						$arrData['prod_id'] = $prodId;
-						$arrData['stage_id'] = $stageId;
-						$arrData['prod_qty'] = -1 * abs($qty);
-						$arrData['action'] = "minus";
-						$this->inventoryModel->tbl = "inventory_stage_detail";
-						$this->inventoryModel->insert($arrData);
+							// Add inventory stage details (in process revese entry)
+							$arrData = array();
+							$arrData['mft_id'] = $mftId;
+							$arrData['prod_id'] = $prodId;
+							$arrData['stage_id'] = $stageId;
+							$arrData['prod_qty'] = -1 * abs($qty);
+							$arrData['action'] = "minus";
+							$this->inventoryModel->tbl = "inventory_stage_detail";
+							$this->inventoryModel->insert($arrData);
 
-						// Add inventory stage details (in process forward entry)
-						$arrData = array();
-						$arrData['mft_id'] = $mftId;
-						$arrData['prod_id'] = $prodId;
-						$arrData['stage_id'] = $nxt_stage_id;
-						$arrData['prod_qty'] = $qty;
-						$arrData['action'] = "plus";
-						$this->inventoryModel->tbl = "inventory_stage_detail";
-						$this->inventoryModel->insert($arrData);
+							// Add inventory stage details (in process forward entry)
+							$arrData = array();
+							$arrData['mft_id'] = $mftId;
+							$arrData['prod_id'] = $prodId;
+							$arrData['stage_id'] = $nxt_stage_id;
+							$arrData['prod_qty'] = $qty;
+							$arrData['action'] = "plus";
+							$this->inventoryModel->tbl = "inventory_stage_detail";
+							$this->inventoryModel->insert($arrData);
 
-						// Product status entry
-						$arrData = array();
-						$arrData['mft_id'] = $mftId;;
-						$arrData['prod_id'] = $prodId;
-						$arrData['stage_id'] = $stageId;
-						$arrData['stage_seq'] = $stage_seq;
-						$arrData['qty'] = $qty;
-						$arrData['note'] = "entry from create order";
-						$arrData['insertby'] =	$this->Page->getSession("intUserId");
-						$arrData['insertdate'] = date('Y-m-d H:i:s');
-						$this->orderModel->tbl = "mft_prod_status";
-						$this->orderModel->insert($arrData);
+							// Product status entry
+							$arrData = array();
+							$arrData['mft_id'] = $mftId;;
+							$arrData['prod_id'] = $prodId;
+							$arrData['stage_id'] = $stageId;
+							$arrData['stage_seq'] = $stage_seq;
+							$arrData['qty'] = $qty;
+							$arrData['note'] = "entry from create order";
+							$arrData['insertby'] =	$this->Page->getSession("intUserId");
+							$arrData['insertdate'] = date('Y-m-d H:i:s');
+							$this->orderModel->tbl = "mft_prod_status";
+							$this->orderModel->insert($arrData);
+						}
 					}
 				}
 			}
@@ -119,6 +155,7 @@ class order extends CI_Controller {
 		$arrData['final_total_amount'] = $this->Page->getRequest("finalTotalAmount");
 		$arrData['order_date'] = $this->Page->getRequest("txtOrderDate");
 		$arrData['order_ship_date'] = $this->Page->getRequest("txtShipDate");
+		$arrData['order_status'] = "pending";
 		$arrData['order_note'] = $this->Page->getRequest("txtNote");
 		$arrData['insertby']	=	$this->Page->getSession("intUserId");
 		$arrData['insertdate'] 	= 	date('Y-m-d H:i:s');
@@ -161,6 +198,12 @@ class order extends CI_Controller {
 			echo "2"; exit;
 		}
 	}
+	
+	
+	
+	####################################################################
+	#						START MENUFECTURE ORDER					   #
+	####################################################################
 	
 	public function checkMftOrder()
 	{
@@ -384,6 +427,21 @@ class order extends CI_Controller {
 		$seq = (int)$this->Page->getRequest("seq"); // seq
 		$last_seq = (int)$this->Page->getRequest("last_seq"); // last seq
 		$nxt_stage_id = $this->Page->getRequest("nxt_stage_id");
+		$stage_inv_stock = $this->Page->getRequest("stage_inv_stock");
+
+		if($stage_inv_stock != "" && $stage_inv_stock > 0)
+		{
+			// stage inventory revese entry
+			$arrData = array();
+			$arrData['prod_id'] = $this->Page->getRequest("product_id");
+			$arrData['stage_id'] = $this->Page->getRequest("stage_id");
+			$arrData['mft_id'] = $this->Page->getRequest("order_id");
+			$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
+			$arrData['action'] = "minus";
+			$arrData['date'] = date('Y-m-d H:i:s');
+			$this->inventoryModel->tbl = "inventory_in_stage";
+			$this->inventoryModel->insert($arrData);
+		}
 		
 		if($proceed_qty <= $total_qty)
 		{

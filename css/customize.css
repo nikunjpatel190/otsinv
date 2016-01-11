@@ -55,3 +55,7 @@ table#tblStgInvOrderList input[type="text"]{font-size: 12px;height: 23px !import
 #chk-cust-copy-addr{float:right; margin-right:20px; color:#000;}
 #frmCustomer{margin:0 !important;}
 /*** End css for customer popup ***/
+
+/*** START CSS FOR VIEW CLIENT ORDER ***/
+.view-order .invoice-info-label{max-width:none !important; width:150px;}
+/*** END CSS FOR VIEW CLIENT ORDER ***/

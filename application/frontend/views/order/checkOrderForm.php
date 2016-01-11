@@ -95,12 +95,25 @@ $uid = $this->Page->getSession("intUserId");
 																					<td><?php echo $orderNo; ?></td>
 																					<td><?php echo $product['prod_tot_qty']; ?></td>
 																					<td><?php echo $product['proceed_qty']; ?></td>
-																					<td><?php echo $product['stage_inv_qty']; ?></td>
+																					<td>
+																					<?php
+																					if($product['stage_inv_qty'] > 0)
+																					{
+																					?>
+																					<a href="javascript:void(0);" class="forward_stock" id="<?php echo $product['mft_id']; ?>"><?php echo $product['stage_inv_qty']; ?></a>
+																					<?php
+																					}
+																					else
+																					{
+																						echo $product['stage_inv_qty'];
+																					}
+																					?>
+																					</td>
 																					<td><?php echo $product['remain_qty']; ?></td>
 																					<td>
 																						<div class="hidden-phone visible-desktop btn-group" id="">
 																							<!-- Start Button forward qty to next stage -->
-																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" >
+																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $product['mft_id']; ?>">
 																								Forward
 																								<!--<i class="icon-ok bigger-120"></i>-->
 																							</button>
@@ -128,7 +141,7 @@ $uid = $this->Page->getSession("intUserId");
 																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
 																									<li>
 																										<!-- Start Button forward qty to next stage -->
-																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>">
+																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $product['mft_id']; ?>">
 																											<span class="green">					<!--<i class="icon-ok bigger-120"></i> --> Forward
 																											</span>
 																										</a>
@@ -196,6 +209,7 @@ $uid = $this->Page->getSession("intUserId");
 	<input type="hidden" id="hdn_seq" value="" />
 	<input type="hidden" id="hdn_last_seq" value="" />
 	<input type="hidden" id="hdn_nxt_stage_id" value="" />
+	<input type="hidden" id="hdn_stage_inv_stock" value="" />
 </div>
 <!-- END set hidden values -->
 
@@ -297,11 +311,10 @@ $uid = $this->Page->getSession("intUserId");
 			}
 			var id = this.id;
 			$("#body_"+id).toggle();
-			//alert(id);
 		});
 
 		// Open  modal popup for forward qty
-		$(document).on("click",".opnModalShipQty",function(){
+		$(document).on("click",".opnModalShipQty",function(e){
 			resetStyle("#prod_ship_qty");
 			$(".errmsg").remove();
 			$("#frmAddProdStatus")[0].reset();
@@ -315,33 +328,40 @@ $uid = $this->Page->getSession("intUserId");
 			$("#hdn_seq").val($(this).attr('seq'));
 			$("#hdn_last_seq").val($(this).attr('last_seq'));
 			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
-			
 			$("#hdn_product_id").val($(this).attr('prod_id'));
-			
+
 			$("#ship-qty-form").modal('show');
 		});
 
-		// Open modal popup for Add inventory
-		$(document).on("click",".opnModalAddToInv",function(){
-			resetStyle("#inv_send_qty");
+		// Open modal popup for forward stage stock (we open modal of forward qty)
+		$(".forward_stock").click(function(){
+			var id=this.id;
+			var obj = $("#btn-forward-"+id);
+			
+			resetStyle("#prod_ship_qty");
 			$(".errmsg").remove();
-			$("#frmAddInvToStage")[0].reset();
+			$("#frmAddProdStatus")[0].reset();
 			$("#divHiddenElements input[type='hidden']").val('');
-			$("#hdn_stage_id").val($(this).attr('stageid'));
-			$("#hdn_order_id").val($(this).attr('mftid'));
-			$("#hdn_order_qty").val($(this).attr('order_qty'));
-			$("#hdn_prod_main_qty").val($(this).attr('prod_main_qty'));
-			$("#hdn_total_qty").val($(this).attr('totqty'));
-			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
-			$("#hdn_seq").val($(this).attr('seq'));
-			$("#hdn_last_seq").val($(this).attr('last_seq'));
-			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
-			
-			$("#hdn_product_id").val($(this).attr('prod_id'));
-			
-			$("#inv-qty-form").modal('show');
+			$("#hdn_stage_id").val($(obj).attr('stageid'));
+			$("#hdn_order_id").val($(obj).attr('mftid'));
+			$("#hdn_order_qty").val($(obj).attr('order_qty'));
+			$("#hdn_prod_main_qty").val($(obj).attr('prod_main_qty'));
+			$("#hdn_total_qty").val($(obj).attr('totqty'));
+			$("#hdn_proceed_qty").val($(obj).attr('proceedqty'));
+			$("#hdn_seq").val($(obj).attr('seq'));
+			$("#hdn_last_seq").val($(obj).attr('last_seq'));
+			$("#hdn_nxt_stage_id").val($(obj).attr('nxt_stage_id'));
+			$("#hdn_product_id").val($(obj).attr('prod_id'));
+			$("#hdn_stage_inv_stock").val($.trim($(this).text()));
+
+			$("#ship-qty-form").modal('show');
 		});
-		
+
+		// callback event on close modal popup for forward qty
+		$('#ship-qty-form').on('hidden', function () {
+			$("#divHiddenElements input[type='hidden']").val('');
+		});
+
 		// save forward qty detail
 		$(document).on("submit","#frmAddProdStatus",function(e){
 			$(".errmsg").remove();
@@ -354,6 +374,13 @@ $uid = $this->Page->getSession("intUserId");
 			{
 				setStyle("#prod_ship_qty");
 				$("#prod_ship_qty").after('<span class="errmsg red clearfix">Qty must be greater than zero</span>');
+				return false;
+			}
+
+			var stage_inv_stock = $("#hdn_stage_inv_stock").val();
+			if($("#prod_ship_qty").val() > stage_inv_stock && stage_inv_stock != "")
+			{
+				alert("you can add maximum "+stage_inv_stock+" qty");
 				return false;
 			}
 			
@@ -372,8 +399,8 @@ $uid = $this->Page->getSession("intUserId");
 			data['seq'] = $("#hdn_seq").val();
 			data['last_seq'] = $("#hdn_last_seq").val();
 			data['nxt_stage_id'] = $("#hdn_nxt_stage_id").val();
-			//alert(data.toSource());
-			
+			data['stage_inv_stock'] = stage_inv_stock;
+			//alert(data.toSource()); return false;
 			$.ajax({
 				type:"POST",
 				data:data,
@@ -398,6 +425,27 @@ $uid = $this->Page->getSession("intUserId");
 					return false;
 				}
 			});
+		});
+
+		// Open modal popup for Add inventory
+		$(document).on("click",".opnModalAddToInv",function(){
+			resetStyle("#inv_send_qty");
+			$(".errmsg").remove();
+			$("#frmAddInvToStage")[0].reset();
+			$("#divHiddenElements input[type='hidden']").val('');
+			$("#hdn_stage_id").val($(this).attr('stageid'));
+			$("#hdn_order_id").val($(this).attr('mftid'));
+			$("#hdn_order_qty").val($(this).attr('order_qty'));
+			$("#hdn_prod_main_qty").val($(this).attr('prod_main_qty'));
+			$("#hdn_total_qty").val($(this).attr('totqty'));
+			$("#hdn_proceed_qty").val($(this).attr('proceedqty'));
+			$("#hdn_seq").val($(this).attr('seq'));
+			$("#hdn_last_seq").val($(this).attr('last_seq'));
+			$("#hdn_nxt_stage_id").val($(this).attr('nxt_stage_id'));
+			
+			$("#hdn_product_id").val($(this).attr('prod_id'));
+			
+			$("#inv-qty-form").modal('show');
 		});
 
 		// save add nventry to stage details

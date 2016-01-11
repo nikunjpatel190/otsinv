@@ -737,7 +737,10 @@ $(document).ready(function(){
 				chkProductArr[trid] = prod_id;
 			}
 
-			jsonArr[prod_id] = $(this).find('input[name="jsonString"]').val();
+			if($(this).find('input[name="jsonString"]').val() != "")
+			{
+				jsonArr[prod_id] = $(this).find('input[name="jsonString"]').val();
+			}
 		});
 
 		if(prodError > 0)
@@ -775,7 +778,6 @@ $(document).ready(function(){
 			url:"index.php?c=order&m=saveOrder",
 			success:function(res)
 			{
-				alert(res); return false;
 				if(res == "1")
 				{
 					alert("Order saved successfully");
@@ -964,7 +966,7 @@ $(document).ready(function(){
 				{
 					var firstname = $("#txt_cust_first_name").val();
 					var lastname = $("#txt_cust_last_name").val();
-					var option = "<option value="+res+" selected='selected'>"+firstname+" "+lastname+"</option>"
+					var option = "<option value="+res[0]+" selected='selected'>"+firstname+" "+lastname+"</option>"
 					$("#selCustomer").append(option);
 					$('#frmCustomer')[0].reset();
 					$("#cust-form").modal('hide');
