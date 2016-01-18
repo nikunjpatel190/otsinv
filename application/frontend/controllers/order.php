@@ -9,6 +9,7 @@ class order extends CI_Controller {
 		$this->load->model("inventoryModel",'',true);
 		$this->load->model("processModel",'',true);
 		$this->load->model("productModel",'',true);
+		$this->load->model("customerModel",'',true);
 	}
 	####################################################################
 	#						START CLIENT ORDER					       #
@@ -16,21 +17,45 @@ class order extends CI_Controller {
 
 	public function index()
 	{
-		$rsListing['orderNo'] = $this->orderModel->generateOrderNo();
-		// Load Views
-		$this->load->view('order/orderForm', $rsListing);	
-	}
-
-	### Auther : Nikunj Bambhroliya
-	### Desc : list client order
-	public function listClientOrder()
-	{
 		$orderListArr = $this->orderModel->getOrderList();
 		//$this->Page->pr($orderListArr); exit;
 
 		$rsListing['orderListArr'] = $orderListArr;
 		//$this->Page->pr($orderListArr); exit;
 		$this->load->view('order/listClientOrder', $rsListing);
+	}
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : create client order
+	public function createOrder()
+	{
+		$action = $this->Page->getRequest("action");
+		$orderId = $this->Page->getRequest("orderId");
+
+		if($action == "E")
+		{
+			// Get Order Details
+			$searchCriteria = array();
+			$searchCriteria['orderId'] = $orderId;
+			$searchCriteria['fetchProductDetail'] = 1;
+			$searchCriteria['fetchOrderStatus'] = 1;
+			$this->orderModel->searchCriteria = $searchCriteria;
+			$orderDetailArr = $this->orderModel->getOrderDetails();
+			$orderDetailArr = $orderDetailArr[0];
+
+			$rsListing['strAction'] = "E";
+			$rsListing['orderId'] = $orderId;
+			$rsListing['orderNo'] = $orderDetailArr['order_no'];
+			$rsListing['orderDetailArr'] = $orderDetailArr;
+		}
+		else
+		{
+			$rsListing['strAction'] = "A";
+			$rsListing['orderId'] = $orderId;
+			$rsListing['orderNo'] = $this->orderModel->generateOrderNo();
+		}
+		// Load Views
+		$this->load->view('order/orderForm', $rsListing);	
 	}
 
 	### Auther : Nikunj Bambhroliya
@@ -46,8 +71,16 @@ class order extends CI_Controller {
 		$searchCriteria['fetchOrderStatus'] = 1;
 		$this->orderModel->searchCriteria = $searchCriteria;
 		$orderDetailArr = $this->orderModel->getOrderDetails();
+		$orderDetailArr = $orderDetailArr[0];
+		$rsListing['orderDetailArr'] = $orderDetailArr;
+		//$this->Page->pr($orderDetailArr); exit;
 
-		$rsListing['orderDetailArr'] = $orderDetailArr[0];
+		// Get Customer Details
+		$searchCriteria = array();
+		$searchCriteria['cusomerId'] = $orderDetailArr["customer_id"];
+		$this->customerModel->searchCriteria = $searchCriteria;
+		$customerArr = $this->customerModel->getCustomerDetails();
+		$rsListing['customerArr'] = $customerArr[0];
 		$this->load->view('order/viewClientOrder', $rsListing);
 	}
 
@@ -55,8 +88,11 @@ class order extends CI_Controller {
 	### Desc : save Order
 	public function saveOrder()
 	{
-		$productArr = $_REQUEST['productArr'];	
-		$jsonArr = $_REQUEST['jsonArr'];
+		$strAction = $this->Page->getRequest("hdnAction");
+		$orderId = $this->Page->getRequest("hdnOrderId");
+		$productArr = $_REQUEST["productArr"];
+		$jsonArr = $_REQUEST["jsonArr"];
+		
 		if(count($jsonArr) > 0)
 		{
 			foreach($jsonArr AS $key=>$jsonString)
@@ -157,12 +193,33 @@ class order extends CI_Controller {
 		$arrData['order_ship_date'] = $this->Page->getRequest("txtShipDate");
 		$arrData['order_status'] = "pending";
 		$arrData['order_note'] = $this->Page->getRequest("txtNote");
-		$arrData['insertby']	=	$this->Page->getSession("intUserId");
-		$arrData['insertdate'] 	= 	date('Y-m-d H:i:s');
 
-		$this->orderModel->tbl = "order_master";
-		$orderId = $this->orderModel->insert($arrData);
-		
+
+		if($strAction == "A")
+		{
+			$arrData['insertby']	=	$this->Page->getSession("intUserId");
+			$arrData['insertdate'] 	= 	date('Y-m-d H:i:s');
+
+			$this->orderModel->tbl = "order_master";
+			$orderId = $this->orderModel->insert($arrData);
+		}
+		else
+		{
+			$arrData['updateby']	=	$this->Page->getSession("intUserId");
+			$arrData['updatedate'] 	= 	date('Y-m-d H:i:s');
+			
+			$whereArr = array();
+			$whereArr['order_id'] = $orderId;
+
+			$this->orderModel->tbl = "order_master";
+			$this->orderModel->update($arrData,$whereArr);
+		}
+
+		// Remove existing products
+		$strQuery = "DELETE FROM order_product_detail WHERE order_id=".$orderId."";
+		$this->db->query($strQuery);
+
+		// Add Order Product Details
 		if($orderId != "" && $orderId != 0)
 		{
 			foreach($productArr AS $prod_id=>$arr)
@@ -180,9 +237,17 @@ class order extends CI_Controller {
 				$arrData['discount_type'] = $arr['prodDiscType'];
 				$arrData['discount_amount'] = $arr['prodDiscAmount'];
 				$arrData['prod_total_amount'] = $arr['prodTotalAmount'];
-				$arrData['insertby'] = $this->Page->getSession("intUserId");
-				$arrData['insertdate'] = date('Y-m-d H:i:s');
 
+				if($strAction == "A")
+				{
+					$arrData['insertby'] = $this->Page->getSession("intUserId");
+					$arrData['insertdate'] = date('Y-m-d H:i:s');
+				}
+				else
+				{
+					$arrData['updateby']	=	$this->Page->getSession("intUserId");
+					$arrData['updatedate'] 	= 	date('Y-m-d H:i:s');
+				}
 				$this->orderModel->tbl = "order_product_detail";
 				$this->orderModel->insert($arrData);
 				$cnt++;

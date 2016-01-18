@@ -112,6 +112,7 @@ class orderModel extends Data {
 				if(isset($searchCriteria["fetchProductDetail"]) && $searchCriteria["fetchProductDetail"] == 1)
 				{
 					$prodSearchCriteria = array();
+					$prodSearchCriteria['selectField'] = "opd.*,pm.prod_name,pm.prod_type";
 					$prodSearchCriteria['order_id'] = $row['order_id'];
 					$this->searchCriteria = $prodSearchCriteria;
 					$orderProductDetailsArr = $this->getOrderProductDetails();
@@ -131,7 +132,7 @@ class orderModel extends Data {
 				$orderDetailArr[] = $row;
 			}
 		}
-		$this->Page->pr($orderDetailArr);
+		//$this->Page->pr($orderDetailArr);
 		return $orderDetailArr;
 	}
 
@@ -196,7 +197,7 @@ class orderModel extends Data {
 			$orderDir = $searchCriteria['orderDir'];
 		}
 
-		$sqlQuery = "SELECT ".$selectField." FROM order_product_detail AS opd ".$whereClaue."  ORDER BY ".$orderField." ".$orderDir."";
+		$sqlQuery = "SELECT ".$selectField." FROM order_product_detail AS opd LEFT JOIN product_master AS pm ON opd.prod_id=pm.prod_id  ".$whereClaue."  ORDER BY ".$orderField." ".$orderDir."";
 		// echo $sqlQuery; exit;
 		
 		$result     = $this->db->query($sqlQuery);

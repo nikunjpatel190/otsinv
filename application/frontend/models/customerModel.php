@@ -15,7 +15,6 @@ class customerModel extends Data {
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
-		
 		$selectField = "*";
 		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
 		{
@@ -27,7 +26,7 @@ class customerModel extends Data {
 		// By customer id
 		if(isset($searchCriteria['cusomerId']) && $searchCriteria['cusomerId'] != "")
 		{
-			$whereClaue .= 	" AND cust_id=".$searchCriteria['userType']." ";
+			$whereClaue .= 	" AND cust_id=".$searchCriteria['cusomerId']." ";
 		}
 		
 		// By customer name

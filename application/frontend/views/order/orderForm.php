@@ -18,7 +18,7 @@
 
                 <div class="controls">
                     <select id="selCustomer" name="selCustomer" class="span4 required">
-                        <?php echo $this->Page->generateComboByTable("customer_master","cust_id","CONCAT(cust_first_name,' ',cust_last_name)","","where status='ACTIVE' order by cust_first_name","","Select Customer"); ?>
+                        <?php echo $this->Page->generateComboByTable("customer_master","cust_id","CONCAT(cust_first_name,' ',cust_last_name)","","where status='ACTIVE' order by cust_first_name",$orderDetailArr['customer_id'],"Select Customer"); ?>
                     </select>
 					<a id="" href="#cust-form" data-toggle="modal">Add New Customer<i class="icon-external-plus"></i></a>
                 </div>
@@ -28,7 +28,7 @@
                 <label class="control-label" for="form-field-4">Order Date</label>
                 
                 <div class="controls">
-                    <input type="text" data-date-format="yyyy-mm-dd" id="txtOrderDate" name="txtOrderDate" class="date-picker span4 required" placeholder="dd-mm-yyyy">
+                    <input type="text" data-date-format="yyyy-mm-dd" id="txtOrderDate" name="txtOrderDate" class="date-picker span4 required" placeholder="dd-mm-yyyy" value="<?php echo $orderDetailArr['order_date']; ?>">
                     <span class="add-on">
                         <i class="icon-calendar"></i>
                     </span>
@@ -39,7 +39,7 @@
                 <label class="control-label" for="form-field-4">Shipment Date</label>
                 
                 <div class="controls">
-                    <input type="text" data-date-format="yyyy-mm-dd" id="txtShipDate" name="txtShipDate" class="date-picker span4 required" placeholder="dd-mm-yyyy">
+                    <input type="text" data-date-format="yyyy-mm-dd" id="txtShipDate" name="txtShipDate" class="date-picker span4 required" placeholder="dd-mm-yyyy" value="<?php echo $orderDetailArr['order_ship_date']; ?>">
                     <span class="add-on">
                         <i class="icon-calendar"></i>
                     </span>
@@ -97,8 +97,7 @@
                                     <td class="span2">
                                     	<input class="form-control span8 calc" name="txtProductDiscountValue" id="txtProductDiscountValue" type="text" placeholder="INR" />
                                         <select class="span4" name="txtProductDiscountType" id="txtProductDiscountType" onChange="javascript:$('.calc').blur();">
-                                        	<option value="rs">Rs.</option>
-                                            <option value="%">%</option>
+											<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='DISCOUNT_TYPE' order by seq","",""); ?>
                                         </select>
 										<small id="txtProductDiscountAmt" name="txtProductDiscountAmt"></small>
                                     </td>
@@ -109,6 +108,70 @@
                                     	<button id="btnOrderProdAdd" type="button" class="btn btn-remove btn-danger"><span class="icon-minus bigger-110"></span></button>
                                     </td>
                                 </tr>
+								<?php
+								$cnt = 0;
+								$prodDetailsArr = $orderDetailArr['orderProductDetailsArr'];
+								if(count($prodDetailsArr) > 0)
+								{
+									foreach($prodDetailsArr AS $key=>$productRow)
+									{
+									?>
+										<tr class="entry" id="<?php echo $cnt; ?>">
+											<td class="span2">
+												<select class="form-control span12 required productType" name="selProductType" id="selProductType<?php echo $cnt; ?>">
+													<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='PRODUCT_TYPE' order by seq",$productRow['prod_type'],""); ?>
+												</select>
+											</td>
+											<td class="span2">
+												<select class="form-control span12 required product" name="selProduct" id="selProduct<?php echo $cnt; ?>">
+													<?php echo $this->Page->generateComboByTable("product_master","prod_id","prod_name","","where prod_type='".$productRow['prod_type']."' and status='ACTIVE'",$productRow['prod_id'],"Select Product"); ?>
+												</select>
+											</td>
+											<td class="span1">
+												<input class="form-control span12 required calc" type="text" name="txtProductQty" id="txtProductQty<?php echo $cnt; ?>" placeholder="QTY" onKeyPress="javascript:return OnlyNumeric(event);" value="<?php echo $productRow['prod_qty']; ?>" />
+												<input type="hidden" name="jsonString" id="jsonString0" value="" />
+											</td>
+											<td class="span2">
+												<input class="form-control span12 required calc" name="txtProductPrice" id="txtProductPrice<?php echo $cnt; ?>" type="text" placeholder="INR" value="<?php echo $productRow['price_per_qty']; ?>" />
+											</td>
+											<td class="span1">
+												<input class="form-control span12 calc" name="txtProductTax" id="txtProductTax<?php echo $cnt; ?>" type="text" placeholder="%" value="<?php echo $productRow['tax_value']; ?>" />
+												<small class="small-tax" id="txtProductTaxAmt<?php echo $cnt; ?>" name="txtProductTaxAmt"><?php echo $productRow['tax_amount']; ?></small>
+											</td>
+											<td class="span2">
+												<input class="form-control span8 calc" name="txtProductDiscountValue" id="txtProductDiscountValue<?php echo $cnt; ?>" type="text" placeholder="INR" value="<?php echo $productRow['discount_value']; ?>" />
+												<select class="span4" name="txtProductDiscountType" id="txtProductDiscountType<?php echo $cnt; ?>" onChange="javascript:$('.calc').blur();">
+													<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='DISCOUNT_TYPE' order by seq",$productRow['discount_type'],""); ?>
+												</select>
+												<small id="txtProductDiscountAmt<?php echo $cnt; ?>" name="txtProductDiscountAmt"><?php echo $productRow['discount_amount']; ?></small>
+											</td>
+											<td class="span1">
+												<label id="prodTotalAmount<?php echo $cnt; ?>" name="prodTotalAmount" class="span12"><?php echo $productRow['prod_total_amount']; ?></label>
+											</td>
+											<td class="span1">
+												<?php
+												if($cnt == 0)
+												{
+												?>
+													<button class="btn btn-success btn-add" type="button" id="btnOrderProdAdd"><span class="icon-plus bigger-110"></span></button>
+												<?php
+												}
+												else
+												{
+												?>
+													<button id="btnOrderProdAdd" type="button" class="btn btn-remove btn-danger"><span class="icon-minus bigger-110"></span></button>
+												<?php
+												}
+												?>
+											</td>
+										</tr>
+									<?php
+										$cnt++;
+									}
+								}
+								else
+								{
+								?>
                                 <tr class="entry" id="0">
 									<td class="span2">
 										<select class="form-control span12 required productType" name="selProductType" id="selProductType0">
@@ -134,8 +197,7 @@
                                     <td class="span2">
                                     	<input class="form-control span8 calc" name="txtProductDiscountValue" id="txtProductDiscountValue0" type="text" placeholder="INR" />
                                         <select class="span4" name="txtProductDiscountType" id="txtProductDiscountType0" onChange="javascript:$('.calc').blur();">
-                                        	<option value="rs">Rs.</option>
-                                            <option value="%">%</option>
+											<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='DISCOUNT_TYPE' order by seq","",""); ?>
                                         </select>
 										<small id="txtProductDiscountAmt0" name="txtProductDiscountAmt"></small>
                                     </td>
@@ -148,6 +210,9 @@
 										</button>
                                     </td>
                                 </tr>
+								<?php
+								}
+								?>
                             </tbody>
                         </table>
                         <!-- END ITEM DETAILS -->
@@ -164,31 +229,30 @@
 											   <div class="control-group">
                                                     <label class="control-label">Total Qty</label>
                                                     <div class="controls">
-														<label class="control-label span5" id="lblTotalQty">0</label>
+														<label class="control-label span5" id="lblTotalQty"><?php echo $orderDetailArr['tot_prod_qty']; ?></label>
                                                     </div>
                                                 </div>	
                                                <div class="control-group">
                                                     <label class="control-label">Sub Total</label>
                                                     <div class="controls">
-														<label class="control-label span5" id="lblSubTotal">0.0</label>
+														<label class="control-label span5" id="lblSubTotal"><?php echo $orderDetailArr['sub_total_amount']; ?></label>
                                                     </div>
                                                 </div>
                                                 <div class="control-group">
                                                     <label class="control-label">Total Tax</label>
                                                     <div class="controls">
-                                                        <label class="control-label span5" id="lblTotalTax">0.0</label>
+                                                        <label class="control-label span5" id="lblTotalTax"><?php echo $orderDetailArr['total_tax']; ?></label>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="control-group">
                                                     <label class="control-label">Discount</label>
                                                     <div class="controls">
-                                                        <input class="span4 calc" name="txtTotalDiscountValue" id="txtTotalDiscountValue" type="text" placeholder="INR" />
+                                                        <input class="span4 calc" name="txtTotalDiscountValue" id="txtTotalDiscountValue" type="text" placeholder="INR" value="<?php echo $orderDetailArr['discount_value']; ?>" />
                                                         <select class="span3" name="selTotalDiscountType" id="selTotalDiscountType" onChange="javascript:$('.calc').blur();">
-                                                            <option value="rs">Rs.</option>
-                                                            <option value="%">%</option>
+															<?php echo $this->Page->generateComboByTable("combo_master","combo_key","combo_value",0," where combo_case='DISCOUNT_TYPE' order by seq",$orderDetailArr['discount_type'],""); ?>
                                                         </select>
-                                                        <label class="control-label span4" id="lblDiscountAmount">0.0</label>
+                                                        <label class="control-label span4" id="lblDiscountAmount"><?php echo $orderDetailArr['discount_amount']; ?></label>
                                                     </div>
                                                 </div>
                                                 
@@ -196,14 +260,14 @@
                                                 <div class="control-group">
                                                     <label class="control-label">Adjustment</label>
                                                     <div class="controls">
-                                                        <input type="text" class="span6 calc" name="txtAdjustAmount" id="txtAdjustAmount" value="" placeholder="INR" />
-                                                        <label class="control-label span4" id="lblAdjustAmount">0.0</label>
+                                                        <input type="text" class="span6 calc" name="txtAdjustAmount" id="txtAdjustAmount" value="<?php echo $orderDetailArr['adjust_amount']; ?>" placeholder="INR" />
+                                                        <label class="control-label span4" id="lblAdjustAmount"><?php echo $orderDetailArr['adjust_amount']; ?></label>
                                                     </div>
                                                 </div>	
                                                 <div class="control-group div-final-total">
                                                 	<label class="control-label" for="form-input-readonly">TOTAL</label>
                                                     <div class="controls">
-                                                        <label class="control-label span5" id="lblFinalTotal">0.0</label>
+                                                        <label class="control-label span5" id="lblFinalTotal"><?php echo $orderDetailArr['final_total_amount']; ?></label>
                                                 </div>
                                            </div>
                                        </div> 
@@ -221,7 +285,7 @@
                 <label class="control-label" for="form-input-readonly">Note</label>
 
                 <div class="controls">
-                    <textarea id="txtNote" class="span12"></textarea>
+                    <textarea id="txtNote" class="span12"><?php echo $orderDetailArr['order_note']; ?></textarea>
                 </div>
             </div>
            
@@ -229,6 +293,8 @@
            <div class="form-actions" align="left">
                 <button class="btn btn-info" type="submit"><i class="icon-ok bigger-110"></i>Submit</button>
                 <button class="btn" type="reset"><i class="icon-undo bigger-110"></i>Reset</button>
+				<input type="hidden" name="hdnOrderId" id="hdnOrderId" value="<?php echo $orderId; ?>" />
+				<input type="hidden" name="hdnAction" id="hdnAction" value="<?php echo $strAction; ?>" />
            </div>
 		   <!-- END BUTTON SECTION -->
         </form>						
@@ -434,7 +500,7 @@
 $(document).ready(function(){
 	$(".calc").blur();
 	/* Add product for order entry */
-	var row = 0;
+	var row = '<?php echo $cnt; ?>';
 	$(document).on('click', '#frmOrder .btn-add', function(e)
     {
 		row++;
@@ -755,6 +821,8 @@ $(document).ready(function(){
 		}
 		
 		var param = {};
+		param['hdnAction'] = $("#hdnAction").val();
+		param['hdnOrderId'] = $("#hdnOrderId").val();
 		param['txtOrderNo'] = $("#txtOrderNo").val();
 		param['selCustomer'] = $("#selCustomer").val();
 		param['txtOrderDate'] = $("#txtOrderDate").val();

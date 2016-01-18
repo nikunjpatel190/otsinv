@@ -43,7 +43,7 @@
 					{
 						foreach($orderListArr as $arrRecord)
 						{
-							$strEditLink	=	"index.php?c=product&m=AddProd_cat&action=E&id=".$arrRecord['order_id'];
+							$strEditLink	=	"index.php?c=order&m=createOrder&action=E&orderId=".$arrRecord['order_id'];
 							echo '<tr>';
 							echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['order_id'].'" value="'.$arrRecord['order_id'].'" /><span class="lbl"></span></td>';
 							echo '<td><a href="javascript:void(0);" class="viewOrder" id='.$arrRecord['order_id'].'>'. $arrRecord['order_no'] .'</a></td>';
