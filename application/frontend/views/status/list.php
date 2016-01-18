@@ -3,12 +3,12 @@
 <?php endif; ?>
 <?php
 $this->load->helper('form');
-$attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frm_add_user', 'name' => 'frm_search_module');
-echo form_open('c=department', $attributes);
+$attributes = array('id' => 'frm_list_record', 'name'=>'frm_list_record');
+echo form_open('c=status', $attributes);
 ?>
 
 <div class="page-header position-relative">
-    <h1>Department List</h1>
+    <h1>Status List</h1>
 </div>
 <input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 <input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
@@ -28,8 +28,6 @@ echo form_open('c=department', $attributes);
     </div>
     
 </div>
-
-<?php echo form_close(); ?>
 <br />
 <div class="row-fluid">
     <div class="span12">
@@ -41,14 +39,14 @@ echo form_open('c=department', $attributes);
                         <span class="lbl"></span>
                     </th>
                     <th></th>
-                    <th>Company</th>
-                    <th>Department Name</th>
+                    <th>Status Name</th>
+                    <th>Sequence</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-				if(count($rsDepartments)==0)
+				if(count($rsStatuses)==0)
                 {
                     echo "<tr>";
                     echo '<td colspan="6" style="text-align:center;">No data found.</td>';
@@ -56,15 +54,15 @@ echo form_open('c=department', $attributes);
                 }
                 else
                 {
-                    foreach($rsDepartments as $arrRecord)
+                    foreach($rsStatuses as $arrRecord)
                     {
-                        $strEditLink	=	"index.php?c=department&m=AddDepartment&action=E&id=".$arrRecord['dept_id'];
+                        $strEditLink	=	"index.php?c=status&m=AddStatus&action=E&id=".$arrRecord['status_id'];
                         echo '<tr>';
-						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['dept_id'].'" value="'.$arrRecord['dept_id'].'" /><span class="lbl"></span></td>';
+						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['status_id'].'" value="'.$arrRecord['status_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
-						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord['company'] .'</td>';
-						echo '<td>'. $arrRecord['dept_name'] .'</td>';
+						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';						
+						echo '<td>'. $arrRecord['status_name'] .'</td>';
+						echo '<td>'. $arrRecord['seq'] .'</td>';
                         echo '<td class="center">'. $arrRecord['status']  .'</td>';														
                         echo '</tr>';
                     }
@@ -74,7 +72,7 @@ echo form_open('c=department', $attributes);
         </table>
     </div>
 </div>
-
+<?php echo form_close(); ?>
 <?php if($blnAjax != 1): ?>
 <?php include(APPPATH.'views/bottom.php'); ?>
 <?php endif; ?>
@@ -83,7 +81,7 @@ echo form_open('c=department', $attributes);
 
 $(document).ready(function() {
 
-<?php if(count($rsDepartments)> 0): ?>
+<?php if(count($rsStatuses)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
 					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null ],
 					"iDisplayLength": 25,
@@ -101,7 +99,7 @@ $(".chng").change(function(){
 	}
 	$.ajax({
 		type:"POST",
-		url:"index.php?c=department&m=updateStatus",
+		url:"index.php?c=status&m=updateStatus",
 		data:"id="+id+"&status="+status,
 		success:function(res)
 		{
@@ -116,7 +114,7 @@ $(".chng").change(function(){
 
 function openAddPage()
 {
-    window.location.href = 'index.php?c=department&m=addDepartment&action=A';
+    window.location.href = 'index.php?c=status&m=addStatus&action=A';
 }
 
 function DeleteRow()
@@ -124,7 +122,7 @@ function DeleteRow()
 	var intChecked = $("input[name='chk_lst_list1[]']:checked").length;
 	if(intChecked == 0)
 	{
-		alert("No Department selected.");
+		alert("No Status selected.");
 		return false;
 	}
 	else
@@ -132,7 +130,8 @@ function DeleteRow()
 		var responce = confirm("Do you want to delete selected record(s)?");
 		if(responce==true)
 		{
-			$('#frm_list_record').attr('action','index.php?c=department&m=delete');
+			
+			$('#frm_list_record').attr('action','index.php?c=status&m=delete');
 			$('#frm_list_record').submit()	
 		}
 	}

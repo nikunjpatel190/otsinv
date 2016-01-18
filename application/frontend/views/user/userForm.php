@@ -81,10 +81,10 @@ echo form_open('c=user&m=saveUser', $attributes);
             </div>
             
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Department <span class="red">*</span></label>
+                <label for="form-field-1" class="control-label">Status <span class="red">*</span></label>
                 <div class="controls">
                     <select class="required span6" name="slt_department" id="slt_department" >
-                    	<?php echo $this->Page->generateComboByTable("department_master","dept_id","dept_name","","where status='Active'",$rsEdit->dept_id,"Select Department"); ?>
+                    	<?php echo $this->Page->generateComboByTable("department_master","status_id","status_name","","where status='Active'",$rsEdit->status_id,"Select Status"); ?>
                     </select>
                 </div>
             </div>

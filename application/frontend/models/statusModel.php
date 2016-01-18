@@ -2,12 +2,12 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class departmentModel extends Data {
+class statusModel extends Data {
 	public $searchCriteria; 
 	function __construct() 
 	{
         parent::__construct();
-        $this->tbl = 'department_master';
+        $this->tbl = 'status_master';
     }
 	
 	function getDepartmnt()
@@ -15,43 +15,43 @@ class departmentModel extends Data {
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
 		
-		$selectField = "dept.*,comp.com_name AS company";
+		$selectField = "status.*,comp.com_name AS company";
 		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
 		{
 			$selectField = 	$searchCriteria['selectField'];
 		}
 		
 		$whereClaue = "WHERE 1=1 ";
-		// By user department
-		if(isset($searchCriteria['deptId']) && $searchCriteria['deptId'] != "")
+		// By user status
+		if(isset($searchCriteria['statusid']) && $searchCriteria['statusid'] != "")
 		{
-			$whereClaue .= 	" AND dept.dept_id=".$searchCriteria['deptId']." ";
+			$whereClaue .= 	" AND status.status_id=".$searchCriteria['statusid']." ";
 		}
 		
 		// By company id
 		if(isset($searchCriteria['company_id']) && $searchCriteria['company_id'] != "")
 		{
-			$whereClaue .= 	" AND dept.company_id=".$searchCriteria['company_id']." ";
+			$whereClaue .= 	" AND status.company_id=".$searchCriteria['company_id']." ";
 		}
 		
-		// By department name
-		if(isset($searchCriteria['dept_name']) && $searchCriteria['dept_name'] != "")
+		// By status name
+		if(isset($searchCriteria['status_name']) && $searchCriteria['status_name'] != "")
 		{
-			$whereClaue .= 	" AND dept.dept_name='".$searchCriteria['dept_name']."' ";
+			$whereClaue .= 	" AND status.status_name='".$searchCriteria['status_name']."' ";
 		}
 		// By Status
 		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
 		{
-			$whereClaue .= 	" AND dept.status='".$searchCriteria['status']."' ";
+			$whereClaue .= 	" AND status.status='".$searchCriteria['status']."' ";
 		}
 		
 		// Not In
 		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
 		{
-			$whereClaue .= 	" AND dept_id !=".$searchCriteria['not_id']." ";
+			$whereClaue .= 	" AND status_id !=".$searchCriteria['not_id']." ";
 		}
 		
-		$orderField = " dept.dept_name";
+		$orderField = " status.status_name";
 		$orderDir = " ASC";
 		
 		// Set Order Field
@@ -69,7 +69,7 @@ class departmentModel extends Data {
 		$sqlQuery = "SELECT 
 						".$selectField."
 					FROM 
-						department_master AS dept LEFT JOIN company_master AS comp ON dept.company_id=comp.com_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+						status_master AS status LEFT JOIN company_master AS comp ON status.company_id=comp.com_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();

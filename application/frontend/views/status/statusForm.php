@@ -2,10 +2,10 @@
 <?php
 $this->load->helper('form');
 $attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frm_add_user', 'name' => 'frm_add_user');
-echo form_open('c=department&m=saveDepartment', $attributes);
+echo form_open('c=status&m=saveStatus', $attributes);
 ?>
 <div class="page-header position-relative">
-    <h1>Add Department</h1>
+    <h1>Add Status</h1>
 </div>
 
 <input type="hidden" name="action" value="<?php echo $strAction; ?>" id="action"/>
@@ -16,19 +16,19 @@ echo form_open('c=department&m=saveDepartment', $attributes);
 <div class="row-fluid" id="printFrmDiv">
     <div class="span10">
         <fieldset>
+            
+            
             <div class="control-group">
-                <label for="form-field-1" class="control-label">Company Id <span class="red">*</span></label>
+                <label for="form-field-1" class="control-label">Status Name <span class="red">*</span></label>
                 <div class="controls">
-                    <select class="required span6" name="slt_company_id" >
-                    	<?php echo $this->Page->generateComboByTable("company_master","com_id","com_name","","where status='Active'",$rsEdit->company_id,"Select Company"); ?>
-                    </select>
+                    <input type="text" id="txt_status_name" name="txt_status_name" class="required span6" value="<?php echo $rsEdit->status_name; ?>" />
                 </div>
             </div>
             
-            <div class="control-group">
-                <label for="form-field-1" class="control-label">Department Name <span class="red">*</span></label>
+             <div class="control-group">
+                <label for="form-field-1" class="control-label">Sequence <span class="red">*</span></label>
                 <div class="controls">
-                    <input type="text" id="txt_dept_name" name="txt_dept_name" class="required span6" value="<?php echo $rsEdit->dept_name; ?>" />
+                    <input type="text" id="txt_seq" name="txt_seq" class="required span6" value="<?php echo $rsEdit->seq; ?>" />
                 </div>
             </div>
             

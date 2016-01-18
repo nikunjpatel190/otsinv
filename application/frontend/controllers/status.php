@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class department extends CI_Controller {
+class status extends CI_Controller {
  
     
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("departmentModel",'',true);
+		$this->load->model("statusModel",'',true);
 		
 	}
 	
@@ -22,18 +22,18 @@ class department extends CI_Controller {
 		$searchCriteria["company_id"] = $company_id;
 			
 		}
-		// Get All Departments
+		// Get All Status
 		
-		$this->departmentModel->searchCriteria=$searchCriteria;
-		$rsDepartments = $this->departmentModel->getDepartmnt();
-		$rsListing['rsDepartments']	=	$rsDepartments;
+		$this->statusModel->searchCriteria=$searchCriteria;
+		$rsStatuses = $this->statusModel->getDepartmnt();
+		$rsListing['rsStatuses']	=	$rsStatuses;
 		$rsListing['company_id']	=	$company_id;
 		
 		// Load Views
-		$this->load->view('department/list', $rsListing);	
+		$this->load->view('status/list', $rsListing);	
 	}
 	
-	public function AddDepartment()
+	public function AddStatus()
 	{
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
@@ -41,38 +41,37 @@ class department extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->departmentModel->get_by_id('dept_id', $data["id"]);
+		   $data["rsEdit"] = $this->statusModel->get_by_id('status_id', $data["id"]);
         } 
 		else 
 		{
             $data["strAction"] = "A";
         }
-		$this->load->view('department/departmentForm',$data);
+		$this->load->view('status/statusForm',$data);
 	}
 	
-	public function SaveDepartment()
+	public function SaveStatus()
 	{
 		$strAction = $this->input->post('action');
 		
 		// Check User
 		$searchCriteria = array(); 
-		$searchCriteria["selectField"] = "dept.dept_id";
-		$searchCriteria["dept_name"] = $this->Page->getRequest('txt_dept_name');
-		$searchCriteria["company_id"] = $this->Page->getRequest('slt_company_id');
+		$searchCriteria["selectField"] = "status.status_id";
+		$searchCriteria["status_name"] = $this->Page->getRequest('txt_status_name');
 		if ($strAction == 'E')
 		{
             $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
 		}
-		$this->departmentModel->searchCriteria=$searchCriteria;
-		$rsDept = $this->departmentModel->getDepartmnt();
-		if(count($rsDept) > 0)
+		$this->statusModel->searchCriteria=$searchCriteria;
+		$rsStatus = $this->statusModel->getDepartmnt();
+		if(count($rsStatus) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
-			redirect('c=department&m=addDepartment', 'location');
+			redirect('c=status&m=addStatus', 'location');
 		}
 		
-		$arrHeader["company_id"]       =   $this->Page->getRequest('slt_company_id');
-        $arrHeader["dept_name"]        =   $this->Page->getRequest('txt_dept_name');
+		$arrHeader["seq"]       =   $this->Page->getRequest('txt_seq');
+        $arrHeader["status_name"]        =   $this->Page->getRequest('txt_status_name');
         $arrHeader["status"]        			= 	$this->Page->getRequest('slt_status');
 		
 		if ($strAction == 'A' || $strAction == 'R')
@@ -81,7 +80,7 @@ class department extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->departmentModel->insert($arrHeader);
+			$intCenterID = $this->statusModel->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -90,22 +89,23 @@ class department extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->departmentModel->update($arrHeader, array('dept_id' => $user_id));
+            $this->statusModel->update($arrHeader, array('status_id' => $user_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
-		redirect('c=department', 'location');
+		redirect('c=status', 'location');
 	}
 	
 	public function delete()
 	{
-		$arrDepartmentIds	=	$this->input->post('chk_lst_list1');
-		$strDepartmentIds	=	implode(",", $arrDepartmentIds);
-		$strQuery = "DELETE FROM department_master WHERE dept_id IN (". $strDepartmentIds .")";
+		$arrStatusIds	=	$this->input->post('chk_lst_list1');
+		
+		$strStatusIds	=	implode(",", $arrStatusIds);
+		$strQuery = "DELETE FROM status_master WHERE status_id IN (". $strStatusIds .")";
 		$this->db->query($strQuery);
 		$this->Page->setMessage("DELETE_RECORD");
 		// redirect to listing screen
-		redirect('c=department', 'location');
+		redirect('c=status', 'location');
 	}
 	
 	public function updateStatus()
@@ -121,7 +121,7 @@ class department extends CI_Controller {
 		$arrHeader['modified_by'] 		= 	$this->Page->getSession("intUserId");
         $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-        $res = $this->departmentModel->update($arrHeader, array('dept_id' => $id));
+        $res = $this->statusModel->update($arrHeader, array('status_id' => $id));
 		echo "Saved";
 		exit;
 	}

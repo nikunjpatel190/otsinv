@@ -10,7 +10,7 @@ class Commonajax extends CI_Controller {
 		$this->load->model("productModel",'',true);
 		$this->load->model("settingModel",'',true);
 		$this->load->model("companyModel",'',true);
-		$this->load->model("departmentModel",'',true);
+		$this->load->model("statusModel",'',true);
 		$this->load->model("raw_materialModel",'',true);
 		
     }	
@@ -111,71 +111,71 @@ class Commonajax extends CI_Controller {
 		}
 	}
 	
-	function getUsrDeptDetails()
+	function getUsrStatusDetails()
 	{
 		$user_id = $this->Page->getRequest("user_id");
 		
-		// Get All Department
+		// Get All status
 		$searchCriteria["status"] = "ACTIVE";
-		$rsDepartments = $this->departmentModel->getDepartmnt();
+		$rsStatuses = $this->statusModel->getDepartmnt();
 		//$this->Page->pr($rsCompanies); exit;
 		
 		$rsMapDtl = array();
 		if($user_id != "")
 		{
 			$searchCriteria = array();
-			$searchCriteria['selectField'] = 'dept.dept_id';
+			$searchCriteria['selectField'] = 'status.status_id';
 			$searchCriteria["userId"] = $user_id;
 			$this->userModel->searchCriteria=$searchCriteria;
 			$rsMapDtl = $this->userModel->getAssignDeptDetail();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
-		$assignDepartmentArr = array();
-		foreach($rsDepartments AS $row)
+		$assignStatusArr = array();
+		foreach($rsStatuses AS $row)
 		{
 			$map = 0;
 			foreach($rsMapDtl AS $mapRow)
 			{
-				if($row['dept_id'] == $mapRow['dept_id'])
+				if($row['status_id'] == $mapRow['status_id'])
 				{
 					$map = 1;
 				}
 			}
-			$assignDepartmentArr[$row['dept_id']] = 	$row;
-			$assignDepartmentArr[$row['dept_id']]['map'] = $map;
+			$assignStatusArr[$row['status_id']] = 	$row;
+			$assignStatusArr[$row['status_id']]['map'] = $map;
 		}
 		//$this->Page->pr($assignCompanyArr); exit;
-		$rsListing['rsMapDtl'] = $assignDepartmentArr;
+		$rsListing['rsMapDtl'] = $assignStatusArr;
 		$rsListing['user_id'] = $user_id;
-		$this->load->view('user/list_user_dept', $rsListing);		
+		$this->load->view('user/list_user_status', $rsListing);		
 	}
 	
-	function mapUserDepartment()
+	function mapUserStatus()
 	{
 		$userid = $this->Page->getRequest("userid");
-		$deptid = $this->Page->getRequest("deptid");
+		$statusid = $this->Page->getRequest("statusid");
 		
 		$searchCriteria = array();
-		$searchCriteria['selectField'] = 'dept.dept_id';
+		$searchCriteria['selectField'] = 'status.status_id';
 		$searchCriteria["userId"] = $userid;
-		$searchCriteria["deptId"] = $deptid;
+		$searchCriteria["statusid"] = $statusid;
 		$this->userModel->searchCriteria=$searchCriteria;
 		$rsMapDtl = $this->userModel->getAssignDeptDetail();
 		if(count($rsMapDtl)>0)
 		{		
-			$strQuery = "DELETE FROM map_user_department WHERE user_id=".$userid." AND dept_id=".$deptid."";
+			$strQuery = "DELETE FROM map_user_status WHERE user_id=".$userid." AND status_id=".$statusid."";
 			$this->db->query($strQuery);
 		}
 		else
 		{
 			$arrRecord = array();
 			$arrRecord["user_id"] = $userid;
-			$arrRecord["dept_id"] = $deptid;
+			$arrRecord["status_id"] = $statusid;
 			$arrRecord['insertby']		=	$this->Page->getSession("intUserId");
 			$arrRecord['insertdate'] 		= 	date('Y-m-d H:i:s');
 			$arrRecord['updatedate'] 		= 	date('Y-m-d H:i:s');
-			$this->db->insert("map_user_department", $arrRecord);
+			$this->db->insert("map_user_status", $arrRecord);
 			$this->db->insert_id();
 		}
 	}

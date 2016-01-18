@@ -36,7 +36,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                     <th>Email Id</th>
                     <th>Phone No.</th>
                     <th>Company</th>
-                    <th>Department</th>
+                    <th>Status</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -63,7 +63,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                         echo '<td>'. $arrRecord['user_email'] .'</td>';
 						echo '<td>'. $arrRecord['user_phone'] .'</td>';
                         echo '<td>'. $arrRecord['com_name'] .'</td>';
-						echo '<td>'. $arrRecord['dept_name'] .'</td>';
+						echo '<td>'. $arrRecord['status_name'] .'</td>';
 						echo '<td>'. $arrRecord['status'] .'</td>';														
                         echo '</tr>';
                     }

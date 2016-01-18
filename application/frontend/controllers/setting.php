@@ -179,7 +179,7 @@ class setting extends CI_Controller {
 		$this->load->view('module/assignModuleForm',$data);
 	}
 	
-	// save user-department mapping info
+	// save user-status mapping info
 	public function assignModule()
 	{
 		$this->settingModel->tbl="map_usertype_module";

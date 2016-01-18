@@ -54,7 +54,7 @@
 				$(this).html('-');
 				$.ajax({
 					type:"POST",
-					url:"index.php?c=commonajax&m=getUsrDeptDetails",
+					url:"index.php?c=commonajax&m=getUsrStatusDetails",
 					data:"user_id="+user_id,
 					beforeSend:function(){
 					},

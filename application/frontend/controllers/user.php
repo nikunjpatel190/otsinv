@@ -17,7 +17,7 @@ class user extends CI_Controller {
 		
 		// Get All Users
 		$searchCriteria = array(); 
-		$searchCriteria["selectField"] = "um.*,com.com_name,dept.dept_name";
+		$searchCriteria["selectField"] = "um.*,com.com_name,status.status_name";
 		$searchCriteria["orderField"] = "insertdate";
 		$searchCriteria["orderDir"] = "DESC";
 		$this->userModel->searchCriteria=$searchCriteria;
@@ -77,7 +77,7 @@ class user extends CI_Controller {
 		}	
 			
 		$arrHeader["company_id"]        =   $this->Page->getRequest('slt_company');
-		$arrHeader["dept_id"]        =   $this->Page->getRequest('slt_department');
+		$arrHeader["status_id"]        =   $this->Page->getRequest('slt_status');
         $arrHeader["status"]        			= 	$this->Page->getRequest('slt_status');
 		
 		if ($strAction == 'A' || $strAction == 'R')
@@ -122,12 +122,12 @@ class user extends CI_Controller {
 		$this->load->view('user/assignCompanyForm',$data);
 	}
 	
-	// open form (user-department mapping)
-	public function frmAssignDept()
+	// open form (user-status mapping)
+	public function frmAssignStatus()
 	{
 		$this->userModel->tbl="user_master";
 		$data['UsersArr'] = $this->userModel->getUsers();
-		$this->load->view('user/assignDeptForm',$data);
+		$this->load->view('user/assignStatusForm',$data);
 	}
 	
 	##User Type List

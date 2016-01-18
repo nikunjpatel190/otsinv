@@ -46,10 +46,10 @@ class userModel extends Data {
 			$whereClaue .= 	" AND um.company_id=".$searchCriteria['companyId']." ";
 		}
 		
-		// By Department
-		if(isset($searchCriteria['deptId']) && $searchCriteria['deptId'] != "")
+		// By Status
+		if(isset($searchCriteria['statusid']) && $searchCriteria['statusid'] != "")
 		{
-			$whereClaue .= 	" AND um.dept_id=".$searchCriteria['deptId']." ";
+			$whereClaue .= 	" AND um.status_id=".$searchCriteria['statusid']." ";
 		}
 		
 		// By Status
@@ -86,8 +86,8 @@ class userModel extends Data {
 							ON um.company_id = com.com_id
 						LEFT JOIN user_types AS ut
 							ON um.user_type = ut.u_typ_id
-					 	LEFT JOIN department_master AS dept
-							ON um.dept_id = dept.dept_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+					 	LEFT JOIN status_master AS status
+							ON um.status_id = status.status_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
@@ -167,9 +167,9 @@ class userModel extends Data {
 		}
 		
 		// By Company
-		if(isset($searchCriteria['deptId']) && $searchCriteria['deptId'] != "")
+		if(isset($searchCriteria['statusid']) && $searchCriteria['statusid'] != "")
 		{
-			$whereClaue .= 	" AND map.dept_id='".$searchCriteria['deptId']."' ";
+			$whereClaue .= 	" AND map.status_id='".$searchCriteria['statusid']."' ";
 		}
 		
 		$orderField = " map.id";
@@ -189,11 +189,11 @@ class userModel extends Data {
 		
 		$sqlQuery = "SELECT
 					  	".$selectField."
-					 FROM map_user_department AS map
+					 FROM map_user_status AS map
 					 	JOIN user_master AS um
 							ON map.user_id = um.user_id
-					  	JOIN department_master AS dept
-							ON map.dept_id = dept.dept_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+					  	JOIN status_master AS status
+							ON map.status_id = status.status_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);

@@ -97,9 +97,9 @@ $rsAssignModules = $CI->generalModel->getAssignModule();
                     </a>
                 </li>
                 <li>
-                    <a href="index.php?c=user&m=frmAssignDept">
+                    <a href="index.php?c=user&m=frmAssignStatus">
                         <i class="icon-double-angle-right"></i>
-                        Assign Department
+                        Assign Status
                     </a>
                 </li>
                 <li>
@@ -130,16 +130,16 @@ $rsAssignModules = $CI->generalModel->getAssignModule();
         <li>
         	<a href="#" class="dropdown-toggle">
                 <i class="icon-edit"></i>
-                <span class="menu-text"> Department </span>
+                <span class="menu-text"> Status </span>
     
                 <b class="arrow icon-angle-down"></b>
             </a>
     
             <ul class="submenu">
                 <li>
-                    <a href="index.php?c=department">
+                    <a href="index.php?c=status">
                         <i class="icon-double-angle-right"></i>
-                        Manage Department
+                        Manage Status
                     </a>
                 </li>
             </ul>
