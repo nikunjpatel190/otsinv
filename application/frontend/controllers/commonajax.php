@@ -11,7 +11,7 @@ class Commonajax extends CI_Controller {
 		$this->load->model("settingModel",'',true);
 		$this->load->model("companyModel",'',true);
 		$this->load->model("statusModel",'',true);
-		$this->load->model("raw_materialModel",'',true);
+		$this->load->model("raw_materialModel1",'',true);
 		
     }	
 	
