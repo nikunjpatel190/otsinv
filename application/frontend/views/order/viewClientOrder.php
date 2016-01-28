@@ -1,3 +1,4 @@
+<input type="hidden" name="orderId" id="orderId" value="<?php echo $orderDetailArr["order_id"]; ?>">
 <div class="row-fluid">
 	<div class="span12">
 		<!--PAGE CONTENT BEGINS-->
@@ -12,7 +13,7 @@
 							ORDER NO : <?php echo $orderDetailArr['order_no']; ?>
 						</h3>
 
-						<div class="widget-toolbar hidden-480 div-icons">
+						<!--<div class="widget-toolbar hidden-480 div-icons">
 							<a href="#">
 								<i class="icon-file bigger-120"></i>
 							</a> 
@@ -25,7 +26,7 @@
 							<a href="#">
 								<i class="icon-print bigger-120"></i>
 							</a>
-						</div>
+						</div>-->
 
 						<div class="btn-group" id="div-order-stage">
 							<button class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -34,20 +35,21 @@
 							</button>
 
 							<ul class="dropdown-menu dropdown-primary">
+								<?php
+								if(count($statusArr) > 0)
+								{
+									foreach($statusArr AS $row)
+									{
+									?>
+										<li>
+											<a href="#order-status-form" data-toggle="modal" class="status" statusid="<?php echo $row['status_id']; ?>" seq="<?php echo $row['seq']; ?>"><?php echo $row['status_name']; ?></a>
+										</li>
+									<?php
+									}
+								}
+								?>
 								<li>
-									<a href="#order-status-form" data-toggle="modal">Check inventory</a>
-								</li>
-								<li>
-									<a href="#">Assembly</a>
-								</li>
-								<li>
-									<a href="#">QA</a>
-								</li>
-								<li>
-									<a href="#">Paint</a>
-								</li>
-								<li>
-									<a href="#">Dispatch</a>
+									<a href="index.php?c=invoice&m=generateInvoice&orderId=<?php echo $orderDetailArr['order_id']; ?>" class="status">Invoice</a>
 								</li>
 							</ul>
 						</div>
@@ -57,7 +59,7 @@
 							<span class="red"><?php echo $orderDetailArr['order_date']; ?></span>
 
 							<br>
-							<span class="invoice-info-label">Shipmendt Date : </span>
+							<span class="invoice-info-label">Shipment Date : </span>
 							<span class="blue"><?php echo $orderDetailArr['order_ship_date']; ?></span>
 						</div>
 					</div>
@@ -145,6 +147,7 @@
 												<th class="hidden-480">Tax</th>
 												<th class="hidden-480">Discount</th>
 												<th>Total</th>
+												<th>Status</th>
 											</tr>
 										</thead>
 
@@ -162,6 +165,19 @@
 													<td><?php echo $prodRow['tax_amount']." (".$prodRow['tax_value']."%)" ?></td>
 													<td><?php echo $prodRow['discount_amount']; ?></td>
 													<td><?php echo $prodRow['prod_total_amount']; ?></td>
+													<td>
+														<?php
+															if(count($statusSummaryArr[$prodRow["prod_id"]]) > 0)
+															{
+																foreach($statusSummaryArr[$prodRow["prod_id"]] AS $status=>$status_qty)
+																{
+																?>
+																	<small class="clearfix"><?php echo $status." : ".$status_qty; ?></small>
+																<?php
+																}
+															}
+														?>
+													</td>
 												</tr>
 											<?php
 												$cnt++;				
@@ -237,144 +253,109 @@
 
 <!-- START Modal popup for Manufacture -->
 <div id="order-status-form" class="modal hide fade" tabindex="-1">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="blue bigger">Please fill the following information</h4>
-    </div>
+	<form name="frmStatusSubmit" id="frmStatusSubmit">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="blue bigger">Order Status Details</h4>
+		</div>
 
-    <div class="modal-body overflow-visible">
-    	<div class="vspace"></div>
-        <div class="row-fluid">
-            <div class="widget-box transparent"> 
-                <div class="widget-body">
-                    <div class="widget-main">
-                    	<h3 class="smaller lighter blue">
-                            Item Details
-                        </h3>
-                        <!-- START ITEM DETAILS -->
-                    	<table class="table table-striped tbl-item-dtl">
-                            <thead>
-                                <tr>
-									<th class="span2">Type</th>
-                                    <th class="span2">Product Name</th>
-                                    <th class="span1">Quantity</th>
-                                    <th class="span2">Price</th>
-                                    <th class="span1">Tax</th>
-                                    <th class="span2">Discount</th>
-                                    <th class="span1">Amount</th>
-                                    <th class="span1">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-								<tr id="0" class="entry">
-									<td class="span2">
-										<select id="selProductType0" name="selProductType" class="form-control span12 required productType">
-											<option value="product">Product</option><option value="component">Component</option>										</select>
-                                    </td>
-                                    <td class="span2">
-										<select id="selProduct0" name="selProduct" class="form-control span12 required product">
-											<option value="">Select Product</option><option value="5">Bearing</option><option value="6">Gearbox</option>										</select>
-                                    </td>
-                                    <td class="span1">
-                                    	<input type="text" onkeypress="javascript:return OnlyNumeric(event);" placeholder="QTY" id="txtProductQty0" name="txtProductQty" class="form-control span12 required calc">
-										<input type="hidden" value="" id="jsonString0" name="jsonString">
-                                    </td>
-                                    <td class="span2">
-                                    	<input type="text" placeholder="INR" id="txtProductPrice0" name="txtProductPrice" class="form-control span12 required calc">
-                                    </td>
-                                    <td class="span1">
-                                    	<input type="text" placeholder="%" id="txtProductTax0" name="txtProductTax" class="form-control span12 calc">
-                                        <small name="txtProductTaxAmt" id="txtProductTaxAmt0" class="small-tax"></small>
-                                    </td>
-                                    <td class="span2">
-                                    	<input type="text" placeholder="INR" id="txtProductDiscountValue0" name="txtProductDiscountValue" class="form-control span8 calc">
-                                        <select onchange="javascript:$('.calc').blur();" id="txtProductDiscountType0" name="txtProductDiscountType" class="span4">
-											<option value="rs">Rs</option><option value="%">%</option>                                        </select>
-										<small name="txtProductDiscountAmt" id="txtProductDiscountAmt0"></small>
-                                    </td>
-                                    <td class="span1">
-                                    	<label class="span12" name="prodTotalAmount" id="prodTotalAmount0">0.0</label>
-                                    </td>
-                                    <td class="span1">
-                                    	<button id="btnOrderProdAdd" type="button" class="btn btn-success btn-add">
-											<span class="icon-plus bigger-110"></span>
-										</button>
-                                    </td>
-                                </tr>
-							</tbody>
-                        </table>
-                        <!-- END ITEM DETAILS -->
-                        
-                        <!-- START TOTAL -->
-                        <table class="table">
-                        	<tbody>
-                                <tr>
-                                	<td align="right">
-                                    	<div class="span12">
-                                           <div class="span6">
-										   </div> 
-                                           <div class="span6 divTotal">
-											   <div class="control-group">
-                                                    <label class="control-label">Total Qty</label>
-                                                    <div class="controls">
-														<label id="lblTotalQty" class="control-label span5"></label>
-                                                    </div>
-                                                </div>	
-                                               <div class="control-group">
-                                                    <label class="control-label">Sub Total</label>
-                                                    <div class="controls">
-														<label id="lblSubTotal" class="control-label span5"></label>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">Total Tax</label>
-                                                    <div class="controls">
-                                                        <label id="lblTotalTax" class="control-label span5"></label>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="control-group">
-                                                    <label class="control-label">Discount</label>
-                                                    <div class="controls">
-                                                        <input type="text" value="" placeholder="INR" id="txtTotalDiscountValue" name="txtTotalDiscountValue" class="span4 calc">
-                                                        <select onchange="javascript:$('.calc').blur();" id="selTotalDiscountType" name="selTotalDiscountType" class="span3">
-															<option value="rs">Rs</option><option value="%">%</option>                                                        </select>
-                                                        <label id="lblDiscountAmount" class="control-label span4"></label>
-                                                    </div>
-                                                </div>
-                                                
-                                                
-                                                <div class="control-group">
-                                                    <label class="control-label">Adjustment</label>
-                                                    <div class="controls">
-                                                        <input type="text" placeholder="INR" value="" id="txtAdjustAmount" name="txtAdjustAmount" class="span6 calc">
-                                                        <label id="lblAdjustAmount" class="control-label span4"></label>
-                                                    </div>
-                                                </div>	
-                                                <div class="control-group div-final-total">
-                                                	<label for="form-input-readonly" class="control-label">TOTAL</label>
-                                                    <div class="controls">
-                                                        <label id="lblFinalTotal" class="control-label span5"></label>
-                                                </div>
-                                           </div>
-                                       </div> 
-                                    </div></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- END TOTAL -->
-                    </div>
-                </div>
-            </div>
-    	</div>
-	</div>
-    
-    <div class="modal-footer">
-        <button class="btn btn-small btn-primary" id="saveMenuOrder">
-            <i class="icon-ok"></i>
-            Save
-        </button>
-    </div>
+		<div class="modal-body overflow-visible">
+			<div class="vspace"></div>
+			<div class="row-fluid">
+				<div class="widget-box transparent"> 
+					<div class="widget-body" id="divOrderStatus"> 
+						<!-- HTML RESPONCE CONTENT -->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal-footer">
+			<button class="btn btn-small btn-primary" id="saveOrderStatus">
+				<i class="icon-ok"></i>
+				Save
+			</button>
+		</div>
+	</form>
 </div>
 <!-- END Modal popup for Manufacture -->
+
+<script type="text/javascript">
+$(document).ready(function(){
+});
+
+// get order status details
+$(".status").click(function(){
+	var param = {};
+	param['orderId'] = $("#orderId").val();
+	param['statusId'] = $(this).attr('statusid');
+	param['seq'] = $(this).attr('seq');
+	param['orderId'] = $("#orderId").val();
+	
+	$.ajax({
+		type:"POST",
+		url:"index.php?c=order&m=getOrderStatus",
+		data:param,
+		success:function(res){
+			var res = $.trim(res);
+			$("#divOrderStatus").html(res);
+		}
+	});
+});
+
+$("#frmStatusSubmit").submit(function(e){
+	e.preventDefault();
+	var error = 0;
+	$(".errmsg,.text-error").remove();
+	if(!submit_form(this))
+	{
+		error++;
+	}
+	if(error > 0)
+	{
+		return false;
+	}	
+	var param = {};
+	param['orderId'] = $("#orderId").val();
+	param['statusId'] = $("#hdnStatusId").val();
+	
+	var prod_error = 0;
+	var prodArr = {};
+	$("table#tbl-order-status tbody tr").each(function(){
+		var prod_id = $(this).find("input[name='prod_id']").val();
+		var remain_qty = $(this).find("input[name='hdn_remain_qty']").val();
+		var qty = $(this).find("input[name='txtQty']").val();
+		if(qty > remain_qty)
+		{
+			$(this).find("input[name='txtQty']").after('<span class="clearfix text-error">Max Qty : '+remain_qty+'</span>');
+			prod_error++;		
+		}
+		else
+		{
+			prodArr[prod_id] = qty;	
+		}
+	});
+	if(prod_error > 0)
+	{
+		return false;
+	}
+	param['prodArr'] = prodArr;
+	$.ajax({
+		type:"POST",
+		url:"index.php?c=order&m=saveOrderStatus",
+		data:param,
+		success:function(res){
+			var res = $.trim(res);
+			if(res == 1)
+			{
+				$("#order-status-form").modal('hide');
+				loadViewOrder($("#orderId").val());
+			}
+			else
+			{
+				alert(res);
+			}
+		}
+	});
+});
+</script>

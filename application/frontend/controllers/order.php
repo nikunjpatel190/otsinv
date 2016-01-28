@@ -10,6 +10,7 @@ class order extends CI_Controller {
 		$this->load->model("processModel",'',true);
 		$this->load->model("productModel",'',true);
 		$this->load->model("customerModel",'',true);
+		$this->load->model("statusModel",'',true);
 	}
 	####################################################################
 	#						START CLIENT ORDER					       #
@@ -17,11 +18,50 @@ class order extends CI_Controller {
 
 	public function index()
 	{
-		$orderListArr = $this->orderModel->getOrderList();
+		// Get All Status (from status master)
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'sts.status_id,sts.status_name,sts.seq';
+		$searchCriteria['status'] = 'ACTIVE';
+		$searchCriteria['orderField'] = 'sts.seq';
+		$searchCriteria['orderDir'] = 'ASC';
+		$this->statusModel->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+
+		// Get Order List
+		$orderListRes = $this->orderModel->getOrderList();
+
+		$orderListArr = array();
+		if(count($orderListRes) > 0)
+		{
+			foreach($orderListRes AS $orderRow)
+			{
+				$statusArr = array();
+				foreach($statusMasterArr AS $statusRow)
+				{
+					$query = "SELECT prod_id,IFNULL(SUM(qty),0) AS sts_qty FROM order_product_status
+						  WHERE order_id = ".$orderRow['order_id']." AND status_id = ".$statusRow['status_id']." GROUP BY prod_id";
+					$result = $this->orderModel->db->query($query);
+					$rsData = $result->result_array();
+					$temp = array();
+					if(count($rsData) > 0)
+					{
+						foreach($rsData AS $stsQtyRow)
+						{
+							$temp[$stsQtyRow['prod_id']] = $stsQtyRow['sts_qty'];
+						}
+					}
+					$statusArr[$statusRow['status_name']] = $temp;
+				}
+
+				//  Add status array with order list array
+				$orderRow['statusArr'] = $statusArr;
+				$orderListArr[] = $orderRow;
+			}
+		}
 		//$this->Page->pr($orderListArr); exit;
 
 		$rsListing['orderListArr'] = $orderListArr;
-		//$this->Page->pr($orderListArr); exit;
+		$rsListing['statusMasterArr'] = $statusMasterArr;
 		$this->load->view('order/listClientOrder', $rsListing);
 	}
 
@@ -62,6 +102,7 @@ class order extends CI_Controller {
 	### Desc : view client order
 	public function viewClientOrder()
 	{
+		$userId = $this->Page->getSession("intUserId");
 		$orderId = $this->Page->getRequest("orderId");
 
 		// Get Order Details
@@ -73,7 +114,6 @@ class order extends CI_Controller {
 		$orderDetailArr = $this->orderModel->getOrderDetails();
 		$orderDetailArr = $orderDetailArr[0];
 		$rsListing['orderDetailArr'] = $orderDetailArr;
-		//$this->Page->pr($orderDetailArr); exit;
 
 		// Get Customer Details
 		$searchCriteria = array();
@@ -81,6 +121,80 @@ class order extends CI_Controller {
 		$this->customerModel->searchCriteria = $searchCriteria;
 		$customerArr = $this->customerModel->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr[0];
+
+		// Get All Status (from status master)
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'sts.status_id,sts.status_name,sts.seq';
+		$searchCriteria['status'] = 'ACTIVE';
+		$searchCriteria['orderField'] = 'sts.seq';
+		$searchCriteria['orderDir'] = 'ASC';
+		$this->statusModel->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+
+		$orderProductDetailsArr = $orderDetailArr['orderProductDetailsArr'];
+		$statusSummaryArr = array();
+		if(count($orderProductDetailsArr) > 0)
+		{
+			foreach($orderProductDetailsArr AS $prodRow)
+			{
+				foreach($statusMasterArr AS $stsRow)
+				{
+					$prod_id = $prodRow['prod_id'];
+					$sts_id = $stsRow['status_id'];	
+					$query = "SELECT IFNULL(SUM(qty),0) AS sts_qty FROM order_product_status
+							  WHERE order_id = ".$orderId." AND prod_id=".$prod_id." AND status_id = ".$sts_id."";
+					$stsQty = $this->orderModel->db->query($query)->row()->sts_qty;
+					$statusSummaryArr[$prod_id][$stsRow['status_name']] = $stsQty;
+				}
+			}
+		}
+		$rsListing['statusSummaryArr'] = $statusSummaryArr;
+
+		// Get Order Total Qty By Status
+		$query = "SELECT ops.status_id,IFNULL(SUM(ops.qty),0) AS sts_qty
+				  FROM order_product_status AS ops
+				  WHERE ops.order_id = ".$orderId."
+				  GROUP BY ops.order_id,ops.status_id";
+		$result = $this->orderModel->db->query($query);
+		$rsData = $result->result_array();
+		
+		$arr = array();
+		if(count($rsData) > 0)
+		{
+			foreach($rsData AS $row)
+			{
+				$arr[$row['status_id']] = $row;
+			}
+		}
+
+		// Get user assigned status
+		$query = "SELECT sm.status_id,sm.status_name,sm.seq FROM status_master AS sm
+				  JOIN map_user_status AS map
+				  ON sm.status_id = map.status_id
+				  WHERE sm.STATUS = 'ACTIVE' AND map.user_id = ".$userId." ORDER BY sm.seq";
+		$result = $this->orderModel->db->query($query);
+		$rsData = $result->result_array();
+		
+		// Total Order Qty
+		$total_qty = $orderDetailArr['tot_prod_qty'];
+
+		$statusArr = array();
+		if(count($rsData) > 0)
+		{
+			foreach($rsData AS $row)
+			{
+				$sts_qty = intval($arr[$row['status_id']]['sts_qty']);
+				//echo $total_qty." ".$sts_qty."|";
+				if($total_qty > $sts_qty)
+				{
+					$statusArr[$row['status_id']] = $row;
+				}
+			}
+		}
+		//$this->Page->pr($statusArr); exit;
+
+		$rsListing['statusArr'] = $statusArr;
+
 		$this->load->view('order/viewClientOrder', $rsListing);
 	}
 
@@ -263,8 +377,138 @@ class order extends CI_Controller {
 			echo "2"; exit;
 		}
 	}
-	
-	
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : get order status details
+	public function getOrderStatus()
+	{
+		$orderId = $this->Page->getRequest("orderId");
+		$statusId = $this->Page->getRequest("statusId");
+		$seq = $this->Page->getRequest("seq");		
+		
+		// Get Order Status Master Details
+		$searchCriteria = array();
+		$searchCriteria['selectField'] = 'sts.status_id,sts.status_name,sts.seq';
+		$searchCriteria['status'] = 'ACTIVE';
+		$this->statusModel->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+
+		$stsBySeqArr = array();
+		if(count($statusMasterArr) > 0)
+		{
+			foreach($statusMasterArr AS $row)
+			{
+				$stsBySeqArr[$row['seq']] = $row['status_id'];
+			}
+		}
+
+		// get previous status id
+		$prvStatusId = $stsBySeqArr[$seq-1];
+		
+		// Get Order Product Details
+		$searchCriteria = array();
+		$searchCriteria["selectField"] = "pm.prod_id,pm.prod_type,pm.prod_name,opd.prod_qty";
+		$searchCriteria["order_id"] = $orderId;
+		$this->orderModel->searchCriteria = $searchCriteria;
+		$orderProductDetailArr = $this->orderModel->getOrderProductDetails();
+
+		// Get Order Status
+		$searchCriteria = array();
+		$searchCriteria["selectField"] = "ops.prod_id,SUM(ops.qty) AS qty";
+		$searchCriteria["order_id"] = $orderId;
+		$searchCriteria["status_id"] = $statusId;
+		$searchCriteria["groupField"] = "ops.prod_id";
+		$this->orderModel->searchCriteria = $searchCriteria;
+		$orderStatusDetailArr = $this->orderModel->getOrderStatus();
+
+		if(count($orderStatusDetailArr) > 0)
+		{
+			$statusArr = array();
+			foreach($orderStatusDetailArr AS $row)
+			{
+				$statusArr[$row['prod_id']] = $row['qty'];
+			}
+		}
+
+		// Get Previous Status Details
+		$prvStatusArr = array();
+		if($prvStatusId != "")
+		{
+			$searchCriteria = array();
+			$searchCriteria["selectField"] = "ops.prod_id,SUM(ops.qty) AS qty";
+			$searchCriteria["order_id"] = $orderId;
+			$searchCriteria["status_id"] = $prvStatusId;
+			$searchCriteria["groupField"] = "ops.prod_id";
+			$this->orderModel->searchCriteria = $searchCriteria;
+			$prvOrderStatusDetailArr = $this->orderModel->getOrderStatus();
+
+			if(count($prvOrderStatusDetailArr) > 0)
+			{
+				foreach($prvOrderStatusDetailArr AS $row)
+				{
+					$prvStatusArr[$row['prod_id']] = $row['qty'];
+				}
+			}
+		}
+		//$this->Page->pr($prvStatusArr); exit;
+
+		$productArr = array();
+		if(count($orderProductDetailArr) > 0)
+		{
+			foreach($orderProductDetailArr AS $row)
+			{
+				if($seq == 1 || (isset($prvStatusArr[$row['prod_id']]) && $prvStatusArr[$row['prod_id']] != ""))
+				{
+					$row['prv_proceed_qty'] = intval($prvStatusArr[$row['prod_id']]);
+					if($row['prv_proceed_qty'] > 0)
+					{
+						$row['process_qty'] = $row['prv_proceed_qty'];
+					}
+					else
+					{
+						$row['process_qty'] = intval($row['prod_qty']);
+					}
+					$row['proceed_qty'] = intval($statusArr[$row['prod_id']]);
+					$row['remain_qty'] = intval($row['process_qty']) - intval($row['proceed_qty']);
+					if($row['remain_qty'] > 0)
+					{
+						$productArr[$row['prod_id']] = $row;
+					}
+				}
+			}
+		}
+		//$this->Page->pr($productArr); exit;
+		$rsListing["orderProductDetailArr"] = $productArr;
+
+		// Get Order Status Details
+		$this->load->view("order/orderStatusDetail",$rsListing);
+	}
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : save order status
+	public function saveOrderStatus()
+	{
+		$orderId = $_REQUEST['orderId'];
+		$statusId = $_REQUEST['statusId'];
+		$prodArr = $_REQUEST['prodArr'];
+
+		if(count($prodArr) > 0)
+		{
+			foreach($prodArr AS $prod_id => $qty)
+			{
+				$arrData = array();
+				$arrData['order_id'] = $orderId;
+				$arrData['prod_id'] = $prod_id;
+				$arrData['status_id'] = $statusId;
+				$arrData['qty'] = $qty;
+				$arrData['insert_by'] = $this->Page->getSession("intUserId");
+				$arrData['insert_date'] = date("Y-m-d h:i:s");
+				$this->orderModel->tbl = "order_product_status";
+				$this->orderModel->insert($arrData);
+			}
+		}
+		echo "1"; exit;
+	}
 	
 	####################################################################
 	#						START MENUFECTURE ORDER					   #

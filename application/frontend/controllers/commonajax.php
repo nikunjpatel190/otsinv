@@ -117,7 +117,7 @@ class Commonajax extends CI_Controller {
 		
 		// Get All status
 		$searchCriteria["status"] = "ACTIVE";
-		$rsStatuses = $this->statusModel->getDepartmnt();
+		$rsStatuses = $this->statusModel->getClientOrderStatusMaster();
 		//$this->Page->pr($rsCompanies); exit;
 		
 		$rsMapDtl = array();

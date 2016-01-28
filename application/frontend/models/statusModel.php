@@ -10,12 +10,12 @@ class statusModel extends Data {
         $this->tbl = 'status_master';
     }
 	
-	function getDepartmnt()
+	function getClientOrderStatusMaster()
 	{
 		$searchCriteria = array();
 		$searchCriteria = $this->searchCriteria;
 		
-		$selectField = "status.*,comp.com_name AS company";
+		$selectField = "sts.*";
 		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
 		{
 			$selectField = 	$searchCriteria['selectField'];
@@ -25,24 +25,25 @@ class statusModel extends Data {
 		// By user status
 		if(isset($searchCriteria['statusid']) && $searchCriteria['statusid'] != "")
 		{
-			$whereClaue .= 	" AND status.status_id=".$searchCriteria['statusid']." ";
-		}
-		
-		// By company id
-		if(isset($searchCriteria['company_id']) && $searchCriteria['company_id'] != "")
-		{
-			$whereClaue .= 	" AND status.company_id=".$searchCriteria['company_id']." ";
+			$whereClaue .= 	" AND sts.status_id=".$searchCriteria['statusid']." ";
 		}
 		
 		// By status name
 		if(isset($searchCriteria['status_name']) && $searchCriteria['status_name'] != "")
 		{
-			$whereClaue .= 	" AND status.status_name='".$searchCriteria['status_name']."' ";
+			$whereClaue .= 	" AND sts.status_name='".$searchCriteria['status_name']."' ";
 		}
+
+		// By Seq
+		if(isset($searchCriteria['status_seq']) && $searchCriteria['status_seq'] != "")
+		{
+			$whereClaue .= 	" AND sts.seq=".$searchCriteria['status_seq']." ";
+		}
+
 		// By Status
 		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
 		{
-			$whereClaue .= 	" AND status.status='".$searchCriteria['status']."' ";
+			$whereClaue .= 	" AND sts.status='".$searchCriteria['status']."' ";
 		}
 		
 		// Not In
@@ -51,7 +52,7 @@ class statusModel extends Data {
 			$whereClaue .= 	" AND status_id !=".$searchCriteria['not_id']." ";
 		}
 		
-		$orderField = " status.status_name";
+		$orderField = " sts.seq";
 		$orderDir = " ASC";
 		
 		// Set Order Field
@@ -69,12 +70,10 @@ class statusModel extends Data {
 		$sqlQuery = "SELECT 
 						".$selectField."
 					FROM 
-						status_master AS status LEFT JOIN company_master AS comp ON status.company_id=comp.com_id ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+						status_master AS sts ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
 		
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;
-		
-		
 	}
 }

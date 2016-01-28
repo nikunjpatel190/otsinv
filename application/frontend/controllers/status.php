@@ -25,7 +25,7 @@ class status extends CI_Controller {
 		// Get All Status
 		
 		$this->statusModel->searchCriteria=$searchCriteria;
-		$rsStatuses = $this->statusModel->getDepartmnt();
+		$rsStatuses = $this->statusModel->getClientOrderStatusMaster();
 		$rsListing['rsStatuses']	=	$rsStatuses;
 		$rsListing['company_id']	=	$company_id;
 		
@@ -63,7 +63,7 @@ class status extends CI_Controller {
             $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
 		}
 		$this->statusModel->searchCriteria=$searchCriteria;
-		$rsStatus = $this->statusModel->getDepartmnt();
+		$rsStatus = $this->statusModel->getClientOrderStatusMaster();
 		if(count($rsStatus) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');

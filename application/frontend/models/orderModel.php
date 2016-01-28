@@ -233,9 +233,9 @@ class orderModel extends Data {
 		}
 		
 		// By status
-		if(isset($searchCriteria['status']) && $searchCriteria['status'] != "")
+		if(isset($searchCriteria['status_id']) && $searchCriteria['status_id'] != "")
 		{
-			$whereClaue .= 	" AND ops.status = '".$searchCriteria['status']."' ";
+			$whereClaue .= 	" AND ops.status_id = '".$searchCriteria['status_id']."' ";
 		}
 		
 		// Not In
@@ -243,6 +243,14 @@ class orderModel extends Data {
 		{
 			$whereClaue .= 	" AND ops.ops_id !=".$searchCriteria['not_id']." ";
 		}
+
+		$groupBy = "";
+		// Set Grouping
+		if(isset($searchCriteria['groupField']) && $searchCriteria['groupField'] != "")
+		{
+			$groupBy = " GROUP BY ".$searchCriteria['groupField']." ";
+		}
+
 		
 		$orderField = " ops.order_id,ops.prod_id";
 		$orderDir = " DESC";
@@ -259,16 +267,13 @@ class orderModel extends Data {
 			$orderDir = $searchCriteria['orderDir'];
 		}
 
-		$sqlQuery = "SELECT ".$selectField." FROM order_product_status AS ops ".$whereClaue."  ORDER BY ".$orderField." ".$orderDir."";
+		$sqlQuery = "SELECT ".$selectField." FROM order_product_status AS ops ".$whereClaue.$groupBy." ORDER BY ".$orderField." ".$orderDir."";
 		// echo $sqlQuery; exit;
 		
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
 		return $rsData;
 	}
-
-
-	
 	
 	####################################################################
 	#						START MENUFECTURE ORDER					   #

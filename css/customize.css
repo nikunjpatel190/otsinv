@@ -57,5 +57,14 @@ table#tblStgInvOrderList input[type="text"]{font-size: 12px;height: 23px !import
 /*** End css for customer popup ***/
 
 /*** START CSS FOR VIEW CLIENT ORDER ***/
-.view-order .invoice-info-label{max-width:none !important; width:150px;}
+.view-order .invoice-info-label{max-width:none !important; width:120px;}
+.div-icons a {margin:0 5px !important; vertical-align:middle;}
+#div-order-stage{margin-bottom:10px;}
+#div-order-stage li{text-align:left;}
 /*** END CSS FOR VIEW CLIENT ORDER ***/
+
+/*** START CSS FOR ORDER LIST ***/
+#tbl-order-list .progress{margin-bottom:0;}
+#tbl-order-list .progress[data-percent]::after{font-size:9px !important;}
+/*** END CSS FOR ORDER LIST ***/
+

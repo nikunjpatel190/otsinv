@@ -208,4 +208,15 @@ function gotoURL(strHref)
 	window.location.href = strHref;	
 }
 
+// print html content
+function printContent(el){
+	var restorepage = document.body.innerHTML;
+	$(".non-printable").hide();
+	var printcontent = document.getElementById(el).innerHTML;
+	console.log(printcontent);
+	document.body.innerHTML = printcontent;
+	window.print();
+	document.body.innerHTML = restorepage;
+}
+
 
