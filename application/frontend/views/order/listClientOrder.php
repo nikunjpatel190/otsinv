@@ -8,12 +8,12 @@
 	<input type="hidden" id="action" name="action" value="<?php echo $strAction; ?>" />
 	<input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
 
-	<!--<div class="row-fluid">
+	<div class="row-fluid">
 		<div class="span6 text-left">
-			<button type="button" class="btn btn-small btn-success" onclick="return openAddPage();"> <i class="icon-plus-sign bigger-125"></i> Add </button>
-			<button type="button" class="btn btn-small btn-danger" onclick="return DeleteRow();" name="btnDelete" id="btnDelete"> <i class="icon-trash bigger-125"></i> Delete </button>
+			<button type="button" class="btn btn-small btn-success" onclick="javascript:location.href='index.php?c=order&m=createOrder'"> <i class="icon-plus-sign bigger-125"></i> Add New Order </button>
+			<!--<button type="button" class="btn btn-small btn-danger" onclick="return DeleteRow();" name="btnDelete" id="btnDelete"> <i class="icon-trash bigger-125"></i> Delete </button>-->
 		</div>
-	</div>-->
+	</div>
 
 	<br />
 	<div class="row-fluid">

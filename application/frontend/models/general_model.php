@@ -34,7 +34,7 @@ class general_model extends Data {
 						module_master as mm
 					 JOIN  map_usertype_module as utm 
 						ON utm.module_id = mm.module_id
-					 WHERE utm.utype_id = ".$user_type." ORDER BY mm.seq";
+					 WHERE utm.utype_id = ".$user_type." AND mm.status='ACTIVE' ORDER BY mm.seq";
 						
 		//echo $sqlQuery; exit;
 		
