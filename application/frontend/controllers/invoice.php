@@ -5,9 +5,9 @@ class invoice extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("orderModel",'',true);
-		$this->load->model("customerModel",'',true);
-		$this->load->model("invoiceModel",'',true);
+		$this->load->model("order_model",'',true);
+		$this->load->model("customer_model",'',true);
+		$this->load->model("invoice_model",'',true);
 	}
 
 	### Auther : Nikunj Bambhroliya
@@ -21,19 +21,19 @@ class invoice extends CI_Controller {
 		// check invoice entry
 		$searchCriteria = array();
 		$searchCriteria['orderId'] = $orderId;
-		$this->invoiceModel->searchCriteria = $searchCriteria;
-		$invoiceDetailArr = $this->invoiceModel->getInvoiceDetails();
+		$this->invoice_model->searchCriteria = $searchCriteria;
+		$invoiceDetailArr = $this->invoice_model->getInvoiceDetails();
 		if(count($invoiceDetailArr) == 0)
 		{
 			// invoice entry
 			$arrData = array();
-			$arrData['invoice_no'] = $this->invoiceModel->generateInvoiceNo();;
+			$arrData['invoice_no'] = $this->invoice_model->generateInvoiceNo();;
 			$arrData['order_id'] = $orderId;
 			$arrData['invoice_date'] = date("Y-m-d h:i:s");
 			$arrData['created_by'] = $this->Page->getSession("intUserId");
 
-			$this->invoiceModel->tbl = "invoice";
-			$this->invoiceModel->insert($arrData);
+			$this->invoice_model->tbl = "invoice";
+			$this->invoice_model->insert($arrData);
 		}
 
 		// Get Order Details
@@ -41,8 +41,8 @@ class invoice extends CI_Controller {
 		$searchCriteria['order_id'] = $orderId;
 		$searchCriteria['fetchProductDetail'] = 1;
 		$searchCriteria['fetchOrderStatus'] = 1;
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$orderDetailArr = $this->orderModel->getOrderDetails();
+		$this->order_model->searchCriteria = $searchCriteria;
+		$orderDetailArr = $this->order_model->getOrderDetails();
 		$orderDetailArr = $orderDetailArr[0];
 		$rsListing['orderDetailArr'] = $orderDetailArr;
 		//$this->Page->pr($orderDetailArr); exit;
@@ -50,8 +50,8 @@ class invoice extends CI_Controller {
 		// Get Customer Details
 		$searchCriteria = array();
 		$searchCriteria['cusomerId'] = $orderDetailArr["customer_id"];
-		$this->customerModel->searchCriteria = $searchCriteria;
-		$customerArr = $this->customerModel->getCustomerDetails();
+		$this->customer_model->searchCriteria = $searchCriteria;
+		$customerArr = $this->customer_model->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr[0];
 
 		if($isPdf != 1){

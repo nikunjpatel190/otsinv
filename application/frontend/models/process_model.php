@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class processModel extends Data {
+class process_model extends Data {
 
 	public $searchCriteria;
 	function __construct() 

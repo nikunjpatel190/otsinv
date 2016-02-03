@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class raw_materialModel extends Data {
+class raw_material_model extends Data {
 
 	public $searchCriteria;
 	function __construct() 

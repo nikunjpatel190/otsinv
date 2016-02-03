@@ -7,10 +7,10 @@ class client extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("client_model",'',true);
-		$this->load->model("generalModel",'',true);
+		$this->load->model("general_model",'',true);
 		
-		$rsListing['rsPanels'] = $this->generalModel->getPanel();
-		$rsListing['rsAssignModules'] = $this->generalModel->getAssignModule();		
+		$rsListing['rsPanels'] = $this->general_model->getPanel();
+		$rsListing['rsAssignModules'] = $this->general_model->getAssignModule();		
 		
 	}
 	

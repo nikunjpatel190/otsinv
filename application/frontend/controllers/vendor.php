@@ -6,7 +6,7 @@ class vendor extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("vendorModel",'',true);
+		$this->load->model("vendor_model",'',true);
 		
 	}
 	
@@ -16,8 +16,8 @@ class vendor extends CI_Controller {
 		$searchCriteria	=	array();
 		$searchCriteria['orderField'] = 'insertdate';
 		$searchCriteria['orderDir'] = 'DESC';
-		$this->vendorModel->searchCriteria = $searchCriteria;
-		$rsVendors = $this->vendorModel->getVendor();
+		$this->vendor_model->searchCriteria = $searchCriteria;
+		$rsVendors = $this->vendor_model->getVendor();
 		$rsListing['rsVendors']	=	$rsVendors;
 		
 		// Load Views
@@ -32,7 +32,7 @@ class vendor extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->vendorModel->get_by_id('vendor_id', $data["id"]);
+		   $data["rsEdit"] = $this->vendor_model->get_by_id('vendor_id', $data["id"]);
         } 
 		else 
 		{
@@ -61,7 +61,7 @@ class vendor extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->vendorModel->insert($arrHeader);
+			$intCenterID = $this->vendor_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -70,7 +70,7 @@ class vendor extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->vendorModel->update($arrHeader, array('vendor_id' => $vendor_id));
+            $this->vendor_model->update($arrHeader, array('vendor_id' => $vendor_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		

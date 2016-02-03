@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class vendorModel extends Data {
+class vendor_model extends Data {
 
 	public $searchCriteria;
 	function __construct() 

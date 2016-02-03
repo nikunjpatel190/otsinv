@@ -5,9 +5,9 @@ class manufecture extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("inventoryModel",'',true);
-		$this->load->model("processModel",'',true);
-		$this->load->model("productModel",'',true);
+		$this->load->model("inventory_model",'',true);
+		$this->load->model("process_model",'',true);
+		$this->load->model("product_model",'',true);
 		$this->load->model("manufecture_model",'',true);
 	}
 
@@ -106,8 +106,8 @@ class manufecture extends CI_Controller {
 			$searchCriteria = array();
 			$searchCriteria['prod_id'] = $productIds;
 			$searchCriteria['status'] = 'ACTIVE';
-			$this->productModel->searchCriteria = $searchCriteria;
-			$rsProducts = $this->productModel->getProduct();
+			$this->product_model->searchCriteria = $searchCriteria;
+			$rsProducts = $this->product_model->getProduct();
 		}
 		
 		$productsArr = array();
@@ -151,8 +151,8 @@ class manufecture extends CI_Controller {
 				$searchCriteria = array();
 				$searchCriteria['selectField'] = "mpp.prod_id,mps.process_id,mps.stage_id,mps.seq,GROUP_CONCAT(mup.u_id) AS user_id";
 				$searchCriteria['prod_id'] = $row["prodId"];
-				$this->processModel->searchCriteria=$searchCriteria;
-				$rsProcessStage = $this->processModel->getProcessStageByProduct();
+				$this->process_model->searchCriteria=$searchCriteria;
+				$rsProcessStage = $this->process_model->getProcessStageByProduct();
 				if(count($rsProcessStage) > 0)
 				{
 					foreach($rsProcessStage AS $rowStage)
@@ -172,8 +172,8 @@ class manufecture extends CI_Controller {
 						$arrData['insertby'] =	$this->Page->getSession("intUserId");
 						$arrData['insertdate'] = date('Y-m-d H:i:s');
 						
-						$this->processModel->tbl = "mft_order_time_process_stage";
-						$this->processModel->insert($arrData);
+						$this->process_model->tbl = "mft_order_time_process_stage";
+						$this->process_model->insert($arrData);
 					}
 				}
 
@@ -198,8 +198,8 @@ class manufecture extends CI_Controller {
 				$arrData['insertby'] =	$this->Page->getSession("intUserId");
 				$arrData['insertdate'] = date('Y-m-d H:i:s');
 				
-				$this->inventoryModel->tbl = "inventory_master";
-				$this->inventoryModel->insert($arrData);
+				$this->inventory_model->tbl = "inventory_master";
+				$this->inventory_model->insert($arrData);
 
 				// Add inventory stage details for first stage
 				$arrData = array();
@@ -208,8 +208,8 @@ class manufecture extends CI_Controller {
 				$arrData['stage_id'] = $initialStage;
 				$arrData['prod_qty'] = $row["prodQty"];
 				$arrData['action'] = "plus";
-				$this->inventoryModel->tbl = "inventory_stage_detail";
-				$this->inventoryModel->insert($arrData);
+				$this->inventory_model->tbl = "inventory_stage_detail";
+				$this->inventory_model->insert($arrData);
 			}
 		}
 	}
@@ -249,8 +249,8 @@ class manufecture extends CI_Controller {
 			$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
 			$arrData['action'] = "minus";
 			$arrData['date'] = date('Y-m-d H:i:s');
-			$this->inventoryModel->tbl = "inventory_in_stage";
-			$this->inventoryModel->insert($arrData);
+			$this->inventory_model->tbl = "inventory_in_stage";
+			$this->inventory_model->insert($arrData);
 		}
 		
 		if($proceed_qty <= $total_qty)
@@ -278,8 +278,8 @@ class manufecture extends CI_Controller {
 				$arrData['stage_id'] = $this->Page->getRequest("stage_id");
 				$arrData['prod_qty'] = -1 * abs($this->Page->getRequest("qty"));
 				$arrData['action'] = "minus";
-				$this->inventoryModel->tbl = "inventory_stage_detail";
-				$this->inventoryModel->insert($arrData);
+				$this->inventory_model->tbl = "inventory_stage_detail";
+				$this->inventory_model->insert($arrData);
 
 				if($nxt_stage_id !=0)
 				{
@@ -291,8 +291,8 @@ class manufecture extends CI_Controller {
 					$arrData['prod_qty'] = $this->Page->getRequest("qty");
 					$arrData['action'] = "plus";
 					
-					$this->inventoryModel->tbl = "inventory_stage_detail";
-					$this->inventoryModel->insert($arrData);
+					$this->inventory_model->tbl = "inventory_stage_detail";
+					$this->inventory_model->insert($arrData);
 				}
 
 				if($seq == $last_seq)
@@ -372,8 +372,8 @@ class manufecture extends CI_Controller {
 					$arrData['insertby'] =	$this->Page->getSession("intUserId");
 					$arrData['insertdate'] = date('Y-m-d H:i:s');
 					
-					$this->inventoryModel->tbl = "inventory_master";
-					$this->inventoryModel->insert($arrData);
+					$this->inventory_model->tbl = "inventory_master";
+					$this->inventory_model->insert($arrData);
 					
 					// Add inventory (in stock entry)
 					$arrData = array();
@@ -385,8 +385,8 @@ class manufecture extends CI_Controller {
 					$arrData['insertby'] =	$this->Page->getSession("intUserId");
 					$arrData['insertdate'] = date('Y-m-d H:i:s');
 					
-					$this->inventoryModel->tbl = "inventory_master";
-					$this->inventoryModel->insert($arrData);
+					$this->inventory_model->tbl = "inventory_master";
+					$this->inventory_model->insert($arrData);
 				}
 				echo "1";
 			}

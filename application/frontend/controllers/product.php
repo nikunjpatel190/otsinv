@@ -6,13 +6,13 @@ class product extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("productModel",'',true);
+		$this->load->model("product_model",'',true);
 		
 	}
 	
 	public function index()
 	{
-		$this->productModel->tbl="product_master";
+		$this->product_model->tbl="product_master";
 		$arrWhere	=	array();
 		$strAction = $this->input->post('action');
 		$cat_id =   $this->Page->getRequest('slt_category');
@@ -27,8 +27,8 @@ class product extends CI_Controller {
 		}
 		$searchCriteria['orderField'] = 'insertdate';
 		$searchCriteria['orderDir'] = 'DESC';
-		$this->productModel->searchCriteria = $searchCriteria;
-		$rsProducts = $this->productModel->getProduct();
+		$this->product_model->searchCriteria = $searchCriteria;
+		$rsProducts = $this->product_model->getProduct();
 		$rsListing['rsProducts']	=	$rsProducts;
 		$rsListing['cat_id']	=	$cat_id;
 		
@@ -38,14 +38,14 @@ class product extends CI_Controller {
 	
 	public function AddProduct()
 	{
-		$this->productModel->tbl="product_master";
+		$this->product_model->tbl="product_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->productModel->get_by_id('prod_id', $data["id"]);
+		   $data["rsEdit"] = $this->product_model->get_by_id('prod_id', $data["id"]);
         } 
 		else 
 		{
@@ -56,7 +56,7 @@ class product extends CI_Controller {
 	
 	public function SaveProduct()
 	{
-		$this->productModel->tbl="product_master";
+		$this->product_model->tbl="product_master";
 		$strAction = $this->input->post('action');
 		$prod_id   = $this->Page->getRequest('prod_id');
 		
@@ -68,8 +68,8 @@ class product extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $prod_id;
 		}
-		$this->productModel->searchCriteria=$searchCriteria;
-		$rsProduct = $this->productModel->getProduct();
+		$this->product_model->searchCriteria=$searchCriteria;
+		$rsProduct = $this->product_model->getProduct();
 		if(count($rsProduct) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -91,7 +91,7 @@ class product extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->productModel->insert($arrHeader);
+			$intCenterID = $this->product_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -99,7 +99,7 @@ class product extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->productModel->update($arrHeader, array('prod_id' => $prod_id));
+            $this->product_model->update($arrHeader, array('prod_id' => $prod_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -127,8 +127,8 @@ class product extends CI_Controller {
 		$searchCriteria	=	array();
 		if($prod_type != "")
 			$searchCriteria['prod_type'] = $prod_type;
-		$this->productModel->searchCriteria = $searchCriteria;
-		$rsProduct = $this->productModel->getProduct();
+		$this->product_model->searchCriteria = $searchCriteria;
+		$rsProduct = $this->product_model->getProduct();
 
 		if($res_type != "" && $res_type = "json")
 			echo json_encode($rsProduct);
@@ -142,26 +142,26 @@ class product extends CI_Controller {
 		$searchCriteria = array();
 		$searchCriteria['prod_type'] = "product";
 		$searchCriteria["status"] = "ACTIVE";
-		$this->productModel->searchCriteria=$searchCriteria;
-		$data['ProductsArr'] = $this->productModel->getProduct();
+		$this->product_model->searchCriteria=$searchCriteria;
+		$data['ProductsArr'] = $this->product_model->getProduct();
 		$this->load->view('product/mapProductComponentForm',$data);
 	}
 	
 	public function frmAssignProcess()
 	{
-		$data['ProductsArr'] = $this->productModel->getProduct();
+		$data['ProductsArr'] = $this->product_model->getProduct();
 		$this->load->view('product/assignProcessForm',$data);
 	}
 	
 	public function Category_list()
 	{
-		$this->productModel->tbl="product_category";
+		$this->product_model->tbl="product_category";
 		$arrWhere	=	array();
 		
 		// Get All Categories
 		$searchCriteria	=	array();
-		$this->productModel->searchCriteria = $searchCriteria;
-		$rsProd_cat = $this->productModel->getCategory();
+		$this->product_model->searchCriteria = $searchCriteria;
+		$rsProd_cat = $this->product_model->getCategory();
 		$rsListing['rsProd_cat']	=	$rsProd_cat;
 		
 		// Load Views
@@ -170,14 +170,14 @@ class product extends CI_Controller {
 	
 	public function AddProd_cat()
 	{
-		$this->productModel->tbl="product_category";
+		$this->product_model->tbl="product_category";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->productModel->get_by_id('cat_id', $data["id"]);
+		   $data["rsEdit"] = $this->product_model->get_by_id('cat_id', $data["id"]);
         } 
 		else 
 		{
@@ -188,7 +188,7 @@ class product extends CI_Controller {
 	
 	public function SaveProd_cat()
 	{
-		$this->productModel->tbl="product_category";
+		$this->product_model->tbl="product_category";
 		$strAction = $this->input->post('action');
 		$cat_id	   = $this->Page->getRequest('cat_id');
 		
@@ -200,8 +200,8 @@ class product extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $cat_id;
 		}
-		$this->productModel->searchCriteria=$searchCriteria;
-		$rsCategory = $this->productModel->getCategory();
+		$this->product_model->searchCriteria=$searchCriteria;
+		$rsCategory = $this->product_model->getCategory();
 		if(count($rsCategory) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -218,7 +218,7 @@ class product extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->productModel->insert($arrHeader);
+			$intCenterID = $this->product_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -226,7 +226,7 @@ class product extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->productModel->update($arrHeader, array('cat_id' => $cat_id));
+            $this->product_model->update($arrHeader, array('cat_id' => $cat_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -251,8 +251,8 @@ class product extends CI_Controller {
 		$prod_id = $this->Page->getRequest('prod_id');
 		$searchCriteria	=	array();
 		$searchCriteria['prod_id'] = $prod_id;
-		$this->productModel->searchCriteria = $searchCriteria;
-		$rsProduct = $this->productModel->getProduct();
+		$this->product_model->searchCriteria = $searchCriteria;
+		$rsProduct = $this->product_model->getProduct();
 		echo $rsProduct[0]['prod_price_per_unit']; exit;
 	}
 }

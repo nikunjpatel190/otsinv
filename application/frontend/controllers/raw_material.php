@@ -6,7 +6,7 @@ class raw_material extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("raw_materialModel",'',true);
+		$this->load->model("raw_material_model",'',true);
 		
 	}
 	
@@ -15,7 +15,7 @@ class raw_material extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All raw_material
-		$rsRaw_material = $this->raw_materialModel->getRowMaterial();
+		$rsRaw_material = $this->raw_material_model->getRowMaterial();
 		$rsListing['rsRaw_material']	=	$rsRaw_material;
 		
 		// Load Views
@@ -30,7 +30,7 @@ class raw_material extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->raw_materialModel->get_by_id('rm_id', $data["id"]);
+		   $data["rsEdit"] = $this->raw_material_model->get_by_id('rm_id', $data["id"]);
         } 
 		else 
 		{
@@ -52,8 +52,8 @@ class raw_material extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $rm_id;
 		}
-		$this->raw_materialModel->searchCriteria=$searchCriteria;
-		$rsRowMaterial = $this->raw_materialModel->getRowMaterial();
+		$this->raw_material_model->searchCriteria=$searchCriteria;
+		$rsRowMaterial = $this->raw_material_model->getRowMaterial();
 		if(count($rsRowMaterial) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -73,7 +73,7 @@ class raw_material extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->raw_materialModel->insert($arrHeader);
+			$intCenterID = $this->raw_material_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -81,7 +81,7 @@ class raw_material extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->raw_materialModel->update($arrHeader, array('rm_id' => $rm_id));
+            $this->raw_material_model->update($arrHeader, array('rm_id' => $rm_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		

@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class productModel extends Data {
+class product_model extends Data {
 
 	public $searchCriteria;
 	function __construct() 

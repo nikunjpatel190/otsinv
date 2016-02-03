@@ -6,7 +6,7 @@ class customer extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("customerModel",'',true);
+		$this->load->model("customer_model",'',true);
 	}
 
 	// save Customer record
@@ -16,8 +16,8 @@ class customer extends CI_Controller {
 		$searchCriteria = array(); 
 		$searchCriteria["selectField"] = "cust_id,CONCAT(cust_first_name,' ',cust_last_name) AS name";
 		$searchCriteria["mobile"] = $_REQUEST['txt_cust_mobile'];
-		$this->customerModel->searchCriteria=$searchCriteria;
-		$rsCustomer = $this->customerModel->getCustomerDetails();
+		$this->customer_model->searchCriteria=$searchCriteria;
+		$rsCustomer = $this->customer_model->getCustomerDetails();
 		if(count($rsCustomer) > 0)
 		{
 			$option = '<option selected="selected" value='.$rsCustomer[0]['cust_id'].'>'.$rsCustomer[0]['name'].'</option>';
@@ -57,8 +57,8 @@ class customer extends CI_Controller {
 			$arrData['STATUS'] = 'ACTIVE';
 			$arrData['insertby'] =	$this->Page->getSession("intUserId");
 			$arrData['insertdate'] = date('Y-m-d H:i:s');
-			$this->customerModel->tbl = "customer_master";
-			$res=$this->customerModel->insert($arrData);
+			$this->customer_model->tbl = "customer_master";
+			$res=$this->customer_model->insert($arrData);
 			if($res > 0)
 			{
 				echo $res."|success";

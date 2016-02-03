@@ -1,8 +1,8 @@
 <?php
 $CI =& get_instance();
-$CI->load->model('generalModel');
-$rsPanels = $CI->generalModel->getPanel();
-$rsAssignModules = $CI->generalModel->getAssignModule();
+$CI->load->model('general_model');
+$rsPanels = $CI->general_model->getPanel();
+$rsAssignModules = $CI->general_model->getAssignModule();
 //$this->Page->pr($rsPanels); exit;
 ?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->

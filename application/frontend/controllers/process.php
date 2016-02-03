@@ -6,8 +6,8 @@ class process extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("processModel",'',true);
-		$this->load->model("productModel",'',true);
+		$this->load->model("process_model",'',true);
+		$this->load->model("product_model",'',true);
 	}
 	
 	public function index()
@@ -15,7 +15,7 @@ class process extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All process
-		$rsProcesses = $this->processModel->getProcess();
+		$rsProcesses = $this->process_model->getProcess();
 		$rsListing['rsProcesses']	=	$rsProcesses;
 		
 		// Load Views
@@ -28,7 +28,7 @@ class process extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All stages
-		$rsStages = $this->processModel->getProcessStage();
+		$rsStages = $this->process_model->getProcessStage();
 		$rsListing['rsStages']	=	$rsStages;
 		
 		// Load Views
@@ -43,7 +43,7 @@ class process extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->processModel->get_by_id('ps_id', $data["id"]);
+		   $data["rsEdit"] = $this->process_model->get_by_id('ps_id', $data["id"]);
         } 
 		else 
 		{
@@ -65,8 +65,8 @@ class process extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $ps_id;
 		}
-		$this->processModel->searchCriteria=$searchCriteria;
-		$rsProcessStage = $this->processModel->getProcessStage();
+		$this->process_model->searchCriteria=$searchCriteria;
+		$rsProcessStage = $this->process_model->getProcessStage();
 		if(count($rsProcessStage) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -87,7 +87,7 @@ class process extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->processModel->insert($arrHeader);
+			$intCenterID = $this->process_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -95,7 +95,7 @@ class process extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->processModel->update($arrHeader, array('ps_id' => $ps_id));
+            $this->process_model->update($arrHeader, array('ps_id' => $ps_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -132,8 +132,8 @@ class process extends CI_Controller {
 		   $searchCriteria['p_id'] = $data["id"];
 		   $searchCriteria['orderField'] = "map.seq";
 		   $searchCriteria['selectField'] = "map.stage_id , map.seq , sm.ps_name , pm.proc_name , pm.proc_id";
-		   $this->processModel->searchCriteria=$searchCriteria;
-		   $data["rsEdit"] = $this->processModel->getProcessStage();
+		   $this->process_model->searchCriteria=$searchCriteria;
+		   $data["rsEdit"] = $this->process_model->getProcessStage();
 		   
 		 /*   $proc_id=$data["id"];
 		    $sqlQuery = "SELECT *
@@ -192,8 +192,8 @@ class process extends CI_Controller {
 				// for update process
 				$arrData['updateby'] 		= 	$this->Page->getSession("intUserId");
 				$arrData['updatedate'] =	date('Y-m-d H:i:s');
-				$this->processModel->tbl = "process_master";
-				$this->processModel->update($arrData, array('proc_id' => $processId));
+				$this->process_model->tbl = "process_master";
+				$this->process_model->update($arrData, array('proc_id' => $processId));
 				$intProcessID = $processId;
 			}
 			else
@@ -202,8 +202,8 @@ class process extends CI_Controller {
 				$arrData['insertby']		=	$this->Page->getSession("intUserId");
 				$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 			
-				$this->processModel->tbl = "process_master";
-				$intProcessID = $this->processModel->insert($arrData);
+				$this->process_model->tbl = "process_master";
+				$intProcessID = $this->process_model->insert($arrData);
 			}
 			
 			if($intProcessID != "" && $intProcessID != 0)
@@ -218,8 +218,8 @@ class process extends CI_Controller {
 					$arrData['insertby']		=	$this->Page->getSession("intUserId");
 					$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 					
-					$this->processModel->tbl = "map_process_stage";
-					$this->processModel->insert($arrData);
+					$this->process_model->tbl = "map_process_stage";
+					$this->process_model->insert($arrData);
 					$cnt++;
 				}
 			}
@@ -233,10 +233,10 @@ class process extends CI_Controller {
 			$searchCriteria['orderField'] = "map.seq";
 			$searchCriteria['orderDir'] = "ASC";
 			
-			$this->processModel->searchCriteria = $searchCriteria;
+			$this->process_model->searchCriteria = $searchCriteria;
 			$data = array();
 			$data['processId'] = $intProcessID;
-			$data['resArr'] = $this->processModel->getProcessStage();
+			$data['resArr'] = $this->process_model->getProcessStage();
 			
 			### Get Process Stage assigned Users
 			
@@ -244,8 +244,8 @@ class process extends CI_Controller {
 			$searchCriteria['selectField'] = "map.p_id,map.stage_id,GROUP_CONCAT(map.u_id) AS userIds";
 			$searchCriteria['processId'] = $processId;
 			$searchCriteria['groupField'] = "map.p_id,map.stage_id";
-			$this->processModel->searchCriteria = $searchCriteria;
-			$stgUserArr = $this->processModel->getMapUserStageDetails();
+			$this->process_model->searchCriteria = $searchCriteria;
+			$stgUserArr = $this->process_model->getMapUserStageDetails();
 			
 			$asnUserArr = array();
 			foreach($stgUserArr AS $row)
@@ -284,8 +284,8 @@ class process extends CI_Controller {
 						$searchCriteria['userId'] = $userId;
 						$searchCriteria['stageId'] = $stageId;
 						$searchCriteria['processId'] = $processId;
-						$this->processModel->searchCriteria = $searchCriteria;
-						$resArr = $this->processModel->getMapUserStageDetails();
+						$this->process_model->searchCriteria = $searchCriteria;
+						$resArr = $this->process_model->getMapUserStageDetails();
 						if(count($resArr) == 0)
 						{
 							### insert data
@@ -296,8 +296,8 @@ class process extends CI_Controller {
 							$arrData['insertby']		=	$this->Page->getSession("intUserId");
 							$arrData['insertdate'] 		= 	date('Y-m-d H:i:s');
 							
-							$this->processModel->tbl = "map_user_pstage";
-							$this->processModel->insert($arrData);	
+							$this->process_model->tbl = "map_user_pstage";
+							$this->process_model->insert($arrData);	
 						}
 					}
 				}

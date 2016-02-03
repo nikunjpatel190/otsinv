@@ -5,10 +5,10 @@ class inventory extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("orderModel",'',true);
-		$this->load->model("inventoryModel",'',true);
-		$this->load->model("processModel",'',true);
-		$this->load->model("productModel",'',true);
+		$this->load->model("order_model",'',true);
+		$this->load->model("inventory_model",'',true);
+		$this->load->model("process_model",'',true);
+		$this->load->model("product_model",'',true);
 	}
 	
 	public function index()
@@ -24,8 +24,8 @@ class inventory extends CI_Controller {
 		$searchCriteria['selectField'] = "status,SUM(im.prod_qty) AS qty ";
 		$searchCriteria['prod_id'] = $this->Page->getRequest("prod_id");
 		$searchCriteria['groupField'] = "im.status";
-		$this->inventoryModel->searchCriteria = $searchCriteria;
-		$resultArr = $this->inventoryModel->getInventoryDetail();
+		$this->inventory_model->searchCriteria = $searchCriteria;
+		$resultArr = $this->inventory_model->getInventoryDetail();
 		
 		$inventoryDetailArr = array();
 		$inventoryDetailArr["in_stock"] = 0;
@@ -43,8 +43,8 @@ class inventory extends CI_Controller {
 			$searchCriteria['prod_id'] = $this->Page->getRequest("prod_id");
 			$searchCriteria['groupField'] = "isd.prod_id,isd.stage_id";
 			
-			$this->inventoryModel->searchCriteria = $searchCriteria;
-			$stageInprocessRes = $this->inventoryModel->getStageInprocessDetail();
+			$this->inventory_model->searchCriteria = $searchCriteria;
+			$stageInprocessRes = $this->inventory_model->getStageInprocessDetail();
 			
 			$stageInprocessInventoryArr = array();
 			foreach($stageInprocessRes AS $stgRow)
@@ -64,8 +64,8 @@ class inventory extends CI_Controller {
 			$searchCriteria['groupField'] = "iis.prod_id,iis.stage_id";
 			$searchCriteria['having'] = 1;
 			
-			$this->inventoryModel->searchCriteria = $searchCriteria;
-			$stageInstockRes = $this->inventoryModel->getStageInstockDetail();
+			$this->inventory_model->searchCriteria = $searchCriteria;
+			$stageInstockRes = $this->inventory_model->getStageInstockDetail();
 			
 			$stageInstockInventoryArr = array();
 			foreach($stageInstockRes AS $stgRow)
@@ -83,8 +83,8 @@ class inventory extends CI_Controller {
 			$searchCriteria['prod_id'] = $this->Page->getRequest("prod_id");
 			$searchCriteria['groupField'] = "iis.prod_id,iis.stage_id,iis.mft_id";
 			
-			$this->inventoryModel->searchCriteria = $searchCriteria;
-			$stageInstockRes = $this->inventoryModel->getStageInstockDetail();
+			$this->inventory_model->searchCriteria = $searchCriteria;
+			$stageInstockRes = $this->inventory_model->getStageInstockDetail();
 			$stageInstockOrderArr = array();
 			foreach($stageInstockRes AS $key=>$row)
 			{
@@ -114,8 +114,8 @@ class inventory extends CI_Controller {
 		$searchCriteria['mft_id'] = $this->Page->getRequest("order_id");
 		$searchCriteria['prod_id'] = $this->Page->getRequest("product_id");
 		$searchCriteria['stage_id'] = $this->Page->getRequest("stage_id");
-		$this->inventoryModel->searchCriteria = $searchCriteria;
-		$stageInventoryArr = $this->inventoryModel->getStageInstockDetail();
+		$this->inventory_model->searchCriteria = $searchCriteria;
+		$stageInventoryArr = $this->inventory_model->getStageInstockDetail();
 		$qty = (int)$this->Page->getRequest("qty");
 		$inv_qty = (int)$stageInventoryArr[0]['prod_qty'] + $qty;
 		$remain_qty = (int)$this->Page->getRequest("remain_qty");
@@ -132,8 +132,8 @@ class inventory extends CI_Controller {
 			$arrData['action'] = "plus";
 			$arrData['date'] = date('Y-m-d H:i:s');
 			
-			$this->inventoryModel->tbl = "inventory_in_stage";
-			$lst_id = $this->inventoryModel->insert($arrData);
+			$this->inventory_model->tbl = "inventory_in_stage";
+			$lst_id = $this->inventory_model->insert($arrData);
 			if($lst_id > 0)
 			{
 				echo "1";

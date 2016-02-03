@@ -5,11 +5,11 @@ class order extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("orderModel",'',true);
-		$this->load->model("inventoryModel",'',true);
-		$this->load->model("processModel",'',true);
-		$this->load->model("productModel",'',true);
-		$this->load->model("customerModel",'',true);
+		$this->load->model("order_model",'',true);
+		$this->load->model("inventory_model",'',true);
+		$this->load->model("process_model",'',true);
+		$this->load->model("product_model",'',true);
+		$this->load->model("customer_model",'',true);
 		$this->load->model("statusModel",'',true);
 		$this->load->model("manufecture_model",'',true);
 	}
@@ -29,7 +29,7 @@ class order extends CI_Controller {
 		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
 
 		// Get Order List
-		$orderListRes = $this->orderModel->getOrderList();
+		$orderListRes = $this->order_model->getOrderList();
 
 		$orderListArr = array();
 		if(count($orderListRes) > 0)
@@ -41,7 +41,7 @@ class order extends CI_Controller {
 				{
 					$query = "SELECT prod_id,IFNULL(SUM(qty),0) AS sts_qty FROM order_product_status
 						  WHERE order_id = ".$orderRow['order_id']." AND status_id = ".$statusRow['status_id']." GROUP BY prod_id";
-					$result = $this->orderModel->db->query($query);
+					$result = $this->order_model->db->query($query);
 					$rsData = $result->result_array();
 					$temp = array();
 					if(count($rsData) > 0)
@@ -80,8 +80,8 @@ class order extends CI_Controller {
 			$searchCriteria['orderId'] = $orderId;
 			$searchCriteria['fetchProductDetail'] = 1;
 			$searchCriteria['fetchOrderStatus'] = 1;
-			$this->orderModel->searchCriteria = $searchCriteria;
-			$orderDetailArr = $this->orderModel->getOrderDetails();
+			$this->order_model->searchCriteria = $searchCriteria;
+			$orderDetailArr = $this->order_model->getOrderDetails();
 			$orderDetailArr = $orderDetailArr[0];
 
 			$rsListing['strAction'] = "E";
@@ -93,7 +93,7 @@ class order extends CI_Controller {
 		{
 			$rsListing['strAction'] = "A";
 			$rsListing['orderId'] = $orderId;
-			$rsListing['orderNo'] = $this->orderModel->generateOrderNo();
+			$rsListing['orderNo'] = $this->order_model->generateOrderNo();
 		}
 		// Load Views
 		$this->load->view('order/orderForm', $rsListing);	
@@ -111,16 +111,16 @@ class order extends CI_Controller {
 		$searchCriteria['order_id'] = $orderId;
 		$searchCriteria['fetchProductDetail'] = 1;
 		$searchCriteria['fetchOrderStatus'] = 1;
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$orderDetailArr = $this->orderModel->getOrderDetails();
+		$this->order_model->searchCriteria = $searchCriteria;
+		$orderDetailArr = $this->order_model->getOrderDetails();
 		$orderDetailArr = $orderDetailArr[0];
 		$rsListing['orderDetailArr'] = $orderDetailArr;
 
 		// Get Customer Details
 		$searchCriteria = array();
 		$searchCriteria['cusomerId'] = $orderDetailArr["customer_id"];
-		$this->customerModel->searchCriteria = $searchCriteria;
-		$customerArr = $this->customerModel->getCustomerDetails();
+		$this->customer_model->searchCriteria = $searchCriteria;
+		$customerArr = $this->customer_model->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr[0];
 
 		// Get All Status (from status master)
@@ -144,7 +144,7 @@ class order extends CI_Controller {
 					$sts_id = $stsRow['status_id'];	
 					$query = "SELECT IFNULL(SUM(qty),0) AS sts_qty FROM order_product_status
 							  WHERE order_id = ".$orderId." AND prod_id=".$prod_id." AND status_id = ".$sts_id."";
-					$stsQty = $this->orderModel->db->query($query)->row()->sts_qty;
+					$stsQty = $this->order_model->db->query($query)->row()->sts_qty;
 					$statusSummaryArr[$prod_id][$stsRow['status_name']] = $stsQty;
 				}
 			}
@@ -156,7 +156,7 @@ class order extends CI_Controller {
 				  FROM order_product_status AS ops
 				  WHERE ops.order_id = ".$orderId."
 				  GROUP BY ops.order_id,ops.status_id";
-		$result = $this->orderModel->db->query($query);
+		$result = $this->order_model->db->query($query);
 		$rsData = $result->result_array();
 		
 		$arr = array();
@@ -173,7 +173,7 @@ class order extends CI_Controller {
 				  JOIN map_user_status AS map
 				  ON sm.status_id = map.status_id
 				  WHERE sm.STATUS = 'ACTIVE' AND map.user_id = ".$userId." ORDER BY sm.seq";
-		$result = $this->orderModel->db->query($query);
+		$result = $this->order_model->db->query($query);
 		$rsData = $result->result_array();
 		
 		// Total Order Qty
@@ -225,7 +225,7 @@ class order extends CI_Controller {
 							$searchCriteria['prod_id'] = $prodId;
 							$searchCriteria['stage_id'] = $stageId;
 							$searchCriteria['mft_id'] = $mftId;
-							$this->orderModel->searchCriteria=$searchCriteria;
+							$this->order_model->searchCriteria=$searchCriteria;
 							$resultArr = array();
 							$resultArr = $this->manufecture_model->getCreateTimeOrderDetail();
 							$stage_seq = $resultArr[0]['stage_seq'];
@@ -237,7 +237,7 @@ class order extends CI_Controller {
 							$searchCriteria['prod_id'] = $prodId;
 							$searchCriteria['stage_seq'] = $nxt_stage_seq;
 							$searchCriteria['mft_id'] = $mftId;
-							$this->orderModel->searchCriteria=$searchCriteria;
+							$this->order_model->searchCriteria=$searchCriteria;
 							$resultArr = array();
 							$resultArr = $this->manufecture_model->getCreateTimeOrderDetail();
 							$nxt_stage_id = $resultArr[0]['stage_id'];
@@ -250,8 +250,8 @@ class order extends CI_Controller {
 							$arrData['prod_qty'] = -1 * abs($qty);
 							$arrData['action'] = "minus";
 							$arrData['date'] = date('Y-m-d H:i:s');
-							$this->inventoryModel->tbl = "inventory_in_stage";
-							$this->inventoryModel->insert($arrData);
+							$this->inventory_model->tbl = "inventory_in_stage";
+							$this->inventory_model->insert($arrData);
 
 							// Add inventory stage details (in process revese entry)
 							$arrData = array();
@@ -260,8 +260,8 @@ class order extends CI_Controller {
 							$arrData['stage_id'] = $stageId;
 							$arrData['prod_qty'] = -1 * abs($qty);
 							$arrData['action'] = "minus";
-							$this->inventoryModel->tbl = "inventory_stage_detail";
-							$this->inventoryModel->insert($arrData);
+							$this->inventory_model->tbl = "inventory_stage_detail";
+							$this->inventory_model->insert($arrData);
 
 							// Add inventory stage details (in process forward entry)
 							$arrData = array();
@@ -270,8 +270,8 @@ class order extends CI_Controller {
 							$arrData['stage_id'] = $nxt_stage_id;
 							$arrData['prod_qty'] = $qty;
 							$arrData['action'] = "plus";
-							$this->inventoryModel->tbl = "inventory_stage_detail";
-							$this->inventoryModel->insert($arrData);
+							$this->inventory_model->tbl = "inventory_stage_detail";
+							$this->inventory_model->insert($arrData);
 
 							// Product status entry
 							$arrData = array();
@@ -283,8 +283,8 @@ class order extends CI_Controller {
 							$arrData['note'] = "entry from create order";
 							$arrData['insertby'] =	$this->Page->getSession("intUserId");
 							$arrData['insertdate'] = date('Y-m-d H:i:s');
-							$this->orderModel->tbl = "mft_prod_status";
-							$this->orderModel->insert($arrData);
+							$this->order_model->tbl = "mft_prod_status";
+							$this->order_model->insert($arrData);
 						}
 					}
 				}
@@ -315,8 +315,8 @@ class order extends CI_Controller {
 			$arrData['insertby']	=	$this->Page->getSession("intUserId");
 			$arrData['insertdate'] 	= 	date('Y-m-d H:i:s');
 
-			$this->orderModel->tbl = "order_master";
-			$orderId = $this->orderModel->insert($arrData);
+			$this->order_model->tbl = "order_master";
+			$orderId = $this->order_model->insert($arrData);
 		}
 		else
 		{
@@ -326,8 +326,8 @@ class order extends CI_Controller {
 			$whereArr = array();
 			$whereArr['order_id'] = $orderId;
 
-			$this->orderModel->tbl = "order_master";
-			$this->orderModel->update($arrData,$whereArr);
+			$this->order_model->tbl = "order_master";
+			$this->order_model->update($arrData,$whereArr);
 		}
 
 		// Remove existing products
@@ -363,8 +363,8 @@ class order extends CI_Controller {
 					$arrData['updateby']	=	$this->Page->getSession("intUserId");
 					$arrData['updatedate'] 	= 	date('Y-m-d H:i:s');
 				}
-				$this->orderModel->tbl = "order_product_detail";
-				$this->orderModel->insert($arrData);
+				$this->order_model->tbl = "order_product_detail";
+				$this->order_model->insert($arrData);
 				$cnt++;
 			}
 		}
@@ -410,8 +410,8 @@ class order extends CI_Controller {
 		$searchCriteria = array();
 		$searchCriteria["selectField"] = "pm.prod_id,pm.prod_type,pm.prod_name,opd.prod_qty";
 		$searchCriteria["order_id"] = $orderId;
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$orderProductDetailArr = $this->orderModel->getOrderProductDetails();
+		$this->order_model->searchCriteria = $searchCriteria;
+		$orderProductDetailArr = $this->order_model->getOrderProductDetails();
 
 		// Get Order Status
 		$searchCriteria = array();
@@ -419,8 +419,8 @@ class order extends CI_Controller {
 		$searchCriteria["order_id"] = $orderId;
 		$searchCriteria["status_id"] = $statusId;
 		$searchCriteria["groupField"] = "ops.prod_id";
-		$this->orderModel->searchCriteria = $searchCriteria;
-		$orderStatusDetailArr = $this->orderModel->getOrderStatus();
+		$this->order_model->searchCriteria = $searchCriteria;
+		$orderStatusDetailArr = $this->order_model->getOrderStatus();
 
 		if(count($orderStatusDetailArr) > 0)
 		{
@@ -440,8 +440,8 @@ class order extends CI_Controller {
 			$searchCriteria["order_id"] = $orderId;
 			$searchCriteria["status_id"] = $prvStatusId;
 			$searchCriteria["groupField"] = "ops.prod_id";
-			$this->orderModel->searchCriteria = $searchCriteria;
-			$prvOrderStatusDetailArr = $this->orderModel->getOrderStatus();
+			$this->order_model->searchCriteria = $searchCriteria;
+			$prvOrderStatusDetailArr = $this->order_model->getOrderStatus();
 
 			if(count($prvOrderStatusDetailArr) > 0)
 			{
@@ -504,8 +504,8 @@ class order extends CI_Controller {
 				$arrData['qty'] = $qty;
 				$arrData['insert_by'] = $this->Page->getSession("intUserId");
 				$arrData['insert_date'] = date("Y-m-d h:i:s");
-				$this->orderModel->tbl = "order_product_status";
-				$this->orderModel->insert($arrData);
+				$this->order_model->tbl = "order_product_status";
+				$this->order_model->insert($arrData);
 			}
 		}
 		echo "1"; exit;

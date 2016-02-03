@@ -7,11 +7,11 @@ class Commonajax extends CI_Controller {
        	parent::__construct();
 		$this->load->model("data",'',true);
 		$this->load->model("userModel",'',true);
-		$this->load->model("productModel",'',true);
+		$this->load->model("product_model",'',true);
 		$this->load->model("settingModel",'',true);
 		$this->load->model("company_model",'',true);
 		$this->load->model("statusModel",'',true);
-		$this->load->model("raw_materialModel",'',true);
+		$this->load->model("raw_material_model",'',true);
 		
     }	
 	
@@ -188,8 +188,8 @@ class Commonajax extends CI_Controller {
 		$searchCriteria = array();
 		$searchCriteria['prod_type'] = "component";
 		$searchCriteria["status"] = "ACTIVE";
-		$this->productModel->searchCriteria=$searchCriteria;
-		$rsProdComponent = $this->productModel->getProduct();
+		$this->product_model->searchCriteria=$searchCriteria;
+		$rsProdComponent = $this->product_model->getProduct();
 		//$this->Page->pr($rsProdComponent); exit;
 		
 		$rsMapDtl = array();
@@ -199,8 +199,8 @@ class Commonajax extends CI_Controller {
 			$searchCriteria['selectField'] = 'map.prod_component_id,map.qty';
 			$searchCriteria['status'] = 'ACTIVE';
 			$searchCriteria["prodId"] = $prod_id;
-			$this->productModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->productModel->getMapProdComponentDetails();
+			$this->product_model->searchCriteria=$searchCriteria;
+			$rsMapDtl = $this->product_model->getMapProdComponentDetails();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
@@ -238,8 +238,8 @@ class Commonajax extends CI_Controller {
 		$searchCriteria['selectField'] = 'map.prod_component_id';
 		$searchCriteria["prodId"] = $prodid;
 		$searchCriteria["componentId"] = $component_id;
-		$this->productModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->productModel->getMapProdComponentDetails();
+		$this->product_model->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->product_model->getMapProdComponentDetails();
 		if(count($rsMapDtl)>0)
 		{	
 			$strQuery = "UPDATE map_prod_to_component SET qty=".$qty.",status='".$status."',updatedate = '".date('Y-m-d H:i:s')."' WHERE prod_id=".$prodid." AND prod_component_id=".$component_id."";
@@ -267,7 +267,7 @@ class Commonajax extends CI_Controller {
 		
 		// Get All Products
 		$searchCriteria["status"] = "ACTIVE";
-		$rsProcesses= $this->productModel->getProcess();
+		$rsProcesses= $this->product_model->getProcess();
 		//$this->Page->pr($rsProcesses); exit;
 		
 		$rsMapDtl = array();
@@ -276,8 +276,8 @@ class Commonajax extends CI_Controller {
 			$searchCriteria = array();
 			$searchCriteria['selectField'] = 'proc.proc_id';
 			$searchCriteria["prodId"] = $prod_id;
-			$this->productModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->productModel->getAssignProcessDetail();
+			$this->product_model->searchCriteria=$searchCriteria;
+			$rsMapDtl = $this->product_model->getAssignProcessDetail();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
