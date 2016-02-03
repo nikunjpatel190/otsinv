@@ -6,11 +6,11 @@ class Commonajax extends CI_Controller {
     { 
        	parent::__construct();
 		$this->load->model("data",'',true);
-		$this->load->model("userModel",'',true);
+		$this->load->model("user_model",'',true);
 		$this->load->model("product_model",'',true);
-		$this->load->model("settingModel",'',true);
+		$this->load->model("setting_model",'',true);
 		$this->load->model("company_model",'',true);
-		$this->load->model("statusModel",'',true);
+		$this->load->model("status_model",'',true);
 		$this->load->model("raw_material_model",'',true);
 		
     }	
@@ -57,8 +57,8 @@ class Commonajax extends CI_Controller {
 			$searchCriteria = array();
 			$searchCriteria['selectField'] = 'com.com_id';
 			$searchCriteria["userId"] = $user_id;
-			$this->userModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->userModel->getAssignCompanyDetail();
+			$this->user_model->searchCriteria=$searchCriteria;
+			$rsMapDtl = $this->user_model->getAssignCompanyDetail();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
@@ -91,8 +91,8 @@ class Commonajax extends CI_Controller {
 		$searchCriteria['selectField'] = 'com.com_id';
 		$searchCriteria["userId"] = $userid;
 		$searchCriteria["companyId"] = $companyid;
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->userModel->getAssignCompanyDetail();
+		$this->user_model->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->user_model->getAssignCompanyDetail();
 		if(count($rsMapDtl)>0)
 		{		
 			$strQuery = "DELETE FROM map_user_company WHERE user_id=".$userid." AND company_id=".$companyid."";
@@ -117,7 +117,7 @@ class Commonajax extends CI_Controller {
 		
 		// Get All status
 		$searchCriteria["status"] = "ACTIVE";
-		$rsStatuses = $this->statusModel->getClientOrderStatusMaster();
+		$rsStatuses = $this->status_model->getClientOrderStatusMaster();
 		//$this->Page->pr($rsCompanies); exit;
 		
 		$rsMapDtl = array();
@@ -126,8 +126,8 @@ class Commonajax extends CI_Controller {
 			$searchCriteria = array();
 			$searchCriteria['selectField'] = 'status.status_id';
 			$searchCriteria["userId"] = $user_id;
-			$this->userModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->userModel->getAssignDeptDetail();
+			$this->user_model->searchCriteria=$searchCriteria;
+			$rsMapDtl = $this->user_model->getAssignDeptDetail();
 			//$this->Page->pr($rsMapDtl); exit;
 		}
 		
@@ -160,8 +160,8 @@ class Commonajax extends CI_Controller {
 		$searchCriteria['selectField'] = 'status.status_id';
 		$searchCriteria["userId"] = $userid;
 		$searchCriteria["statusid"] = $statusid;
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->userModel->getAssignDeptDetail();
+		$this->user_model->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->user_model->getAssignDeptDetail();
 		if(count($rsMapDtl)>0)
 		{		
 			$strQuery = "DELETE FROM map_user_status WHERE user_id=".$userid." AND status_id=".$statusid."";
@@ -330,7 +330,7 @@ class Commonajax extends CI_Controller {
 		// Get All Modules
 		$where = " mm.STATUS='ACTIVE'";
 		$orderBy = " mm.module_name ASC";
-		$rsModules = $this->settingModel->getModule($where,$orderBy);
+		$rsModules = $this->setting_model->getModule($where,$orderBy);
 		
 		$rsMapDtl = array();
 		if($utype_id != "")
@@ -338,8 +338,8 @@ class Commonajax extends CI_Controller {
 			$searchCriteria = array();
 			$searchCriteria['selectField'] = 'mm.module_id';
 			$searchCriteria["utypeId"] = $utype_id;
-			$this->settingModel->searchCriteria=$searchCriteria;
-			$rsMapDtl = $this->settingModel->getAssignModuleDetail();
+			$this->setting_model->searchCriteria=$searchCriteria;
+			$rsMapDtl = $this->setting_model->getAssignModuleDetail();
 		}
 		
 		$assignModuleArr = array();
@@ -371,8 +371,8 @@ class Commonajax extends CI_Controller {
 		$searchCriteria['selectField'] = 'mm.module_id';
 		$searchCriteria["utypeId"] = $utypeid;
 		$searchCriteria["moduleId"] = $moduleid;
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsMapDtl = $this->settingModel->getAssignModuleDetail();
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsMapDtl = $this->setting_model->getAssignModuleDetail();
 		if(count($rsMapDtl)>0)
 		{		
 			$strQuery = "DELETE FROM map_usertype_module WHERE utype_id=".$utypeid." AND module_id=".$moduleid."";

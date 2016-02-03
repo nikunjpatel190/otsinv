@@ -10,7 +10,7 @@ class order extends CI_Controller {
 		$this->load->model("process_model",'',true);
 		$this->load->model("product_model",'',true);
 		$this->load->model("customer_model",'',true);
-		$this->load->model("statusModel",'',true);
+		$this->load->model("status_model",'',true);
 		$this->load->model("manufecture_model",'',true);
 	}
 	####################################################################
@@ -25,8 +25,8 @@ class order extends CI_Controller {
 		$searchCriteria['status'] = 'ACTIVE';
 		$searchCriteria['orderField'] = 'sts.seq';
 		$searchCriteria['orderDir'] = 'ASC';
-		$this->statusModel->searchCriteria = $searchCriteria;
-		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+		$this->status_model->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->status_model->getClientOrderStatusMaster();
 
 		// Get Order List
 		$orderListRes = $this->order_model->getOrderList();
@@ -129,8 +129,8 @@ class order extends CI_Controller {
 		$searchCriteria['status'] = 'ACTIVE';
 		$searchCriteria['orderField'] = 'sts.seq';
 		$searchCriteria['orderDir'] = 'ASC';
-		$this->statusModel->searchCriteria = $searchCriteria;
-		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+		$this->status_model->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->status_model->getClientOrderStatusMaster();
 
 		$orderProductDetailsArr = $orderDetailArr['orderProductDetailsArr'];
 		$statusSummaryArr = array();
@@ -391,8 +391,8 @@ class order extends CI_Controller {
 		$searchCriteria = array();
 		$searchCriteria['selectField'] = 'sts.status_id,sts.status_name,sts.seq';
 		$searchCriteria['status'] = 'ACTIVE';
-		$this->statusModel->searchCriteria = $searchCriteria;
-		$statusMasterArr = $this->statusModel->getClientOrderStatusMaster();
+		$this->status_model->searchCriteria = $searchCriteria;
+		$statusMasterArr = $this->status_model->getClientOrderStatusMaster();
 
 		$stsBySeqArr = array();
 		if(count($statusMasterArr) > 0)

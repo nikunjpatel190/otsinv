@@ -6,7 +6,7 @@ class status extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("statusModel",'',true);
+		$this->load->model("status_model",'',true);
 		
 	}
 	
@@ -24,8 +24,8 @@ class status extends CI_Controller {
 		}
 		// Get All Status
 		
-		$this->statusModel->searchCriteria=$searchCriteria;
-		$rsStatuses = $this->statusModel->getClientOrderStatusMaster();
+		$this->status_model->searchCriteria=$searchCriteria;
+		$rsStatuses = $this->status_model->getClientOrderStatusMaster();
 		$rsListing['rsStatuses']	=	$rsStatuses;
 		$rsListing['company_id']	=	$company_id;
 		
@@ -41,7 +41,7 @@ class status extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->statusModel->get_by_id('status_id', $data["id"]);
+		   $data["rsEdit"] = $this->status_model->get_by_id('status_id', $data["id"]);
         } 
 		else 
 		{
@@ -62,8 +62,8 @@ class status extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
 		}
-		$this->statusModel->searchCriteria=$searchCriteria;
-		$rsStatus = $this->statusModel->getClientOrderStatusMaster();
+		$this->status_model->searchCriteria=$searchCriteria;
+		$rsStatus = $this->status_model->getClientOrderStatusMaster();
 		if(count($rsStatus) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -80,7 +80,7 @@ class status extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->statusModel->insert($arrHeader);
+			$intCenterID = $this->status_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -89,7 +89,7 @@ class status extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->statusModel->update($arrHeader, array('status_id' => $user_id));
+            $this->status_model->update($arrHeader, array('status_id' => $user_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -121,7 +121,7 @@ class status extends CI_Controller {
 		$arrHeader['modified_by'] 		= 	$this->Page->getSession("intUserId");
         $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-        $res = $this->statusModel->update($arrHeader, array('status_id' => $id));
+        $res = $this->status_model->update($arrHeader, array('status_id' => $id));
 		echo "Saved";
 		exit;
 	}

@@ -6,13 +6,13 @@ class user extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("userModel",'',true);
+		$this->load->model("user_model",'',true);
 		
 	}
 	
 	public function index()
 	{
-		$this->userModel->tbl="user_master";
+		$this->user_model->tbl="user_master";
 		$arrWhere	=	array();
 		
 		// Get All Users
@@ -20,8 +20,8 @@ class user extends CI_Controller {
 		$searchCriteria["selectField"] = "um.*,com.com_name,status.status_name";
 		$searchCriteria["orderField"] = "insertdate";
 		$searchCriteria["orderDir"] = "DESC";
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsUsers = $this->userModel->getUsers();
+		$this->user_model->searchCriteria=$searchCriteria;
+		$rsUsers = $this->user_model->getUsers();
 		$rsListing['rsUsers']	=	$rsUsers;
 		
 		// Load Views
@@ -30,14 +30,14 @@ class user extends CI_Controller {
 	
 	public function AddUser()
 	{
-		$this->userModel->tbl="user_master";
+		$this->user_model->tbl="user_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->userModel->get_by_id('user_id', $data["id"]);
+		   $data["rsEdit"] = $this->user_model->get_by_id('user_id', $data["id"]);
         } 
 		else 
 		{
@@ -48,7 +48,7 @@ class user extends CI_Controller {
 	
 	public function SaveUser()
 	{
-		$this->userModel->tbl="user_master";
+		$this->user_model->tbl="user_master";
 		$strAction = $this->input->post('action');
 		
 		// Check User
@@ -59,8 +59,8 @@ class user extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
 		}
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsUsers = $this->userModel->getUsers();
+		$this->user_model->searchCriteria=$searchCriteria;
+		$rsUsers = $this->user_model->getUsers();
 		if(count($rsUsers) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -86,7 +86,7 @@ class user extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->userModel->insert($arrHeader);
+			$intCenterID = $this->user_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -95,7 +95,7 @@ class user extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->userModel->update($arrHeader, array('user_id' => $user_id));
+            $this->user_model->update($arrHeader, array('user_id' => $user_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -104,7 +104,7 @@ class user extends CI_Controller {
 	
 	public function delete()
 	{
-		$this->userModel->tbl="user_master";
+		$this->user_model->tbl="user_master";
 		$arrUserIds	=	$this->input->post('chk_lst_list1');
 		$strUserIds	=	implode(",", $arrUserIds);
 		$strQuery = "DELETE FROM user_master WHERE user_id IN (". $strUserIds .")";
@@ -117,16 +117,16 @@ class user extends CI_Controller {
 	// open form (user-company mapping)
 	public function frmAssignCompany()
 	{
-		$this->userModel->tbl="user_master";
-		$data['UsersArr'] = $this->userModel->getUsers();
+		$this->user_model->tbl="user_master";
+		$data['UsersArr'] = $this->user_model->getUsers();
 		$this->load->view('user/assignCompanyForm',$data);
 	}
 	
 	// open form (user-status mapping)
 	public function frmAssignStatus()
 	{
-		$this->userModel->tbl="user_master";
-		$data['UsersArr'] = $this->userModel->getUsers();
+		$this->user_model->tbl="user_master";
+		$data['UsersArr'] = $this->user_model->getUsers();
 		$this->load->view('user/assignStatusForm',$data);
 	}
 	
@@ -136,7 +136,7 @@ class user extends CI_Controller {
 		$arrWhere	=	array();
 		
 		// Get All User Types
-		$rsUserTypes = $this->userModel->getUserTypes();
+		$rsUserTypes = $this->user_model->getUserTypes();
 		
 		$rsListing['rsUserTypes']	=	$rsUserTypes;
 		
@@ -146,14 +146,14 @@ class user extends CI_Controller {
 	
 	public function addUserTypes()
 	{
-		$this->userModel->tbl="user_types";
+		$this->user_model->tbl="user_types";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->userModel->get_by_id('u_typ_id', $data["id"]);
+		   $data["rsEdit"] = $this->user_model->get_by_id('u_typ_id', $data["id"]);
         } 
 		else 
 		{
@@ -164,7 +164,7 @@ class user extends CI_Controller {
 	
 	public function saveUserTypes()
 	{
-		$this->userModel->tbl="user_types";
+		$this->user_model->tbl="user_types";
 		$strAction = $this->input->post('action');
 		// Check User
 		$searchCriteria = array(); 
@@ -174,8 +174,8 @@ class user extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $this->Page->getRequest('hid_id');
 		}
-		$this->userModel->searchCriteria=$searchCriteria;
-		$rsUserTypes = $this->userModel->getUserTypes();
+		$this->user_model->searchCriteria=$searchCriteria;
+		$rsUserTypes = $this->user_model->getUserTypes();
 		if(count($rsUserTypes) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -192,7 +192,7 @@ class user extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->userModel->insert($arrHeader);
+			$intCenterID = $this->user_model->insert($arrHeader);
 			$intCenterID;
 			$this->Page->setMessage('REC_ADD_MSG');
         }
@@ -202,7 +202,7 @@ class user extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->userModel->update($arrHeader, array('u_typ_id' => $u_typ_id));
+            $this->user_model->update($arrHeader, array('u_typ_id' => $u_typ_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		

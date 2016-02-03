@@ -6,8 +6,8 @@ class setting extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("settingModel",'',true);
-		$this->load->model("userModel",'',true);
+		$this->load->model("setting_model",'',true);
+		$this->load->model("user_model",'',true);
 		
 	}
 	
@@ -17,7 +17,7 @@ class setting extends CI_Controller {
 		
 		// Get All Vendors
 		$orderBy = " insertdate DESC";
-		$rsPanels = $this->settingModel->getPanel('',$orderBy);
+		$rsPanels = $this->setting_model->getPanel('',$orderBy);
 		$rsListing['rsPanels']	=	$rsPanels;
 		
 		// Load Views
@@ -26,14 +26,14 @@ class setting extends CI_Controller {
 	
 	public function AddPanel()
 	{
-		$this->settingModel->tbl="panel_master";
+		$this->setting_model->tbl="panel_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->settingModel->get_by_id('panel_id', $data["id"]);
+		   $data["rsEdit"] = $this->setting_model->get_by_id('panel_id', $data["id"]);
         } 
 		else 
 		{
@@ -44,7 +44,7 @@ class setting extends CI_Controller {
 	
 	public function SavePanel()
 	{
-		$this->settingModel->tbl="panel_master";
+		$this->setting_model->tbl="panel_master";
 		$strAction = $this->input->post('action');
 		$arrHeader["panel_name"]   	=	$this->Page->getRequest('txt_panel_name');
         $arrHeader["seq"]     	=	$this->Page->getRequest('txt_seq');
@@ -57,7 +57,7 @@ class setting extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->settingModel->insert($arrHeader);
+			$intCenterID = $this->setting_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -66,7 +66,7 @@ class setting extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->settingModel->update($arrHeader, array('panel_id' => $panel_id));
+            $this->setting_model->update($arrHeader, array('panel_id' => $panel_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -100,8 +100,8 @@ class setting extends CI_Controller {
 			
 		// Get All modules
 		$orderBy = " mm.insertdate DESC";
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsModules = $this->settingModel->getModule('',$orderBy);
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsModules = $this->setting_model->getModule('',$orderBy);
 		$rsListing['panel_id']	=	$panel_id;
 		$rsListing['rsModules']	=	$rsModules;
 		
@@ -111,14 +111,14 @@ class setting extends CI_Controller {
 	
 	public function AddModule()
 	{
-		$this->settingModel->tbl="module_master";
+		$this->setting_model->tbl="module_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->settingModel->get_by_id('module_id', $data["id"]);	     
+		   $data["rsEdit"] = $this->setting_model->get_by_id('module_id', $data["id"]);	     
 		   
         } 
 		else 
@@ -130,7 +130,7 @@ class setting extends CI_Controller {
 	
 	public function SaveModule()
 	{
-		$this->settingModel->tbl="module_master";
+		$this->setting_model->tbl="module_master";
 		$strAction = $this->input->post('action');
 		$arrHeader["panel_id"]   	=	$this->Page->getRequest('slt_panel_id');
         $arrHeader["module_name"]     	=	$this->Page->getRequest('txt_module_name');
@@ -144,7 +144,7 @@ class setting extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->settingModel->insert($arrHeader);
+			$intCenterID = $this->setting_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -153,7 +153,7 @@ class setting extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->settingModel->update($arrHeader, array('module_id' => $module_id));
+            $this->setting_model->update($arrHeader, array('module_id' => $module_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -175,14 +175,14 @@ class setting extends CI_Controller {
 	// open form (module usertype mapping)
 	public function frmAssignModule()
 	{
-		$data['userTypesArr'] = $this->userModel->getUserTypes();
+		$data['userTypesArr'] = $this->user_model->getUserTypes();
 		$this->load->view('module/assignModuleForm',$data);
 	}
 	
 	// save user-status mapping info
 	public function assignModule()
 	{
-		$this->settingModel->tbl="map_usertype_module";
+		$this->setting_model->tbl="map_usertype_module";
 		$utype_id = $this->Page->getRequest("slt_utype");
 		$module_id = $this->Page->getRequest("slt_module");
 		
@@ -191,8 +191,8 @@ class setting extends CI_Controller {
 		//$searchCriteria["selectField"] = "map.id";
 		$searchCriteria["utypeId"] = $utype_id;
 		$searchCriteria["moduleId"] = $module_id;
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsRecord = $this->settingModel->getAssignModuleDetail();
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsRecord = $this->setting_model->getAssignModuleDetail();
 		if(count($rsRecord) > 0)
 		{
 			$this->Page->setMessage('ALREADY_MAPPED');
@@ -229,8 +229,8 @@ class setting extends CI_Controller {
 		}
 		
 		// Get All combo
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsCombos = $this->settingModel->getCombo();
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsCombos = $this->setting_model->getCombo();
 		$rsListing['rsCombos']	=	$rsCombos;
 		$rsListing['combo_case']	=	$combo_case;
 		
@@ -240,14 +240,14 @@ class setting extends CI_Controller {
 	
 	public function AddCombo()
 	{
-		$this->settingModel->tbl="combo_master";
+		$this->setting_model->tbl="combo_master";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->settingModel->get_by_id('combo_id', $data["id"]);
+		   $data["rsEdit"] = $this->setting_model->get_by_id('combo_id', $data["id"]);
         } 
 		else 
 		{
@@ -258,7 +258,7 @@ class setting extends CI_Controller {
 	
 	public function SaveCombo()
 	{
-		$this->settingModel->tbl="combo_master";
+		$this->setting_model->tbl="combo_master";
 		$strAction = $this->input->post('action');
 		
 		// Check Company
@@ -271,8 +271,8 @@ class setting extends CI_Controller {
             $searchCriteria["not_id"] = $this->Page->getRequest('combo_id');
 		}
 		
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsCombo = $this->settingModel->getCombo();
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsCombo = $this->setting_model->getCombo();
 		if(count($rsCombo) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -291,7 +291,7 @@ class setting extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->settingModel->insert($arrHeader);
+			$intCenterID = $this->setting_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -300,7 +300,7 @@ class setting extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->settingModel->update($arrHeader, array('combo_id' => $combo_id));
+            $this->setting_model->update($arrHeader, array('combo_id' => $combo_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
@@ -320,13 +320,13 @@ class setting extends CI_Controller {
 	
 	public function setting_list()
 	{
-		$this->settingModel->tbl="settings";
+		$this->setting_model->tbl="settings";
 		$arrWhere	=	array();
 		
 		// Get All Categories
 		$searchCriteria	=	array();
-		$this->settingModel->searchCriteria = $searchCriteria;
-		$rsSetting = $this->settingModel->getSetting();
+		$this->setting_model->searchCriteria = $searchCriteria;
+		$rsSetting = $this->setting_model->getSetting();
 		$rsListing['rsSetting']	=	$rsSetting;
 		
 		// Load Views
@@ -335,14 +335,14 @@ class setting extends CI_Controller {
 	
 	public function AddSetting()
 	{
-		$this->settingModel->tbl="settings";
+		$this->setting_model->tbl="settings";
 		$data["strAction"] = $this->Page->getRequest("action");
         $data["strMessage"] = $this->Page->getMessage();
         $data["id"] = $this->Page->getRequest("id");
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->settingModel->get_by_id('setting_id', $data["id"]);
+		   $data["rsEdit"] = $this->setting_model->get_by_id('setting_id', $data["id"]);
         } 
 		else 
 		{
@@ -353,7 +353,7 @@ class setting extends CI_Controller {
 	
 	public function SaveSetting()
 	{		
-		$this->settingModel->tbl="settings";
+		$this->setting_model->tbl="settings";
 		$strAction = $this->input->post('action');
 		$setting_id	   = $this->Page->getRequest('setting_id');
 		
@@ -366,8 +366,8 @@ class setting extends CI_Controller {
 		{
             $searchCriteria["not_id"] = $setting_id;
 		}
-		$this->settingModel->searchCriteria=$searchCriteria;
-		$rsSetting = $this->settingModel->getSetting();
+		$this->setting_model->searchCriteria=$searchCriteria;
+		$rsSetting = $this->setting_model->getSetting();
 		if(count($rsSetting) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -384,7 +384,7 @@ class setting extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->settingModel->insert($arrHeader);
+			$intCenterID = $this->setting_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -392,7 +392,7 @@ class setting extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->settingModel->update($arrHeader, array('setting_id' => $cat_id));
+            $this->setting_model->update($arrHeader, array('setting_id' => $cat_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		
