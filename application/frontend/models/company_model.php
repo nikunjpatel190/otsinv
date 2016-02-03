@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class companyModel extends Data {
+class company_model extends Data {
 
 	public $searchCriteria;
 	

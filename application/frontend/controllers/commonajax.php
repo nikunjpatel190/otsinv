@@ -9,7 +9,7 @@ class Commonajax extends CI_Controller {
 		$this->load->model("userModel",'',true);
 		$this->load->model("productModel",'',true);
 		$this->load->model("settingModel",'',true);
-		$this->load->model("companyModel",'',true);
+		$this->load->model("company_model",'',true);
 		$this->load->model("statusModel",'',true);
 		$this->load->model("raw_materialModel",'',true);
 		
@@ -48,7 +48,7 @@ class Commonajax extends CI_Controller {
 		
 		// Get All Companies
 		$searchCriteria["status"] = "ACTIVE";
-		$rsCompanies = $this->companyModel->getCompany();
+		$rsCompanies = $this->company_model->getCompany();
 		//$this->Page->pr($rsCompanies); exit;
 		
 		$rsMapDtl = array();

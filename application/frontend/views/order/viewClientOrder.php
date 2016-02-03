@@ -254,27 +254,8 @@
 <!-- START Modal popup for Manufacture -->
 <div id="order-status-form" class="modal hide fade" tabindex="-1">
 	<form name="frmStatusSubmit" id="frmStatusSubmit">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4 class="blue bigger">Order Status Details</h4>
-		</div>
-
-		<div class="modal-body overflow-visible">
-			<div class="vspace"></div>
-			<div class="row-fluid">
-				<div class="widget-box transparent"> 
-					<div class="widget-body" id="divOrderStatus"> 
-						<!-- HTML RESPONCE CONTENT -->
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="modal-footer">
-			<button class="btn btn-small btn-primary" id="saveOrderStatus">
-				<i class="icon-ok"></i>
-				Save
-			</button>
+		<div id="divOrderStatus">
+			<!-- HTML RESPONCE CONTENT -->
 		</div>
 	</form>
 </div>

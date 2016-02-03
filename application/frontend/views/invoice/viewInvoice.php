@@ -7,21 +7,21 @@
 			<div class="widget-box transparent invoice-box">
 				<div class="widget-header widget-header-large">
 					<h3 class="grey lighter pull-left position-relative">
-						<i class="icon-leaf green"></i>
+						<!--<i class="icon-leaf green"></i>-->
 						ORDER NO : <?php echo $orderDetailArr['order_no']; ?>
 					</h3>
 
-					<div class="widget-toolbar hidden-480 div-icons">
-						<a href="#">
+					<div class="widget-toolbar hidden-480 div-icons non-printable">
+						<a href="index.php?c=invoice&m=generatePdf&orderId=<?php echo $orderDetailArr['order_id']; ?>" target="_blank" title="PDF">
 							<i class="icon-file bigger-120"></i>
 						</a>
-						<a href="#">
+						<a href="#" title="Mail">
 							<i class="icon-envelope bigger-120"></i>
 						</a>
-						<a href="index.php?c=order&m=createOrder&action=E&orderId=<?php echo $orderDetailArr['order_id']; ?>">
+						<a href="index.php?c=order&m=createOrder&action=E&orderId=<?php echo $orderDetailArr['order_id']; ?>" title="Edit">
 							<i class="icon-pencil bigger-120"></i>
 						</a>
-						<a href="javascript:void(0);" onClick="javascript:printContent('div-order-invoice');">
+						<a href="javascript:void(0);" onClick="javascript:printContent('div-order-invoice');" title="Print">
 							<i class="icon-print bigger-120"></i>
 						</a>
 					</div>

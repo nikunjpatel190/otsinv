@@ -15,6 +15,7 @@ class invoice extends CI_Controller {
 	public function generateInvoice()
 	{
 		$orderId = $this->Page->getRequest("orderId");
+		$isPdf = $this->Page->getRequest("isPdf");
 
 		### Generate Invoice
 		// check invoice entry
@@ -37,7 +38,7 @@ class invoice extends CI_Controller {
 
 		// Get Order Details
 		$searchCriteria = array();
-		$searchCriteria['orderId'] = $orderId;
+		$searchCriteria['order_id'] = $orderId;
 		$searchCriteria['fetchProductDetail'] = 1;
 		$searchCriteria['fetchOrderStatus'] = 1;
 		$this->orderModel->searchCriteria = $searchCriteria;
@@ -53,7 +54,35 @@ class invoice extends CI_Controller {
 		$customerArr = $this->customerModel->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr[0];
 
-		$this->load->view('order/invoice', $rsListing);
+		if($isPdf != 1){
+			$this->load->view('invoice/viewInvoice', $rsListing);
+		}
+		else{
+			$this->load->view('invoice/viewPdfHtml', $rsListing);
+		}
+	}
+
+	### Auther : Nikunj Bambhroliya
+	### Desc : Generate PDF for invoice
+	public function generatePdf()
+	{
+		$orderId = $this->Page->getRequest("orderId");
+		$dir = "./upload/invoice/pdf";
+		$file_name = "invoice_pdf_fl_".$orderId.".pdf";
+		$fullpath = $dir."/".$file_name;
+		if(!is_dir($dir)){
+			mkdir($dir,0755,true);
+		}
+
+		if(file_exists($fullpath))
+		{
+			unlink($fullpath);
+		}
+		$url = "http://".$_SERVER['HTTP_HOST']."/otsinv/index.php?c=invoice&m=generateInvoice&orderId=".$orderId."&isPdf=1";
+		$temp = array();
+		exec('"D:\wkhtmltopdf\bin\wkhtmltopdf.exe" "'.$url.'" "'.$fullpath.'"',$temp);
+		//var_dump($temp);
+		redirect("http://".$_SERVER['HTTP_HOST']."/otsinv/".$fullpath."","");
 	}
 }
 

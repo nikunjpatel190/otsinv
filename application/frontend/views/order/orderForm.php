@@ -913,7 +913,7 @@ $(document).ready(function(){
 		$.ajax({
 			type:"POST",
 			data:param,
-			url:"index.php?c=order&m=saveMftOrder",
+			url:"index.php?c=manufecture&m=saveMftOrder",
 			success:function(res)
 			{
 				alert("Menufecture order created successfully"); 

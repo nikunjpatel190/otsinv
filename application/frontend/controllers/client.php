@@ -6,7 +6,7 @@ class client extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("clientModel",'',true);
+		$this->load->model("client_model",'',true);
 		$this->load->model("generalModel",'',true);
 		
 		$rsListing['rsPanels'] = $this->generalModel->getPanel();
@@ -17,7 +17,7 @@ class client extends CI_Controller {
 	public function index()
 	{
 		// Get All companies
-		$rsClients = $this->clientModel->getClient();
+		$rsClients = $this->client_model->getClient();
 		$rsListing['rsClients']	=	$rsClients;
 		
 		// Load Views
@@ -32,7 +32,7 @@ class client extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->clientModel->get_by_id('client_id', $data["id"]);
+		   $data["rsEdit"] = $this->client_model->get_by_id('client_id', $data["id"]);
         } 
 		else 
 		{
@@ -54,8 +54,8 @@ class client extends CI_Controller {
             $searchCriteria["not_id"] = $this->Page->getRequest('client_id');
 		}
 		
-		$this->clientModel->searchCriteria=$searchCriteria;
-		$rsClient = $this->clientModel->getClient();
+		$this->client_model->searchCriteria=$searchCriteria;
+		$rsClient = $this->client_model->getClient();
 		if(count($rsClient) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -71,8 +71,8 @@ class client extends CI_Controller {
             $searchCriteria["not_id"] = $this->Page->getRequest('client_id');
 		}
 		
-		$this->clientModel->searchCriteria=$searchCriteria;
-		$rsClient = $this->clientModel->getClient();
+		$this->client_model->searchCriteria=$searchCriteria;
+		$rsClient = $this->client_model->getClient();
 		if(count($rsClient) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -97,7 +97,7 @@ class client extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->clientModel->insert($arrHeader);
+			$intCenterID = $this->client_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -106,7 +106,7 @@ class client extends CI_Controller {
             //$arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->clientModel->update($arrHeader, array('client_id' => $client_id));
+            $this->client_model->update($arrHeader, array('client_id' => $client_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		

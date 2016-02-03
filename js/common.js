@@ -210,12 +210,14 @@ function gotoURL(strHref)
 
 // print html content
 function printContent(el){
+	$('body').removeClass('navbar-fixed');
 	var restorepage = document.body.innerHTML;
 	$(".non-printable").hide();
 	var printcontent = document.getElementById(el).innerHTML;
 	console.log(printcontent);
 	document.body.innerHTML = printcontent;
 	window.print();
+	$('body').addClass('navbar-fixed');
 	document.body.innerHTML = restorepage;
 }
 

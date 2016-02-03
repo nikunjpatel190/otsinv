@@ -6,13 +6,13 @@ class company extends CI_Controller {
 	function __construct()  
 	{
 		parent::__construct();
-		$this->load->model("companyModel",'',true);
+		$this->load->model("company_model",'',true);
 	}
 	
 	public function index()
 	{
 		// Get All companies
-		$rsCompanies = $this->companyModel->getCompany();
+		$rsCompanies = $this->company_model->getCompany();
 		$rsListing['rsCompanies']	=	$rsCompanies;
 		
 		// Load Views
@@ -27,7 +27,7 @@ class company extends CI_Controller {
 
         if ($data["strAction"] == 'E' || $data["strAction"] == 'V' || $data["strAction"] == 'R')
 		{
-		   $data["rsEdit"] = $this->companyModel->get_by_id('com_id', $data["id"]);
+		   $data["rsEdit"] = $this->company_model->get_by_id('com_id', $data["id"]);
         } 
 		else 
 		{
@@ -49,8 +49,8 @@ class company extends CI_Controller {
             $searchCriteria["not_id"] = $this->Page->getRequest('com_id');
 		}
 		
-		$this->companyModel->searchCriteria=$searchCriteria;
-		$rsCompany = $this->companyModel->getCompany();
+		$this->company_model->searchCriteria=$searchCriteria;
+		$rsCompany = $this->company_model->getCompany();
 		if(count($rsCompany) > 0)
 		{
 			$this->Page->setMessage('ALREADY_EXISTS');
@@ -72,7 +72,7 @@ class company extends CI_Controller {
             $arrHeader['insertdate'] 		= 	date('Y-m-d H:i:s');
             $arrHeader['updatedate'] 		= 	date('Y-m-d H:i:s');
 			
-			$intCenterID = $this->companyModel->insert($arrHeader);
+			$intCenterID = $this->company_model->insert($arrHeader);
 			$this->Page->setMessage('REC_ADD_MSG');
         }
 		elseif ($strAction == 'E')
@@ -81,7 +81,7 @@ class company extends CI_Controller {
             $arrHeader['updateby'] 		= 	$this->Page->getSession("intUserId");
             $arrHeader['updatedate'] =	date('Y-m-d H:i:s');
 			
-            $this->companyModel->update($arrHeader, array('com_id' => $com_id));
+            $this->company_model->update($arrHeader, array('com_id' => $com_id));
             $this->Page->setMessage('REC_EDIT_MSG');
         }
 		

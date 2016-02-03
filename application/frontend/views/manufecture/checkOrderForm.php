@@ -404,7 +404,7 @@ $uid = $this->Page->getSession("intUserId");
 			$.ajax({
 				type:"POST",
 				data:data,
-				url:"index.php?c=order&m=addMftOrderStatus",
+				url:"index.php?c=manufecture&m=addMftOrderStatus",
 				success:function(res)
 				{
 					var res = $.trim(res);
