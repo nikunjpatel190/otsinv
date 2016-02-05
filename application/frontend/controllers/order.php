@@ -493,6 +493,15 @@ class order extends CI_Controller {
 		$statusId = $_REQUEST['statusId'];
 		$prodArr = $_REQUEST['prodArr'];
 
+		// check status for release inventory
+		$release_inventory = 0;
+		$searchCriteria = array();
+		$searchCriteria["selectField"] = "sts.release_inventory";
+		$searchCriteria['statusid'] = $statusId;
+		$this->status_model->searchCriteria = $searchCriteria;
+		$res = $this->status_model->getClientOrderStatusMaster();
+		$release_inventory = $res[0]['release_inventory'];
+
 		if(count($prodArr) > 0)
 		{
 			foreach($prodArr AS $prod_id => $qty)
@@ -506,6 +515,21 @@ class order extends CI_Controller {
 				$arrData['insert_date'] = date("Y-m-d h:i:s");
 				$this->order_model->tbl = "order_product_status";
 				$this->order_model->insert($arrData);
+
+				if($release_inventory == "1"){
+					// remove in stock from inventory
+					$arrData = array();
+					$arrData['order_id'] = $orderId;
+					$arrData['prod_id'] = $prod_id;
+					$arrData['prod_qty'] = $qty;
+					$arrData['action'] = "minus";
+					$arrData['status'] = "in_stock";
+					$arrData['insertby'] =	$this->Page->getSession("intUserId");
+					$arrData['insertdate'] = date('Y-m-d H:i:s');
+
+					$this->inventory_model->tbl = "inventory_master";
+					$this->inventory_model->insert($arrData);
+				}
 			}
 		}
 		echo "1"; exit;
