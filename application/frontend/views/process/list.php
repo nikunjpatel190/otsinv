@@ -31,6 +31,7 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                     </th>
                     <th></th>
                     <th>Process Name</th>
+                    <th>Process flow</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -46,12 +47,32 @@ echo form_open_multipart('c=aheg&m=event_add', $attributes);
                 {
                     foreach($rsProcesses as $arrRecord)
                     {
+					   
+					   $proc_id = $arrRecord['proc_id'];
+					   $searchCriteria['p_id'] = $proc_id;
+					   $searchCriteria['orderField'] = "map.seq";
+					   $searchCriteria['selectField'] = "map.stage_id , map.seq , sm.ps_name , pm.proc_name , pm.proc_id";
+					   $this->process_model->searchCriteria=$searchCriteria;
+					   $data["rsEdit"] = $this->process_model->getProcessStage();
+					   
+					   $stage_list = $data["rsEdit"];
+					   
+					  	
+						
                         $strEditLink	=	"index.php?c=process&m=addProcess&action=E&id=".$arrRecord['proc_id'];
                         echo '<tr>';
 						echo '<td><input type="checkbox" name="chk_lst_list1[]" id="chk_lst_'.$arrRecord['proc_id'].'" value="'.$arrRecord['proc_id'].'" /><span class="lbl"></span></td>';
                         echo '<td width="20" class="action-buttons" nowrap="nowrap">';
 						echo '<a href="'.$strEditLink.'" class="green" title="Edit"><i class="icon-pencil bigger-130"></i></a>';
-						echo '<td>'. $arrRecord['proc_name'] .'</td>';
+						echo '<td>'.$arrRecord['proc_name']."</td><td>" ;?>
+						
+						<?php 
+						foreach($stage_list as $arrStageList){
+						echo "<span class='label  label-info arrowed-in-left arrowed-in arrowed-right'>".$stage_list = $arrStageList['ps_name']." </span>";
+						}
+						?>
+                       
+						<?php echo '</td>';
 						echo '<td>'. $arrRecord['status'] .'</td>';														
                         echo '</tr>';
                     }
@@ -72,7 +93,7 @@ $(document).ready(function() {
 
 <?php if(count($rsProcesses)> 0): ?>
 var oTable1 =	$('#pagelist_center').dataTable( {
-					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null ],
+					"aoColumns": [{"bSortable": false}, {"bSortable": false},null, null, null ],
 					"iDisplayLength": 25,
 				});
 <?php endif; ?>

@@ -18,6 +18,8 @@ class process extends CI_Controller {
 		$rsProcesses = $this->process_model->getProcess();
 		$rsListing['rsProcesses']	=	$rsProcesses;
 		
+		 	
+	
 		// Load Views
 		$this->load->view('process/list', $rsListing);
 	

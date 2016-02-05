@@ -7,6 +7,7 @@ class product extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("product_model",'',true);
+		$this->load->model("process_model",'',true);
 		
 	}
 	

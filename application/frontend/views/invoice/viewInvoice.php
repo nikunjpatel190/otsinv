@@ -15,7 +15,7 @@
 						<a href="index.php?c=invoice&m=generatePdf&orderId=<?php echo $orderDetailArr['order_id']; ?>" target="_blank" title="PDF">
 							<i class="icon-file bigger-120"></i>
 						</a>
-						<a href="#" title="Mail">
+						<a href="index.php?c=invoice&m=generateMailForm&action=E&orderId=<?php echo $orderDetailArr['order_id']; ?>" title="Mail">
 							<i class="icon-envelope bigger-120"></i>
 						</a>
 						<a href="index.php?c=order&m=createOrder&action=E&orderId=<?php echo $orderDetailArr['order_id']; ?>" title="Edit">
