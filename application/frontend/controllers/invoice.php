@@ -140,6 +140,19 @@ class invoice extends CI_Controller {
 	}
 	
     public function send_mail() {
+		
+		$to	= $this->Page->getRequest('to');
+		$from = $this->Page->getRequest('from');
+		$cc = $this->Page->getRequest('cc');
+		$hideditor = $this->Page->getRequest('hideditor');
+		$invoice = $_FILES['invoice']['name'];
+		
+		//upload start		
+		$path = "./upload/".$invoice;	
+		move_uploaded_file($_FILES["invoice"]["tmp_name"],$path);
+		//upload end
+		
+		
 		$mail = new PHPMailer();
 		$mail->IsSMTP(); // we are going to use SMTP
 		$mail->SMTPAuth   = true; // enabled SMTP authentication
@@ -151,12 +164,12 @@ class invoice extends CI_Controller {
 		$mail->SetFrom('snehal.trapsiya@gmail.com', 'Snehal Trapsiya');  //Who is sending the email
 		$mail->AddReplyTo("snehal.trapsiya@gmail.com","Snehal Trapsiya");  //email address that receives the response
 		$mail->Subject    = "Test";
-		$mail->Body      = "HTML message";
+		$mail->Body      = $hideditor;
 		$mail->AltBody    = "PHP mailer test message";
-		$destino = "nikunjpatel190@gmail.com"; // Who is addressed the email to
-		$mail->AddAddress($destino, "John Doe");
+		$destino = $to; // Who is addressed the email to
+		$mail->AddAddress($destino, "Snehal Trapsiya");
 
-		$mail->AddAttachment("./upload/test.pdf");      // some attached files
+		$mail->AddAttachment($path);      // some attached files
 		$mail->AddAttachment("images/phpmailer_mini.gif"); // as many as you want
 		if(!$mail->Send()) {
 			$data["message"] = "Error: " . $mail->ErrorInfo;
