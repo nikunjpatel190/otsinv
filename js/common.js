@@ -50,8 +50,6 @@ function checkAll(strName)
 
 function submit_form(form)
 {
-	alert("hello");
-	exit;
 	var formid	=	form.id;
 	var blnError	=	false;
 	
