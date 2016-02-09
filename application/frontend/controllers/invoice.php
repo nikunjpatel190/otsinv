@@ -92,7 +92,11 @@ class invoice extends CI_Controller {
 	public function generateMailForm()
 	{
 		$orderId = $this->Page->getRequest("orderId");
-
+		
+		$arrTemplate	=	$this->Page->getEmailTemplate("INVOICE_EMAIL");
+		$subject = $arrTemplate['subject'];
+		$message = $arrTemplate['description'];
+		
 		### Generate Invoice
 		// check invoice entry
 		$searchCriteria = array();
@@ -147,6 +151,8 @@ class invoice extends CI_Controller {
 		$temp = array();
 		exec('"D:\wkhtmltopdf\bin\wkhtmltopdf.exe" "'.$url.'" "'.$fullpath.'"',$temp);
 		
+		$rsListing['subject'] = $subject;
+		$rsListing['message'] = $message;
 		$this->load->view('invoice/viewEmailForm', $rsListing);
 		
 	}
