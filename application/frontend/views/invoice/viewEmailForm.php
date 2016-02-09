@@ -1,9 +1,10 @@
 <?php include(APPPATH.'views/top.php');
 $this->load->helper('form');
-$attributes = array('class' => 'form-horizontal', 'id' => 'frmMailInvoice', 'name' => 'frmMailInvoice');
-echo form_open('c=invoice&m=send_mail', $attributes);
+$attributes = array('class' => 'frm_add_record form-horizontal', 'id' => 'frmMailInvoice', 'name' => 'frmMailInvoice', 'enctype' => 'multipart/form-data');
+echo form_open('c=invoice&m=send_invoice', $attributes);
+$order_id = $orderDetailArr["order_id"];
 ?>
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+<input type="hidden" name="order_id" value="<?php echo $order_id;?>"  />
 <div class="main-container container-fluid">
 <div class="page-header position-relative">
     <h1>Send Invoice</h1>
@@ -36,8 +37,7 @@ echo form_open('c=invoice&m=send_mail', $attributes);
 
 			<div class="controls">
 			   <div class="span10">
-					 <div class="wysiwyg-editor" id="editor1"></div>
-					 <input type="hidden" name="hideditor"  id="hideditor"/>
+                     <textarea id="mytextarea"  name="hideditor"></textarea>
 			   </div>
 			</div>
 		</div>
@@ -45,7 +45,21 @@ echo form_open('c=invoice&m=send_mail', $attributes);
 			<label class="control-label" for="form-field-1">Select File :</label>
 
 			<div class="controls">
-				<input type="file" id="form-field-1" placeholder="Cc" class="span10"/>
+            	<?php
+                	$dir = "./upload/invoice/pdf";
+					$file_name = "invoice_pdf_fl_".$order_id.".pdf";
+					$fullpath = $dir."/".$file_name;
+
+					if(file_exists($fullpath))
+					{
+						echo "<a href='./upload/invoice/pdf/".$file_name."' target='_blank'><img src='./upload/pdf.jpg' width='40px'/></a>";
+					}
+					else
+					{
+						echo "There is no file";
+					}
+				?>
+				
 			</div>
 		</div>
 		<div class="control-group">
@@ -62,9 +76,16 @@ echo form_open('c=invoice&m=send_mail', $attributes);
 </div>
 <?php echo form_close(); ?>
 <?php include(APPPATH.'views/bottom.php'); ?>
-<script src="./js/bootstrap-wysiwyg.min.js"></script>
-<script src="./js/jquery.hotkeys.min.js"></script>
+ <script src="./js/tinymce.min.js"></script>
+
 <script type="text/javascript">
+	tinymce.init({
+	  selector: 'textarea',  // note the comma at the end of the line!
+	  plugins: 'code',  // note the comma at the end of the line!
+	  toolbar: 'code'
+	});
+	
+	
 $(document).ready(function(){
 
 	$("#sendMail").click(function(event){
@@ -73,6 +94,7 @@ $(document).ready(function(){
 		$('#hideditor').val(text);
 		$('#frmMailInvoice').submit();
     });
+	
 });
 
 $(document).on('submit','#frmMailInvoice',function(e){
@@ -83,10 +105,7 @@ $(document).on('submit','#frmMailInvoice',function(e){
 			return false;
 	  }
 
-	  if($('#hideditor').val() == "")
-	  {
-		  alert("Please enter message"); return false;
-	  }
+	  
 });
 
 $(function(){

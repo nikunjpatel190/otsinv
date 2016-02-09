@@ -92,7 +92,6 @@ class invoice extends CI_Controller {
 	public function generateMailForm()
 	{
 		$orderId = $this->Page->getRequest("orderId");
-		$isPdf = $this->Page->getRequest("isPdf");
 
 		### Generate Invoice
 		// check invoice entry
@@ -131,27 +130,39 @@ class invoice extends CI_Controller {
 		$customerArr = $this->customer_model->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr[0];
 
-		if($isPdf != 1){
-			$this->load->view('invoice/viewEmailForm', $rsListing);
+		## Generate PDF
+		
+		$dir = "./upload/invoice/pdf";
+		$file_name = "invoice_pdf_fl_".$orderId.".pdf";
+		$fullpath = $dir."/".$file_name;
+		if(!is_dir($dir)){
+			mkdir($dir,0755,true);
 		}
-		else{
-			$this->load->view('invoice/viewPdfHtml', $rsListing);
+
+		if(file_exists($fullpath))
+		{
+			unlink($fullpath);
 		}
+		$url = "http://".$_SERVER['HTTP_HOST']."/otsinv/index.php?c=invoice&m=generateInvoice&orderId=".$orderId."&isPdf=1";
+		$temp = array();
+		exec('"D:\wkhtmltopdf\bin\wkhtmltopdf.exe" "'.$url.'" "'.$fullpath.'"',$temp);
+		
+		$this->load->view('invoice/viewEmailForm', $rsListing);
+		
 	}
 	
-    public function send_mail() {
+    public function send_invoice() {
 		
 		$to	= $this->Page->getRequest('to');
 		$from = $this->Page->getRequest('from');
 		$cc = $this->Page->getRequest('cc');
 		$hideditor = $this->Page->getRequest('hideditor');
-		$invoice = $_FILES['invoice']['name'];
+		$order_id = $this->Page->getRequest('order_id');
+				
+		//$invoice = $_FILES['invoice']['name'];
 		
-		//upload start		
-		$path = "./upload/".$invoice;	
-		move_uploaded_file($_FILES["invoice"]["tmp_name"],$path);
-		//upload end
-		
+		$invoice_file = "invoice_pdf_fl_".$order_id.".pdf";
+		$path = "./upload/invoice/pdf/".$invoice_file;
 		
 		$mail = new PHPMailer();
 		$mail->IsSMTP(); // we are going to use SMTP
