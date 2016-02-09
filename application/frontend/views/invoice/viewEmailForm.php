@@ -35,9 +35,9 @@ $order_id = $orderDetailArr["order_id"];
 		<div class="control-group">
 			<label class="control-label" for="form-field-1">Message :</label>
 
-			<div class="controls">
+			<div class="controls">.
 			   <div class="span10">
-                     <textarea id="mytextarea"  name="hideditor"></textarea>
+                     <textarea id="hideditor"  name="hideditor"></textarea>
 			   </div>
 			</div>
 		</div>
@@ -79,15 +79,7 @@ $order_id = $orderDetailArr["order_id"];
  <script src="./js/tinymce.min.js"></script>
 
 <script type="text/javascript">
-	tinymce.init({
-	  selector: 'textarea',  // note the comma at the end of the line!
-	  plugins: 'code',  // note the comma at the end of the line!
-	  toolbar: 'code'
-	});
-	
-	
 $(document).ready(function(){
-
 	$("#sendMail").click(function(event){
         event.preventDefault();
 		var text = $('#editor1').text();
@@ -95,6 +87,12 @@ $(document).ready(function(){
 		$('#frmMailInvoice').submit();
     });
 	
+	tinymce.init({
+	  selector: 'textarea',  // note the comma at the end of the line!
+	  plugins: 'code',  // note the comma at the end of the line!
+	  toolbar: 'code'
+	});
+	setTimeout(function(){ tinyMCE.get('hideditor').setContent('<b>123123123<b>'); }, 2000);
 });
 
 $(document).on('submit','#frmMailInvoice',function(e){
