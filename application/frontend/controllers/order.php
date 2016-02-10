@@ -225,11 +225,11 @@ class order extends CI_Controller {
 							$searchCriteria['prod_id'] = $prodId;
 							$searchCriteria['stage_id'] = $stageId;
 							$searchCriteria['mft_id'] = $mftId;
-							$this->order_model->searchCriteria=$searchCriteria;
+							$this->manufecture_model->searchCriteria=$searchCriteria;
 							$resultArr = array();
 							$resultArr = $this->manufecture_model->getCreateTimeOrderDetail();
 							$stage_seq = $resultArr[0]['stage_seq'];
-
+							
 							// get next sequence stage id
 							$nxt_stage_seq = (int)($stage_seq+1);
 							$searchCriteria = array();
@@ -237,11 +237,11 @@ class order extends CI_Controller {
 							$searchCriteria['prod_id'] = $prodId;
 							$searchCriteria['stage_seq'] = $nxt_stage_seq;
 							$searchCriteria['mft_id'] = $mftId;
-							$this->order_model->searchCriteria=$searchCriteria;
+							$this->manufecture_model->searchCriteria=$searchCriteria;
 							$resultArr = array();
 							$resultArr = $this->manufecture_model->getCreateTimeOrderDetail();
 							$nxt_stage_id = $resultArr[0]['stage_id'];
-
+							
 							// stage inventory revese entry
 							$arrData = array();
 							$arrData['prod_id'] = $prodId;
@@ -283,8 +283,8 @@ class order extends CI_Controller {
 							$arrData['note'] = "entry from create order";
 							$arrData['insertby'] =	$this->Page->getSession("intUserId");
 							$arrData['insertdate'] = date('Y-m-d H:i:s');
-							$this->order_model->tbl = "mft_prod_status";
-							$this->order_model->insert($arrData);
+							$this->manufecture_model->tbl = "mft_prod_status";
+							$this->manufecture_model->insert($arrData);
 						}
 					}
 				}
@@ -521,7 +521,7 @@ class order extends CI_Controller {
 					$arrData = array();
 					$arrData['order_id'] = $orderId;
 					$arrData['prod_id'] = $prod_id;
-					$arrData['prod_qty'] = $qty;
+					$arrData['prod_qty'] = -1 * abs($qty);
 					$arrData['action'] = "minus";
 					$arrData['status'] = "in_stock";
 					$arrData['insertby'] =	$this->Page->getSession("intUserId");
