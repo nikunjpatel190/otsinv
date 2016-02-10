@@ -240,8 +240,8 @@ class order extends CI_Controller {
 							$this->manufecture_model->searchCriteria=$searchCriteria;
 							$resultArr = array();
 							$resultArr = $this->manufecture_model->getCreateTimeOrderDetail();
-							$nxt_stage_id = $resultArr[0]['stage_id'];
-							
+							$nxt_stage_id = $resultArr[0]['stage_id']; 
+
 							// stage inventory revese entry
 							$arrData = array();
 							$arrData['prod_id'] = $prodId;
