@@ -32,12 +32,20 @@ $order_id = $orderDetailArr["order_id"];
 				<input type="text" id="form-field-1" name="cc" placeholder="Cc" class="span10"/>
 			</div>
 		</div>
+        <div class="control-group">
+			<label class="control-label" for="form-field-1">Subject :</label>
+
+			<div class="controls">
+				<input type="text" id="form-field-1" name="subject" value="<?php echo $subject;?>" placeholder="Subject" class="span10 required"/>
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-field-1">Message :</label>
 
 			<div class="controls">.
 			   <div class="span10">
                      <textarea id="hideditor"  name="hideditor"></textarea>
+                     <input type="hidden" name="message1" id="message1" value='<?php echo $message;?>'  />
 			   </div>
 			</div>
 		</div>
@@ -79,6 +87,7 @@ $order_id = $orderDetailArr["order_id"];
  <script src="./js/tinymce.min.js"></script>
 
 <script type="text/javascript">
+
 $(document).ready(function(){
 	$("#sendMail").click(function(event){
         event.preventDefault();
@@ -90,9 +99,12 @@ $(document).ready(function(){
 	tinymce.init({
 	  selector: 'textarea',  // note the comma at the end of the line!
 	  plugins: 'code',  // note the comma at the end of the line!
-	  toolbar: 'code'
+	  toolbar: 'code',
+	  height : '450px'
 	});
-	setTimeout(function(){ tinyMCE.get('hideditor').setContent('<b>123123123<b>'); }, 2000);
+	var message1 = $('#message1').val();
+	setTimeout(function(){ tinyMCE.get('hideditor').setContent(message1); }, 2000);
+	
 });
 
 $(document).on('submit','#frmMailInvoice',function(e){

@@ -93,9 +93,38 @@ class invoice extends CI_Controller {
 	{
 		$orderId = $this->Page->getRequest("orderId");
 		
+		// Get Order Details
+		$searchCriteria = array();
+		$searchCriteria['order_id'] = $orderId;
+		$searchCriteria['fetchProductDetail'] = 1;
+		$searchCriteria['fetchOrderStatus'] = 1;
+		$this->order_model->searchCriteria = $searchCriteria;
+		$orderDetailArr = $this->order_model->getOrderDetails();
+		$orderDetailArr = $orderDetailArr[0];
+		$rsListing['orderDetailArr'] = $orderDetailArr;
+		//$this->Page->pr($orderDetailArr); exit;
+		
+		$order_no = $orderDetailArr["order_no"];
+		$order_date = $orderDetailArr["order_date"];
+		// Get Customer Details
+		$searchCriteria = array();
+		$searchCriteria['cusomerId'] = $orderDetailArr["customer_id"];
+		$this->customer_model->searchCriteria = $searchCriteria;
+		$customerArr = $this->customer_model->getCustomerDetails();
+		$rsListing['customerArr'] = $customerArr;
+		
+		$cust_first_name = $customerArr[0]["cust_first_name"];
+		$cust_last_name = $customerArr[0]["cust_last_name"];
+		
+		$cust_name= $cust_first_name."&nbsp;".$cust_last_name ; 
+		
 		$arrTemplate	=	$this->Page->getEmailTemplate("INVOICE_EMAIL");
 		$subject = $arrTemplate['subject'];
 		$message = $arrTemplate['description'];
+		
+		$message = str_replace('{CUSTOMER_NAME}' , $cust_name , $message);
+		$message = str_replace('{ORDER_NO}' , $order_no , $message);
+		$message = str_replace('{ORDER_DATE}' , $order_date , $message);
 		
 		### Generate Invoice
 		// check invoice entry
@@ -162,6 +191,7 @@ class invoice extends CI_Controller {
 		$to	= $this->Page->getRequest('to');
 		$from = $this->Page->getRequest('from');
 		$cc = $this->Page->getRequest('cc');
+		$subject = $this->Page->getRequest('subject');
 		$hideditor = $this->Page->getRequest('hideditor');
 		$order_id = $this->Page->getRequest('order_id');
 				
@@ -180,7 +210,7 @@ class invoice extends CI_Controller {
 		$mail->Password   = "snehal2993";            // password in GMail
 		$mail->SetFrom('snehal.trapsiya@gmail.com', 'Snehal Trapsiya');  //Who is sending the email
 		$mail->AddReplyTo("snehal.trapsiya@gmail.com","Snehal Trapsiya");  //email address that receives the response
-		$mail->Subject    = "Test";
+		$mail->Subject    = $subject;
 		$mail->Body      = $hideditor;
 		$mail->AltBody    = "PHP mailer test message";
 		$destino = $to; // Who is addressed the email to
