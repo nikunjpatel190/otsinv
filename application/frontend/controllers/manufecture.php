@@ -29,10 +29,7 @@ class manufecture extends CI_Controller {
 		{
 			$stageIds .=  $row['ps_id'].",";
 		}
-		if(strpos($stageIds,",") == true)
-		{
-			$stageIds = rtrim($stageIds,",");
-		}
+		$stageIds = rtrim($stageIds,",");
 		
 		// Get Orders
 		if($stageIds != "")
@@ -43,7 +40,7 @@ class manufecture extends CI_Controller {
 			$this->manufecture_model->searchCriteria = $searchCriteria;
 			$usrOrderArr = $this->manufecture_model->getMftOrders();
 		}
-		
+
 		$productListArr = array(); // stage wise product array
 		$orderListArr = array(); // stage wise order array
 		$orderProductListArr = array(); // stage and order wise product array
@@ -94,11 +91,7 @@ class manufecture extends CI_Controller {
 		}
 
 		//$this->Page->pr($productListArr); exit;
-		
-		if(strpos($productIds,",") == true)
-		{
-			$productIds = rtrim($productIds,",");
-		}
+		$productIds = rtrim($productIds,",");
 		
 		// Get Products
 		if($productIds != "")

@@ -16,7 +16,7 @@ $uid = $this->Page->getSession("intUserId");
                 	<li class="<?php echo $className; ?>">
                         <a data-toggle="tab" href="#<?php echo $row['ps_id']; ?>">
                             <?php echo $row['ps_name']; ?>
-                            <span class="badge badge-important"><?php echo count($orderListArr[$row['ps_id']]); ?></span>
+                            <span class="badge badge-important"><?php echo count($productListArr[$row['ps_id']]); ?></span>
                         </a>
                     </li>
                 <?php	
@@ -50,32 +50,33 @@ $uid = $this->Page->getSession("intUserId");
 											foreach($productListArr[$row['ps_id']] as $productId=>$arr)
 											{
 											?>
-												   <div class="panel">
-													   <div class="panel-head">	 
-														   <div class="panel-title">
-															   <div class="span12 product-grid-body" id="<?php echo $cnt.$row['ps_id']; ?>">
-																   <div class="span3">
-																	   <i class="icon-angle-down"></i>
-																	   <?php echo $productsArr[$productId]['prod_name']; ?>
-																	   <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$productId]); ?></span>
-																   </div>
-																   <div class="span2"><?php echo $arr["prod_tot_qty"]; ?></div>	
-																   <div class="span2"><?php echo $arr["proceed_qty"]; ?></div>	
-																   <div class="span2"><?php echo $arr["remain_qty"]; ?></div>
-																   <div class="span3">
-																		<span class="label label-large label-purple"><?php echo $arr["stage_inv_qty"]; ?></span>
-																   </div>
+											   <!-- START PANEL -->
+											   <div class="panel">
+												   <div class="panel-head">	 
+													   <div class="panel-title">
+														   <div class="span12 product-grid-body" id="<?php echo $cnt.$row['ps_id']; ?>">
+															   <div class="span3">
+																   <i class="icon-angle-down"></i>
+																   <?php echo $productsArr[$productId]['prod_name']; ?>
+																   <span class="badge badge-yellow"><?php echo count($orderProductListArr[$row['ps_id']][$productId]); ?></span>
+															   </div>
+															   <div class="span2"><?php echo $arr["prod_tot_qty"]; ?></div>	
+															   <div class="span2"><?php echo $arr["proceed_qty"]; ?></div>	
+															   <div class="span2"><?php echo $arr["remain_qty"]; ?></div>
+															   <div class="span3">
+																	<span class="label label-large label-purple"><?php echo $arr["stage_inv_qty"]; ?></span>
 															   </div>
 														   </div>
-													   </div>	 
-													   <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
+													   </div>
+												   </div>	 
+												   <div class="panel-body" id="body_<?php echo $cnt.$row['ps_id']; ?>" style="display:none;">
 													   <div class="widget-box transparent">
 														   <div class="widget-body">
 																<div class="widget-main no-padding">
 																   <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
 																	   <thead>
-																	       <tr>
-																		       <th>No</th>
+																		   <tr>
+																			   <th>No</th>
 																			   <th>Order No</th>
 																			   <th>Total Qty</th>
 																			   <th>Proceed Qty</th>
@@ -85,7 +86,7 @@ $uid = $this->Page->getSession("intUserId");
 																			</tr>
 																	   </thead>
 																	   <tbody>
-																	       <?php
+																		   <?php
 																			$i=1;
 																			foreach($orderProductListArr[$row['ps_id']][$productId] AS $orderNo=>$product)
 																			{
@@ -111,7 +112,7 @@ $uid = $this->Page->getSession("intUserId");
 																					</td>
 																					<td><?php echo $product['remain_qty']; ?></td>
 																					<td>
-																						<div class="hidden-phone visible-desktop btn-group" id="">
+																						<div class="btn-group">
 																							<!-- Start Button forward qty to next stage -->
 																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $product['mft_id']; ?>">
 																								Forward
@@ -132,38 +133,6 @@ $uid = $this->Page->getSession("intUserId");
 																							?>
 																							<!-- End Button Add to inventory -->
 																						</div>
-																						<div class="hidden-desktop visible-phone">
-																							<div class="inline position-relative">
-																								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
-																									<i class="icon-cog icon-only bigger-110"></i>
-																								</button>
-
-																								<ul class="dropdown-menu dropdown-icon-only dropdown-yellow pull-right dropdown-caret dropdown-close">
-																									<li>
-																										<!-- Start Button forward qty to next stage -->
-																										<a class="tooltip-info opnModalShipQty" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $product['mft_id']; ?>">
-																											<span class="green">					<!--<i class="icon-ok bigger-120"></i> --> Forward
-																											</span>
-																										</a>
-																										<!-- End Button forward qty to next stage -->
-
-																										<!-- Start Button Add to inventory -->
-																										<?php
-																										if($product['last_seq'] != $product['seq'])
-																										{
-																										?>
-																											<a class="tooltip-info opnModalAddToInv" data-rel="tooltip" title="View" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $$product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>">
-																												<span class="yellow"> <i class="icon-ok bigger-120"></i> Add To Inventory
-																												</span>
-																											</a>
-																										<?php
-																										}
-																										?>
-																										<!-- End Button Add to inventory -->
-																									</li>
-																								</ul>
-																							</div>
-																						</div>
 																					</td>
 																				</tr>
 																			<?php
@@ -172,11 +141,12 @@ $uid = $this->Page->getSession("intUserId");
 																			?>
 																	   </tbody>
 																	</table>
-															    </div> 
+																</div> 
 														   </div> 
 													   </div> 
-													   </div>
-													</div>
+												   </div>
+												</div>
+												<!-- END PANEL -->
 											<?php
 												$cnt++;
 											}
@@ -448,7 +418,7 @@ $uid = $this->Page->getSession("intUserId");
 			$("#inv-qty-form").modal('show');
 		});
 
-		// save add nventry to stage details
+		// save add inventry to stage details
 		$(document).on("submit","#frmAddInvToStage",function(e){
 			$(".errmsg").remove();
 			if(!submit_form(this))
@@ -500,12 +470,5 @@ $uid = $this->Page->getSession("intUserId");
 				}
 			});
 		});
-
-
-		/*$('#myTabs a').click(function (e) {
-		  e.preventDefault()
-		  alert("111");
-		  $(this).tab('show')
-		});*/
 	});
 </script>
