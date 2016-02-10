@@ -15,14 +15,14 @@ $order_id = $orderDetailArr["order_id"];
 			<label class="control-label" for="form-field-1">To :</label>
 
 			<div class="controls">
-				<input type="text" id="to" name="to" placeholder="To" class="span10 required isemail"/>
+				<input type="text" id="to" name="to" placeholder="To" class="span10 required isemail" value="<?php echo $cust_email;?>"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="form-field-1">From :</label>
 
 			<div class="controls">
-				<input type="text" id="from" name="from" placeholder="From" class="span10 required isemail"/>
+				<input type="text" id="from" name="from" placeholder="From" class="span10 required isemail" value="<?php echo $from_mail;?>"/>
 			</div>
 		</div>
 		<div class="control-group">

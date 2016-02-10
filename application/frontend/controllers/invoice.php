@@ -112,9 +112,11 @@ class invoice extends CI_Controller {
 		$this->customer_model->searchCriteria = $searchCriteria;
 		$customerArr = $this->customer_model->getCustomerDetails();
 		$rsListing['customerArr'] = $customerArr;
+		//$this->Page->pr($customerArr); exit;
 		
+		$cust_email = $customerArr[0]["cust_email"];
 		$cust_first_name = $customerArr[0]["cust_first_name"];
-		$cust_last_name = $customerArr[0]["cust_last_name"];
+		$cust_last_name = $customerArr[0]["cust_last_name"];		
 		
 		$cust_name= $cust_first_name."&nbsp;".$cust_last_name ; 
 		
@@ -125,6 +127,9 @@ class invoice extends CI_Controller {
 		$message = str_replace('{CUSTOMER_NAME}' , $cust_name , $message);
 		$message = str_replace('{ORDER_NO}' , $order_no , $message);
 		$message = str_replace('{ORDER_DATE}' , $order_date , $message);
+		
+		
+		$from_mail	=	$this->Page->getSetting("FYI_FROM_EMAIL");
 		
 		### Generate Invoice
 		// check invoice entry
@@ -180,6 +185,8 @@ class invoice extends CI_Controller {
 		$temp = array();
 		exec('"D:\wkhtmltopdf\bin\wkhtmltopdf.exe" "'.$url.'" "'.$fullpath.'"',$temp);
 		
+		$rsListing['cust_email'] = $cust_email;
+		$rsListing['from_mail'] = $from_mail;
 		$rsListing['subject'] = $subject;
 		$rsListing['message'] = $message;
 		$this->load->view('invoice/viewEmailForm', $rsListing);
@@ -208,8 +215,8 @@ class invoice extends CI_Controller {
 		$mail->Port       = 465;                   // SMTP port to connect to GMail
 		$mail->Username   = "snehal.trapsiya@gmail.com";  // user email address
 		$mail->Password   = "snehal2993";            // password in GMail
-		$mail->SetFrom('snehal.trapsiya@gmail.com', 'Snehal Trapsiya');  //Who is sending the email
-		$mail->AddReplyTo("snehal.trapsiya@gmail.com","Snehal Trapsiya");  //email address that receives the response
+		$mail->SetFrom($from, 'OTSINV');  //Who is sending the email
+		$mail->AddReplyTo($from,"OTSINV");  //email address that receives the response
 		$mail->Subject    = $subject;
 		$mail->Body      = $hideditor;
 		$mail->AltBody    = "PHP mailer test message";
@@ -221,7 +228,7 @@ class invoice extends CI_Controller {
 		if(!$mail->Send()) {
 			$data["message"] = "Error: " . $mail->ErrorInfo;
 		} else {
-			$data["message"] = "Message sent correctly!";
+			redirect('c=invoice&m=generateInvoice&orderId='.$order_id, 'location');
 		}
 	}	
 	
