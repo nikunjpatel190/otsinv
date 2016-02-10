@@ -100,7 +100,7 @@ $uid = $this->Page->getSession("intUserId");
 																					if($product['stage_inv_qty'] > 0)
 																					{
 																					?>
-																					<a href="javascript:void(0);" class="forward_stock" id="<?php echo $product['mft_id']; ?>"><?php echo $product['stage_inv_qty']; ?></a>
+																					<a href="javascript:void(0);" class="forward_stock" id="<?php echo $row['ps_id'].$product['mft_id'].$productId.$i; ?>" mftid="<?php echo $row['ps_id']; ?>"><?php echo $product['stage_inv_qty']; ?></a>
 																					<?php
 																					}
 																					else
@@ -335,7 +335,7 @@ $uid = $this->Page->getSession("intUserId");
 
 		// Open modal popup for forward stage stock (we open modal of forward qty)
 		$(".forward_stock").click(function(){
-			var id=this.id;
+			var id=$(this).attr('mftid');
 			var obj = $("#btn-forward-"+id);
 			
 			resetStyle("#prod_ship_qty");
