@@ -90,6 +90,7 @@ $uid = $this->Page->getSession("intUserId");
 																			$i=1;
 																			foreach($orderProductListArr[$row['ps_id']][$productId] AS $orderNo=>$product)
 																			{
+																				$uniqueNo = $row['ps_id']."-".$product['mft_id']."-".$productId."-".$i;
 																			?>
 																				<tr>
 																					<td><?php echo $i; ?></td>
@@ -101,7 +102,7 @@ $uid = $this->Page->getSession("intUserId");
 																					if($product['stage_inv_qty'] > 0)
 																					{
 																					?>
-																					<a href="javascript:void(0);" class="forward_stock" id="<?php echo $row['ps_id'].$product['mft_id'].$productId.$i; ?>" mftid="<?php echo $row['ps_id']; ?>"><?php echo $product['stage_inv_qty']; ?></a>
+																					<a href="javascript:void(0);" class="forward_stock" id="<?php echo $uniqueNo; ?>"><?php echo $product['stage_inv_qty']; ?></a>
 																					<?php
 																					}
 																					else
@@ -114,7 +115,7 @@ $uid = $this->Page->getSession("intUserId");
 																					<td>
 																						<div class="btn-group">
 																							<!-- Start Button forward qty to next stage -->
-																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $product['mft_id']; ?>">
+																							<button class="btn btn-mini btn-success rmargin5 opnModalShipQty" prod_id="<?php echo $product['prod_id']; ?>" mftid="<?php echo $product['mft_id']; ?>" stageid="<?php echo $row['ps_id']; ?>" totqty="<?php echo $product['prod_tot_qty']; ?>" proceedqty="<?php echo $product['proceed_qty']; ?>" seq="<?php echo $product['seq']; ?>" last_seq="<?php echo $product['last_seq']; ?>" nxt_stage_id="<?php echo $product['nxt_stage_id']; ?>" order_qty="<?php echo $product['order_prod_qty']; ?>" prod_main_qty="<?php echo $product['prod_main_qty']; ?>" id="btn-forward-<?php echo $uniqueNo; ?>">
 																								Forward
 																								<!--<i class="icon-ok bigger-120"></i>-->
 																							</button>
@@ -305,7 +306,7 @@ $uid = $this->Page->getSession("intUserId");
 
 		// Open modal popup for forward stage stock (we open modal of forward qty)
 		$(".forward_stock").click(function(){
-			var id=$(this).attr('mftid');
+			var id=this.id;
 			var obj = $("#btn-forward-"+id);
 			
 			resetStyle("#prod_ship_qty");
