@@ -67,10 +67,14 @@ $rsAssignModules = $CI->general_model->getAssignModule();
 								 <a href="'.$module['module_url'].'" style="width:130px;">
 									 <i class="icon-double-angle-right"></i>
 									 '.$module['module_name'].'
-								 </a>
-								 <b class="arrow icon-plus" style="float:right; margin:-27px 4px 0px 0px;"></b>
-								 <button style="float:right; margin:-30px 4px 0px 0px;" class="btn btn-warning btn-mini"><i class="icon-plus  bigger-110 icon-only"></i></button>
-							 </li>'; 
+								 </a>';
+							$is_right_button = $module['is_right_button'];
+							$right_button_link = $module['right_button_link'];
+							if($is_right_button == 1)
+							{
+							echo '<button style="float:right; margin:-36px 0px 0px 0px; height:35px;" class="btn btn-light btn-mini" onclick="location.href=\''.$right_button_link.'\'"><i class="icon-plus  bigger-110 icon-only"></i></button>
+							 </li>';	
+							} 
 					}
 					echo '</ul>
         			</li>';

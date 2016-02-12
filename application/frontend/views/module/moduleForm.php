@@ -44,7 +44,20 @@ echo form_open('c=setting&m=saveModule', $attributes);
                     <input type="text" id="txt_seq" name="txt_seq" class="span6 required" value="<?php echo $rsEdit->seq; ?>" />
                 </div>
             </div>
-            
+            <div class="control-group">
+                <label for="form-field-1" class="control-label">Menu Right Button<span class="red">*</span></label>
+                <div class="controls">
+                    <!--<input type="checkbox" id="is_right_button" name="is_right_button" class="span1" value="is_right_button" />-->
+                    <?php  $is_right_button = $rsEdit->is_right_button ;?>
+                    <select class="span2" name="slt_is_right_button" id="slt_is_right_button">
+                    	<option value="0" <?php if($is_right_button == 0){ echo "selected"; }?>>No</option>
+                        <option value="1" <?php if($is_right_button == 1){ echo "selected"; }?>>Yes</option>
+                    </select>
+                    <span id="row_dim">
+                    <input type="text" id="txt_right_button_link" name="txt_right_button_link" placeholder="Right Button URL" class="span4 required" value="<?php echo $rsEdit->right_button_link; ?>" />
+                    </span>
+                </div>
+            </div>
             <div class="control-group">
                 <label for="form-field-1" class="control-label">Status<span class="red">*</span></label>
                 <div class="controls">
@@ -70,5 +83,16 @@ echo form_open('c=setting&m=saveModule', $attributes);
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-});</script>
+	$(function() {
+		$('#row_dim').hide(); 
+		$('#slt_is_right_button').change(function(){
+			if($('#slt_is_right_button').val() == '1') {
+				$('#row_dim').show(); 
+			} else {
+				$('#row_dim').hide(); 
+			} 
+		});
+		$("#slt_is_right_button").change();
+	});
+});
+</script>

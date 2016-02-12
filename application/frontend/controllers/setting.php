@@ -137,6 +137,8 @@ class setting extends CI_Controller {
         $arrHeader["module_url"]        =   $this->Page->getRequest('txt_module_url');
 		$arrHeader["seq"]        =   $this->Page->getRequest('txt_seq');
 		$arrHeader["status"]        	= 	$this->Page->getRequest('slt_status');
+		$arrHeader["is_right_button"]        	= 	$this->Page->getRequest('slt_is_right_button');
+		$arrHeader["right_button_link"]        	= 	$this->Page->getRequest('txt_right_button_link');
 		
 		if ($strAction == 'A' || $strAction == 'R')
 		{
