@@ -64,10 +64,12 @@ $rsAssignModules = $CI->general_model->getAssignModule();
 					{
 						//$this->Page->pr($module);
 						echo '<li>
-								 <a href="'.$module['module_url'].'">
+								 <a href="'.$module['module_url'].'" style="width:130px;">
 									 <i class="icon-double-angle-right"></i>
 									 '.$module['module_name'].'
 								 </a>
+								 <b class="arrow icon-plus" style="float:right; margin:-27px 4px 0px 0px;"></b>
+								 <button style="float:right; margin:-30px 4px 0px 0px;" class="btn btn-warning btn-mini"><i class="icon-plus  bigger-110 icon-only"></i></button>
 							 </li>'; 
 					}
 					echo '</ul>
@@ -75,6 +77,7 @@ $rsAssignModules = $CI->general_model->getAssignModule();
 				}
 			}
 		?>
+
         <!--<li>
         	<a href="#" class="dropdown-toggle">
                 <i class="icon-edit"></i>

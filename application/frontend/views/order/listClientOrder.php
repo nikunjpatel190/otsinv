@@ -1,5 +1,6 @@
 <?php if($blnAjax != 1): ?>
-<?php include(APPPATH.'views/top.php'); ?>
+<?php include(APPPATH.'views/top.php'); 
+?>
 <?php endif; ?>
 <div id="divOrder">
 	<div class="page-header position-relative">
@@ -9,12 +10,23 @@
 	<input type="hidden" id="from_page" name="from_page" value="<?php echo $from_page; ?>" />
 
 	<div class="row-fluid">
-		<div class="span6 text-left">
+		<div class="span3 text-left">
 			<button type="button" class="btn btn-small btn-success" onclick="javascript:location.href='index.php?c=order&m=createOrder'"> <i class="icon-plus-sign bigger-125"></i> Add New Order </button>
 			<!--<button type="button" class="btn btn-small btn-danger" onclick="return DeleteRow();" name="btnDelete" id="btnDelete"> <i class="icon-trash bigger-125"></i> Delete </button>-->
 		</div>
+        <div class="span9 text-left" style="vertical-align:text-top;">
+            <form class="form-inline" id="frm_serch_order" name="frm_serch_order" action="" method="get">
+                <input type="hidden" name="c" value="order"  />
+                <input type="text" class="input-small" placeholder="Order No" name="search_order" id="search_order" value="<?php echo $search_order;?>"/>
+                <input type="text" data-date-format="yyyy-mm-dd" id="from_date" name="from_date" class="input-small date-picker" placeholder="From" value="<?php echo $from_date;?>"/>
+                <input type="text" data-date-format="yyyy-mm-dd" id="to_date" name="to_date" class="input-small date-picker" placeholder="To" value="<?php echo $to_date;?>"/>
+                <button type="submit" onclick="return submit_form(this.form);" class="btn btn-purple btn-small">
+                    Search
+                    <i class="icon-search icon-on-right bigger-110"></i>		
+                </button>
+            </form>
+        </div>
 	</div>
-
 	<br />
 	<div class="row-fluid">
 		<div class="span12">
@@ -103,6 +115,12 @@
 <?php endif; ?>
 
 <script type="text/javascript">
+	$('.date-picker').datepicker().next().on(ace.click_event, function(){
+		$(this).prev().focus();
+	});
+	$('#id-date-range-picker-1').daterangepicker().prev().on(ace.click_event, function(){
+		$(this).next().focus();
+	});
 	$(document).ready(function(){
 		$('[data-rel=tooltip]').tooltip();
 	});

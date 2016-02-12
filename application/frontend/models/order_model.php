@@ -25,12 +25,65 @@ class order_model extends Data {
 	//Description : return clienct created order list
 	public function getOrderList()
 	{
+		$searchCriteria = array();
+		$searchCriteria = $this->searchCriteria;
 		
-		$sqlQuery = "SELECT * FROM order_master where is_complete=0";
-		//echo $sqlQuery;
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+		{
+			$selectField = 	$searchCriteria['selectField'];
+		}
+		
+		$whereClaue = "WHERE is_complete=0 ";
+
+		// By Order		
+		if(isset($searchCriteria['search_order']) && $searchCriteria['search_order'] != "")
+		{
+			$whereClaue .= 	" AND order_no='".$searchCriteria['search_order']."' ";
+		}
+		
+		// By From Date		
+		if(isset($searchCriteria['from_date']) && $searchCriteria['from_date'] != "")
+		{
+			$whereClaue .= 	" AND order_date>='".$searchCriteria['from_date']."' ";
+		}
+		
+		// By To date		
+		if(isset($searchCriteria['to_date']) && $searchCriteria['to_date'] != "")
+		{
+			$whereClaue .= 	" AND order_date<='".$searchCriteria['to_date']."' ";
+		}
+		
+		// Not In
+		if(isset($searchCriteria['not_id']) && $searchCriteria['not_id'] != "")
+		{
+			$whereClaue .= 	" AND order_id !=".$searchCriteria['not_id']." ";
+		}
+		
+		$orderField = " order_id ";
+		$orderDir = " ASC";
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderField']) && $searchCriteria['orderField'] != "")
+		{
+			$orderField = $searchCriteria['orderField'];
+		}
+		
+		// Set Order Field
+		if(isset($searchCriteria['orderDir']) && $searchCriteria['orderDir'] != "")
+		{
+			$orderDir = $searchCriteria['orderDir'];
+		}
+		
+		$sqlQuery = "SELECT
+					  	".$selectField."
+					  FROM order_master ".$whereClaue." ORDER BY ".$orderField." ".$orderDir."";
+		
+		//echo $sqlQuery; exit;
 		$result     = $this->db->query($sqlQuery);
 		$rsData     = $result->result_array();
-		return $rsData;	
+		return $rsData;
+		
 	}
 
 	//Author : Nikunj Bambhroliya

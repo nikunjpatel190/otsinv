@@ -19,6 +19,9 @@ class order extends CI_Controller {
 
 	public function index()
 	{
+		$search_order = $this->Page->getRequest("search_order");
+		$from_date = $this->Page->getRequest("from_date");
+		$to_date = $this->Page->getRequest("to_date");
 		// Get All Status (from status master)
 		$searchCriteria = array();
 		$searchCriteria['selectField'] = 'sts.status_id,sts.status_name,sts.seq';
@@ -29,6 +32,11 @@ class order extends CI_Controller {
 		$statusMasterArr = $this->status_model->getClientOrderStatusMaster();
 
 		// Get Order List
+		$searchCriteria = array();
+		$searchCriteria['search_order'] = $search_order;
+		$searchCriteria['from_date'] = $from_date;
+		$searchCriteria['to_date'] = $to_date;
+		$this->order_model->searchCriteria = $searchCriteria;
 		$orderListRes = $this->order_model->getOrderList();
 
 		$orderListArr = array();
@@ -63,9 +71,11 @@ class order extends CI_Controller {
 
 		$rsListing['orderListArr'] = $orderListArr;
 		$rsListing['statusMasterArr'] = $statusMasterArr;
+		$rsListing['search_order'] = $search_order;
+		$rsListing['from_date'] = $from_date;
+		$rsListing['to_date'] = $to_date;
 		$this->load->view('order/listClientOrder', $rsListing);
 	}
-
 	### Auther : Nikunj Bambhroliya
 	### Desc : create client order
 	public function createOrder()
