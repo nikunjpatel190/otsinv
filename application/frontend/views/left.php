@@ -4,6 +4,11 @@ $CI->load->model('general_model');
 $rsPanels = $CI->general_model->getPanel();
 $rsAssignModules = $CI->general_model->getAssignModule();
 //$this->Page->pr($rsPanels); exit;
+$page_url = $_SERVER['REQUEST_URI'];
+$page_controller = explode("=", $page_url);
+$page_controller = $page_controller[1];
+$page_url = explode("/", $page_url);
+$page_url = end($page_url);
 ?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->
 <!--<div class="sidebar fixed" id="sidebar">-->
@@ -44,11 +49,12 @@ $rsAssignModules = $CI->general_model->getAssignModule();
         </li>
 		<?php
 			$moduleArr = array();
+			//$this->Page->pr($rsAssignModules); exit;
 			foreach($rsAssignModules AS $module)
 			{
 				$moduleArr[$module['panel_id']][] = $module;
 			}
-			
+			//$this->Page->pr($module); exit;
 			foreach($rsPanels AS $panel)
 			{
 				if(count($moduleArr[$panel['panel_id']]) > 0)
@@ -62,9 +68,12 @@ $rsAssignModules = $CI->general_model->getAssignModule();
 							<ul class="submenu">';
 					foreach($moduleArr[$panel['panel_id']] AS $module)
 					{
+						$module_url = $module['module_url'];
 						//$this->Page->pr($module);
-						echo '<li>
-								 <a href="'.$module['module_url'].'" style="width:130px;">
+						?>
+                        <li <?php if($module_url == $page_url){ echo "class='active'";}?> >
+                        <?php
+						echo'	 <a href="'.$module['module_url'].'" style="width:130px;">
 									 <i class="icon-double-angle-right"></i>
 									 '.$module['module_name'].'
 								 </a>';
