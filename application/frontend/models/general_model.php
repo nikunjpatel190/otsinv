@@ -24,6 +24,26 @@ class general_model extends Data {
 		
 		
 	}
+
+	function getModule()
+	{
+		$searchCriteria = $this->searchCriteria;
+		$selectField = "*";
+		if(isset($searchCriteria['selectField']) && $searchCriteria['selectField'] != "")
+			$selectField = $searchCriteria['selectField'];
+
+		$where = "";
+		if(isset($searchCriteria['url']) && $searchCriteria['url'] != "")
+			$where .= " AND module_url= '".$searchCriteria['url']."'";
+		
+		$sqlQuery = "SELECT 
+						".$selectField." FROM 
+						module_master WHERE status = 'ACTIVE' ".$where." ORDER by seq";
+		//echo $sqlQuery; exit;
+		$result     = $this->db->query($sqlQuery);
+		$rsData     = $result->result_array();
+		return $rsData;
+	}
 	
 	function getAssignModule()
 	{

@@ -3,12 +3,20 @@ $CI =& get_instance();
 $CI->load->model('general_model');
 $rsPanels = $CI->general_model->getPanel();
 $rsAssignModules = $CI->general_model->getAssignModule();
-//$this->Page->pr($rsPanels); exit;
+//$this->Page->pr($rsAssignModules); exit;
 $page_url = $_SERVER['REQUEST_URI'];
 $page_controller = explode("=", $page_url);
 $page_controller = $page_controller[1];
 $page_url = explode("/", $page_url);
 $page_url = end($page_url);
+
+// Get current panel id
+$searchCriteria = array();
+$searchCriteria['selectField'] = 'panel_id';
+$searchCriteria['url'] = $page_url;
+$CI->general_model->searchCriteria = $searchCriteria;
+$rsModule = $CI->general_model->getModule();
+$currPanelId = $rsModule[0]['panel_id'];
 ?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->
 <!--<div class="sidebar fixed" id="sidebar">-->
@@ -41,7 +49,7 @@ $page_url = end($page_url);
 	<!--#sidebar-shortcuts-->
 
     <ul class="nav nav-list">
-    	<li class="active">
+    	<li>
             <a href="index.php?c=general">
                 <i class="icon-dashboard text-left"></i>
                 <span class="menu-text"> Dashboard </span>
@@ -57,9 +65,10 @@ $page_url = end($page_url);
 			//$this->Page->pr($module); exit;
 			foreach($rsPanels AS $panel)
 			{
+				$panelClass = ($currPanelId == $panel['panel_id'])?'active':'';
 				if(count($moduleArr[$panel['panel_id']]) > 0)
 				{
-					echo '<li>
+					echo '<li class="'.$panelClass.'">
 							<a href="#" class="dropdown-toggle">
 								'.$panel['img_url'].'
 								<span class="menu-text"> '.$panel['panel_name'].' </span>
