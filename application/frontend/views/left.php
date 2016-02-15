@@ -6,7 +6,7 @@ $rsAssignModules = $CI->general_model->getAssignModule();
 //$this->Page->pr($rsPanels); exit;
 ?>
 <!--<div class="sidebar-shortcuts" id="sidebar-shortcuts">-->
-<div class="sidebar fixed" id="sidebar">
+<!--<div class="sidebar fixed" id="sidebar">-->
     <!--<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
         <button class="btn btn-small btn-success">
             <i class="icon-signal"></i>
@@ -278,4 +278,4 @@ $rsAssignModules = $CI->general_model->getAssignModule();
         <i class="icon-double-angle-left"></i>
     </div>
 
-</div>
+<!--</div>-->

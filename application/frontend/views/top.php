@@ -42,7 +42,7 @@
             <div class="navbar-inner">
                 <div class="container-fluid">
                     <a href="#" class="brand">
-                    <strong><i class="icon-leaf"></i>&nbsp;<span>Order Management System</span></strong>
+                    <small><i class="icon-leaf"></i>&nbsp;<span>Order Management System</span></small>
                     </a><!--/.brand-->
                     <ul class="nav ace-nav pull-right">
                         <!--<li class="grey">
