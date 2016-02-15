@@ -49,7 +49,7 @@ $currPanelId = $rsModule[0]['panel_id'];
 	<!--#sidebar-shortcuts-->
 
     <ul class="nav nav-list">
-    	<li>
+    	<li <?php if($currPanelId == ""){ echo "class='active'";}?>>
             <a href="index.php?c=general">
                 <i class="icon-dashboard text-left"></i>
                 <span class="menu-text"> Dashboard </span>
