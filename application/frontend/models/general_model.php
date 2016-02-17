@@ -35,6 +35,8 @@ class general_model extends Data {
 		$where = "";
 		if(isset($searchCriteria['url']) && $searchCriteria['url'] != "")
 			$where .= " AND module_url= '".$searchCriteria['url']."'";
+		if(isset($searchCriteria['url2']) && $searchCriteria['url2'] != "")
+			$where .= " AND right_button_link = '".$searchCriteria['url2']."'";
 		
 		$sqlQuery = "SELECT 
 						".$selectField." FROM 
